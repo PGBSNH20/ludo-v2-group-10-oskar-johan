@@ -1,0 +1,18 @@
+version: '3.4'
+
+services:
+  mssql-server:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: mssql-server-container_name
+    hostname: mssql-server-hostname
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "PEWpew1!"
+      MSSQL_PID: Express
+    ports:
+      - "41433:1433"
+    volumes:
+      - ludo-v2-data:/var/opt/mssql
+
+volumes:
+  ludo-v2-data:
