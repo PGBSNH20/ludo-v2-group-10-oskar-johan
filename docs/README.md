@@ -161,6 +161,57 @@
 
 ---
 
+
+- api/Game/{gameId}/RollDie
+  - POST
+    ```csharp
+    // request body:
+    {
+    }
+
+    // Possible responses:
+    Ok {
+      dieRoll: [1-6]
+    }
+    401 // Unauthorized; Unnecessary?
+    BadRequest() // Unnecessary?; If the supplied {gameId || tokenId} is not in the correct format. ??? If the request is malformed in any way.
+    ```
+
+- api/Game/{gameId}/RollDie/{playerId}
+  - POST
+    ```csharp
+    // request body:
+    {
+    }
+
+    // Possible responses:
+    Ok {
+      dieRoll: [1-6]
+    }
+    401 // Unauthorized; Necessary?
+    BadRequest() // Unnecessary?; If the supplied {gameId || tokenId} is not in the correct format. ??? If the request is malformed in any way.
+    NotFound() // Unnecessary?; If there isn't a game || player with the supplied {gameId || playerId}
+    ```
+
+> There is probably no need to couple a die roll to a specific player or game, so these either of these should be enough.
+- api/Die/Roll
+- api/RollDie
+- api/Game/RollDie
+  - POST
+    ```csharp
+    // request body:
+    {
+    }
+
+    // Possible responses:
+    Ok {
+      dieRoll: [1-6]
+    }
+    401 // Unauthorized; Necessary?
+    ```
+
+---
+
 ---
 
 ## Credits & Sources
