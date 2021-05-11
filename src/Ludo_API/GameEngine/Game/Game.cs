@@ -9,29 +9,13 @@ namespace Ludo_API.GameEngine.Game
 {
     public class Game
     {
-        private readonly IGameEngine _gameEngine;
-        private readonly IPlayerRepository _playerRepository;
         private readonly IGameRepository _gameRepository;
-        private GameEngine gameEngine;
-        private List<Models.Player> players;
-
         public Gameboard Gameboard { get; }
-        public List<Player> Players { get; }
 
-        public Game(IGameEngine gameEngine, IPlayerRepository playerRepository, Gameboard gameboard, List<Player> players, IGameRepository gameRepository)
+        public Game(IGameRepository gameRepository, Gameboard gameboard)
         {
-            _gameEngine = gameEngine;
-            _playerRepository = playerRepository;
             _gameRepository = gameRepository;
             Gameboard = gameboard;
-            Players = players;
-        }
-
-        public Game(GameEngine gameEngine, IGameRepository gameRepository, List<Player> players)
-        {
-            gameEngine = gameEngine;
-            _gameRepository = gameRepository;
-            players = players;
         }
 
         #region ILudoGame
@@ -95,7 +79,8 @@ namespace Ludo_API.GameEngine.Game
                             Gameboard.LastPlayer = null;
                             _gameRepository.SaveTurnAsync(Gameboard, player);
                             //Console.WriteLine($"Grattis {currentSquare.OccupiedBy.Name}!! Du har vunnit spelet!\n");
-                            _gameEngine.EndGame();
+                            // todo: restore next line
+                            //_gameEngine.EndGame();
                         }
 
                         return true;

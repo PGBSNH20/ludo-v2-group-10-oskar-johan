@@ -12,7 +12,6 @@ namespace Ludo_API.GameEngine.Game
 {
     public class PlayerManager
     {
-
         internal List<Models.Player> CreatePlayers(LudoContext context, IPlayerRepository playerRepository, GameOptions gameOptions)
         {
             List<Models.Player> players = new();

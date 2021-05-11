@@ -52,7 +52,8 @@ namespace Ludo_API.GameEngine
             {
                 Players = new PlayerManager().CreatePlayers(_context, _playerRepository, gameOptions),
             };
-            //var game = new Game();
+            //var game = new Game.Game(this, _gameRepository, gameboard);
+            var game = new Game.Game(_gameRepository, gameboard);
         }
 
         public void RunGame(Game.Game game)

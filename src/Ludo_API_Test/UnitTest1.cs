@@ -7,7 +7,6 @@ using Ludo_API.Models;
 using System.Linq;
 using Ludo_API.Tests;
 using Ludo_API.Repositories;
-using GameEngine = Ludo_API.GameEngine.GameEngine;
 using Ludo_API.GameEngine.Game;
 using System.Drawing;
 
@@ -21,9 +20,9 @@ namespace Ludo_API.Tests
             //Arrange
             Gameboard.CreateTracks();
 
-            List<Models.Player> players = new List<Models.Player>
+            List<Player> players = new List<Models.Player>
             {
-                new Models.Player("LudoPlayer", Color.Yellow)
+                new Player("LudoPlayer", Color.Yellow)
             };
 
             Gameboard gameboard = new Gameboard(players);
@@ -32,24 +31,18 @@ namespace Ludo_API.Tests
             gameboard.Squares[0].PieceCount = 1;
             IGameRepository gameRepository = new GameRepositoryTest();
             IPlayerRepository playerRepository = new PlayerRepository();
-
-            //Act
-            //var moves = new Moves(gameRepository, new GameEngine(gameRepository));
-            var game = new Game(new GameEngine.GameEngine(null, gameRepository, playerRepository), playerRepository, gameboard, players, gameRepository);
-
-            //public bool MovePiece(Gameboard gameBoard, List<Square> squares, Player player, int initialPosition, int diceNumber)
-            //bool moved = moves.MovePiece(gameboard, gameboard.Squares, players[0], 0, 5);
-            bool moved2 = game.CanMoveToken(players[0], gameboard.Squares[players[0].StartPosition], 5);
+            var game = new Game(gameRepository, gameboard);
+            bool canMove = game.CanMoveToken(players[0], gameboard.Squares[players[0].StartPosition], 5);
             game.MoveToken(players[0], gameboard.Squares[0], gameboard.Squares[5]);
 
-            //Assert that move was successful
-            Assert.True(moved2);
+            // Assert that move was successful
+            Assert.True(canMove);
 
-            //Assert that player has moved from initial position
+            // Assert that player has moved from initial position
             Assert.Null(gameboard.Squares[0].OccupiedBy);
             Assert.Equal(0, gameboard.Squares[0].PieceCount);
 
-            //Assert that player has moved to target position
+            // Assert that player has moved to target position
             Assert.Equal(players[0], gameboard.Squares[5].OccupiedBy);
             Assert.Equal(1, gameboard.Squares[5].PieceCount);
         }
