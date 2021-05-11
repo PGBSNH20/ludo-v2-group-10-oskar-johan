@@ -7,7 +7,7 @@ services:
     hostname: mssql-server-hostname
     environment:
       ACCEPT_EULA: "Y"
-      SA_PASSWORD: "PEWpew1!"
+      SA_PASSWORD: "PEWpew2!"
       MSSQL_PID: Express
     ports:
       - "41433:1433"
