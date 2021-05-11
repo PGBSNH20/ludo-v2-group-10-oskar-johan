@@ -161,6 +161,7 @@
 
 ---
 
+#### **Die Roll**
 
 - api/Game/{gameId}/RollDie
   - POST
@@ -208,6 +209,93 @@
       dieRoll: [1-6]
     }
     401 // Unauthorized; Necessary?
+    ```
+
+---
+
+#### **Add Players** // **Create new game**
+>
+- api/Players/Add
+  - POST
+    ```csharp
+    // request body:
+    {
+      int gameId,
+      Player[] players [
+        {
+          string playerName,
+          aRgb playerColor,
+        },
+        {
+          string playerName,
+          aRgb playerColor,
+        }
+      ],
+    }
+
+    // Possible responses:
+    Ok {
+      // {player}-object with more data?
+    }
+    401 // Unauthorized; Necessary?
+    BadRequest() // ???; If the supplied data ({player}[]) is invalid in some way. Maybe there's another error code better suited for this?
+    NotFound() // If there isn't a game with the supplied {gameId}
+    ```
+- api/Players/Add?gameId={gameId}
+- api/Game/{gameId}/Players/Add
+  - POST
+    ```csharp
+    // request body:
+    [
+      {
+        string playerName,
+        aRgb playerColor,
+      },
+      {
+        string playerName,
+        aRgb playerColor,
+      }
+    ]
+
+    // Possible responses:
+    Ok {
+      // {player}-object with more data?
+    }
+    401 // Unauthorized; Necessary?
+    BadRequest() // ???; If the supplied data ({player}[]) is invalid in some way. Maybe there's another error code better suited for this?
+    NotFound() // If there isn't a game with the supplied {gameId}
+    ```
+
+- api/Game/New
+  - POST
+    ```csharp
+    // request body:
+    {
+      int GameId,
+      Player[] players [
+        {
+          string playerName,
+          aRgb playerColor,
+        },
+        {
+          string playerName,
+          aRgb playerColor,
+        }
+      ],
+      (optional) int AiCount,
+      (optional) string[] emailInvitesTo [
+        string emailAddress,
+        string emailAddress
+      ]
+    }
+
+    // Possible responses:
+    Ok {
+      // {game}-object with more data?
+    }
+    401 // Unauthorized; Necessary?
+    BadRequest() // ???; If the supplied data ({player}[]) is invalid in some way. Maybe there's another error code better suited for this?
+    NotFound() // If there isn't a game with the supplied {gameId}
     ```
 
 ---
