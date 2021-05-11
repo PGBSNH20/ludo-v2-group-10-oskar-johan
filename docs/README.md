@@ -38,6 +38,8 @@
 
 ### **_Ideas_**:
 
+#### **Basic**
+
 - api/Games
   - GET
   - PUT/PATCH
@@ -45,6 +47,52 @@
   - POST
 
 ---
+
+#### **Get/set Game Data/Options (min & max player count, available colors, AI-players available?, gameboard info?, rules?)**
+
+- api/LudoGameInfo
+  - GET
+    ```csharp
+    // request body:
+    {
+    }
+
+    // Possible responses:
+    Ok() {
+      int minPlayerCount,
+      int maxPlayerCount,
+      aRgb[] availableColors,
+      bool AIPlayerAvailable,
+      ? gameboardInfo, // Number of squares? gameboard grid layout?
+      string[] rules
+    }
+    BadRequest() // ???; Necessary?
+    NotFound() // ???; Necessary?
+    401 // Unauthorized; Necessary?
+    ```
+  - PUT || PATCH
+
+    ```csharp
+    // request body:
+    {
+      int minPlayerCount,
+      int maxPlayerCount,
+      aRgb[] availableColors,
+      bool AIPlayerAvailable,
+      ? gameboardInfo, // Number of squares? gameboard grid layout?
+      string[] rules
+    }
+
+    // Possible responses:
+    Ok() // The token was successfully moved.
+    BadRequest() // ???
+    NotFound() // ???
+    401 // Unauthorized; Necessary?
+    ```
+
+---
+
+#### **Move Token**
 
 - api/Game/{gameId}/Player/{playerId}/MoveToken/{tokenId}
 - api/Game/{gameId}/Token/{tokenId}/MoveTo/{squareId}
@@ -58,15 +106,16 @@
         int toSquareId
     }
 
-    // response:
-    {
-        Ok() // The token was successfully moved.
-        BadRequest() // ??? If the supplied {gameId || tokenId} is not in the correct format. ??? If the request is malformed in any way.
-        NotFound() // If there isn't a game || token with the supplied {gameId || tokenId}
-    }
+    // Possible responses:
+    Ok() // The token was successfully moved.
+    BadRequest() // ??? If the supplied {gameId || tokenId} is not in the correct format. ??? If the request is malformed in any way.
+    NotFound() // If there isn't a game || token with the supplied {gameId || tokenId}
+    401 // Unauthorized; Necessary?
     ```
 
 ---
+
+#### **Move Token**
 
 - api/Game/{gameId}/Token/{tokenId}/MoveTo/{squareId}
 - api/Game/{gameId}/Token/{tokenId}/MoveTo/{squareId}
@@ -80,12 +129,10 @@
     }
 
     // Possible responses:
-    {
-        Ok() // The token was successfully moved.
-        BadRequest() // ??? If the supplied {gameId || tokenId || squareId} is not in the correct format. ??? If the request is malformed in any way.
-        401 // Unauthorized (players in the game should be able to update?). Or stricter still (only the player who owns the token can move it?)
-        NotFound() // If there isn't a game || token || square with the supplied {gameId || tokenId || squareId}
-    }
+    Ok() // The token was successfully moved.
+    BadRequest() // ??? If the supplied {gameId || tokenId || squareId} is not in the correct format. ??? If the request is malformed in any way.
+    401 // Unauthorized (players in the game should be able to update?). Or stricter still (only the player who owns the token can move it?)
+    NotFound() // If there isn't a game || token || square with the supplied {gameId || tokenId || squareId}
     ```
 
 ---
@@ -109,6 +156,8 @@
     ```
 
 ---
+
+#### **Delete a game**
 
 - api/Game/{gameId/Delete}
 - api/Game/Delete/{gameId/}
@@ -145,6 +194,7 @@
         int pieceCount
         int gameBoardId // or gameId? necessary?
     }
+    401 // Unauthorized; Necessary?
     ```
 
 ---
@@ -152,11 +202,21 @@
 - api/Game/{gameId}
   - POST
     ```csharp
+    // request body:
     {
         // (player is sent a list of possible moves (each with an id))
         // POST the chosen move's id
         int gameMoveId
     }
+
+    // possible responses:
+    Ok {
+        int id // squareId
+        int playerId // or Player object?
+        int pieceCount
+        int gameBoardId // or gameId? necessary?
+    }
+    401 // Unauthorized; Necessary?
     ```
 
 ---
@@ -164,7 +224,9 @@
 #### **Die Roll**
 
 - api/Game/{gameId}/RollDie
+
   - POST
+
     ```csharp
     // request body:
     {
@@ -179,7 +241,9 @@
     ```
 
 - api/Game/{gameId}/RollDie/{playerId}
+
   - POST
+
     ```csharp
     // request body:
     {
@@ -195,10 +259,13 @@
     ```
 
 > There is probably no need to couple a die roll to a specific player or game, so these either of these should be enough.
+
 - api/Die/Roll
 - api/RollDie
 - api/Game/RollDie
+
   - POST
+
     ```csharp
     // request body:
     {
@@ -214,9 +281,13 @@
 ---
 
 #### **Add Players** // **Create new game**
+
 >
+
 - api/Players/Add
+
   - POST
+
     ```csharp
     // request body:
     {
@@ -241,9 +312,12 @@
     BadRequest() // ???; If the supplied data ({player}[]) is invalid in some way. Maybe there's another error code better suited for this?
     NotFound() // If there isn't a game with the supplied {gameId}
     ```
+
 - api/Players/Add?gameId={gameId}
 - api/Game/{gameId}/Players/Add
+
   - POST
+
     ```csharp
     // request body:
     [
@@ -267,7 +341,9 @@
     ```
 
 - api/Game/New
+
   - POST
+
     ```csharp
     // request body:
     {
