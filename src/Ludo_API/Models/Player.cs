@@ -68,9 +68,13 @@ namespace Ludo_API.Models
             {
                 Track = Gameboard.BlueTrack;
             }
-            else
+            else if (Color == Color.Green)
             {
                 Track = Gameboard.GreenTrack;
+            }
+            else
+            {
+                // todo: error handling?
             }
 
             StartPosition = Track[0];
