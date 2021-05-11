@@ -1,32 +1,29 @@
-# User Stories
-note: Should we use a [Github Project](https://github.com/PGBSNH20/ludo-game-group-6/projects/1) for user stories?
+# User stories
 
-## As a user I can...
-* chose what I want to do when the game starts with a menu
-    1. (_userstory_)(**menuitem**) start a new game
-        * choose the number of `Player`s (at least: 2, max: 4)
-           * (**voluntary**) choose to play against `AI` and/or other `Player`s
-        * pick a `ConsoleColor` (not optional)
-           * (**optional**) automatically assign a number and print that too
-        * see the gameboard with the `Player`s' `Token`s and `Score`s.
-        * see a victory UI/message when I or another player is victorious
-        * ~~chose whether to continue when a player has won~~
-        * roll the `Die`
-        * make a decision based on the roll
-            * if the roll == 6 OR 1 they can enter a new token into play (if)
-        * enter a `Token` into play
-        * move a `Token` already in play
-            * **cannot** move a `Token` past one of my other `Token`s.
-            * move my `Token`(s) in the `Home` column
-        * ~~**have to** move backwards if the `Die` ends up on the floor~~
-        * knock another `Player`s `Token` out of play (back to the `Yard`) if mine lands on theirs
-        * chose whether to enter 1 `Token` (placed a the `Position` 6), 2 `Token`s (placed at `Position` 1), or move a `Token` already on the board
-        * roll a bonus `Die` if I roll a _6_
-        * **have to** roll the exact number  to enter the `Home` "triangle"
-    1. (_userstory_)(**menuitem**) resume a `Game` ~~and see the out come of previous games~~
-    1. (_userstory_)(**menuitem**) save/leave a `Game`
-        * (**option 2**) leave (upon which the `Game` saves automatically)
-    1. (_userstory_)(**menuitem**) read the rules
-        * rule-sets:
-            1. (**rule-set**) [spelregler.se](https://www.spelregler.org/fia-med-knuff/)
-            
+## As a user I want/should to be able to:
+- Start a `new game`
+    - Choose between 2 and 4 `player`s
+        - (optional) `Human` or `AI`
+    - Choose a color and name for each `player`.
+- See a `gameboard` with all `player`'s tokens.
+- See the `score`.
+- Play a `round`.
+    - Roll the `die`.
+    - Make a decision based on the `die`-roll.
+        - Choose to enter new (a) `token`(s) into player (applicable if the result of the `die` roll is 1 or 6).
+            - 1 `token` to my starting `square` (applicable if I roll a **1** and have exactly 1 `token` in my `yard`).
+            - 1 `token` to my the sixth `square` from my starting `square` (applicable if I roll a **6** and have exactly 1 `token` in my `yard`).
+            - 2 `token`s to my starting `square` (applicable if a roll a **6** and have at least 2 `token`s in my `yard`)
+        - Move a `token` (applicable if the `player` has a `token` in play and isn't blocked by one of their other `token`s).
+            - **I cannot** pass one of my own `token`s.
+            - Move to the "finishing `square`" and take a `token` out of play (applicable if I roll the exact number required to reach the "finish").
+        - Knock another `player`'s `token` out of `player` (back to said `player`'s "`yard`" (applicable if I move my `token` to a `square` occupied by another `player`).
+        - Roll a bonus `die` as long as I roll a **6**.
+- See some kind of "Victory UI" when I win.
+- (optional) continue playing after a `player` has won?
+- Resume a `Game`.
+- Save a `game`.
+    - `Game`s are automatically saved at the end of each turn.
+    - (optional) Save a `game` to disc.
+- Read the `rules`.
+    - [https://www.spelregler.org/fia-med-knuff/](https://www.spelregler.org/fia-med-knuff/)

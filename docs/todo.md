@@ -23,4 +23,3 @@
 1. [ ] Update GUI asynchronously (e.g. position of `token`s) (live).
 1. [ ] i18n - localization of GUI.
 1. [ ] Responsive "mobile friendly" UI (html).
-
