@@ -1,4 +1,4 @@
-﻿using Ludo_API.Controller;
+﻿using Ludo_API.Controllers;
 using Ludo_API.Models;
 using Ludo_API.Models.DTO;
 using Ludo_API.Repositories;
@@ -17,7 +17,7 @@ namespace Ludo_API_Test
     public class UnitTest_GamesController
     {
         [Fact]
-        public async void On_Delete_When_GameExists_Expect_GameDeletedSuccess()
+        public async void On_DELETE_When_GameExists_Expect_GameDeletedSuccess()
         {
             // Arrange
             List<Gameboard> gameboards = new()
@@ -28,8 +28,8 @@ namespace Ludo_API_Test
             };
 
             IGamesRepository gameRepo = new TestGamesRepository(gameboards);
-
             GamesController gamesController = new(null, gameRepo);
+
             // Act
             bool success = await gamesController.Delete(1);
 
@@ -40,7 +40,7 @@ namespace Ludo_API_Test
         }
 
         [Fact]
-        public async void On_Delete_When_GameDoesntExists_Expect_GameDeletedFail()
+        public async void On_DELETE_When_GameDoesntExists_Expect_GameDeletedFail()
         {
             // Arrange
             List<Gameboard> gameboards = new()
@@ -51,8 +51,8 @@ namespace Ludo_API_Test
             };
 
             IGamesRepository gameRepo = new TestGamesRepository(gameboards);
-
             GamesController gamesController = new(null, gameRepo);
+
             // Act
             bool success = await gamesController.Delete(5);
 
@@ -61,7 +61,8 @@ namespace Ludo_API_Test
             Assert.Equal(3, gameboards.Count);
         }
 
-        public async void On_Delete_When_GameDoesntExists_Expect_GameDeletedFail_()
+        [Fact]
+        public async void On_POST_When_RequestBodyListOfPlayerDTO_Expect_PlayersSquaresAndGameboardCreated()
         {
             // Arrange
             List<PlayerDTO> playerDTOs = new()
@@ -73,13 +74,15 @@ namespace Ludo_API_Test
             };
 
             IGamesRepository gameRepo = new TestGamesRepository();
-
             GamesController gamesController = new(null, gameRepo);
+
             // Act
-            var statusCode = await gamesController.Post(playerDTOs);
+            var actionResult = await gamesController.Post(playerDTOs);
 
             // Assert
-            Assert.IsType<OkObjectResult>(statusCode);
+            Assert.IsType<ActionResult<string>>(actionResult);
+            var result = Assert.IsType<OkObjectResult>(actionResult.Result);
+            Assert.IsType<Guid>(Guid.Parse((string)result.Value));
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Ludo_API.Tests
 {
     public class GamesRepositoryTest : IGamesRepository
     {
-        private List<Gameboard> _gameBoards = new();
+        private List<Gameboard> _gameboards = new();
 
         public async Task AddNewGameAsync(Gameboard gameboard, Player players)
         {
@@ -56,10 +56,10 @@ namespace Ludo_API.Tests
                     Players = players
                 };
 
-                _gameBoards.Add(gb);
+                _gameboards.Add(gb);
             }
 
-            return _gameBoards;
+            return _gameboards;
         }
 
         public void MoveToken(Player player, Square startSquare, Square endSquare)
@@ -86,12 +86,17 @@ namespace Ludo_API.Tests
             throw new NotImplementedException();
         }
 
-        Task<Gameboard> IGamesRepository.CreateNewGame(LudoContext context)
+        //Task<Gameboard> IGamesRepository.CreateNewGame(LudoContext context)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        public Task<bool> DeleteGame(LudoContext context, int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> DeleteGame(LudoContext context, int id)
+        public Task<Gameboard> CreateNewGame(LudoContext context, Gameboard gameboard)
         {
             throw new NotImplementedException();
         }

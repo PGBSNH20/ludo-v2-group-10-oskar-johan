@@ -56,19 +56,19 @@ namespace Ludo_API.Models
 
         public void SetTrack()
         {
-            if (Color == Color.Yellow)
+            if (Color.ToArgb() == Color.Yellow.ToArgb())
             {
                 Track = Gameboard.YellowTrack;
             }
-            else if (Color == Color.Red)
+            else if (Color.ToArgb() == Color.Red.ToArgb())
             {
                 Track = Gameboard.RedTrack;
             }
-            else if (Color == Color.Blue)
+            else if (Color.ToArgb() == Color.Blue.ToArgb())
             {
                 Track = Gameboard.BlueTrack;
             }
-            else if (Color == Color.Green)
+            else if (Color.ToArgb() == Color.Green.ToArgb())
             {
                 Track = Gameboard.GreenTrack;
             }

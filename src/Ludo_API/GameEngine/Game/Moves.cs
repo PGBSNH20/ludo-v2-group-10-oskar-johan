@@ -20,7 +20,7 @@ namespace Ludo_API.GameEngine.Game
             _gameEngine = gameEngine;
         }
 
-        public void GameMove(Gameboard gameBoard, List<Square> squares, int diceNumber, Models.Player player)
+        public void GameMove(Gameboard gameboard, List<Square> squares, int diceNumber, Models.Player player)
         {
             // Check if a player can insert a new piece on the board (into their start position (1st square) or "their 6th square"
             bool isMoveToSixPossible = CheckMoveOut(squares, player, player.StartPosition + 5);
@@ -65,7 +65,7 @@ namespace Ludo_API.GameEngine.Game
                     //options.Add($"Flytta en av dina pjäser på ruta {position}");
                     //optionActions.Add(new Func<bool>(() =>
                     //{
-                    //    return MovePiece(gameBoard, squares, player, position, diceNumber);
+                    //    return MovePiece(gameboard, squares, player, position, diceNumber);
                     //}));
                 }
                 else
@@ -73,7 +73,7 @@ namespace Ludo_API.GameEngine.Game
                     //options.Add($"Flytta pjäs på ruta {position}");
                     //optionActions.Add(new Func<bool>(() =>
                     //{
-                    //    return MovePiece(gameBoard, squares, player, position, diceNumber);
+                    //    return MovePiece(gameboard, squares, player, position, diceNumber);
                     //}));
                 }
             }
@@ -118,7 +118,7 @@ namespace Ludo_API.GameEngine.Game
             //    while (true)
             //    {
             //        //Console.Clear();
-            //        //GameEngine.ShowGameboardInline(gameBoard);
+            //        //GameEngine.ShowGameboardInline(gameboard);
 
             //        //Console.WriteLine($"{player.Name} slog {diceNumber}");
 
@@ -193,7 +193,7 @@ namespace Ludo_API.GameEngine.Game
             return true;
         }
 
-        //public bool MovePiece(Gameboard gameBoard, List<Square> squares, Models.Player player, int initialPosition, int diceNumber)
+        //public bool MovePiece(Gameboard gameboard, List<Square> squares, Models.Player player, int initialPosition, int diceNumber)
         //{
         //    int startIndex = player.Track.FindIndex(x => x == initialPosition);
         //    Square initialSquare = squares[initialPosition];
@@ -224,8 +224,8 @@ namespace Ludo_API.GameEngine.Game
 
         //                if (currentSquare.PieceCount == 4)
         //                {
-        //                    gameBoard.LastPlayer = null;
-        //                    _gameRepository.SaveTurnAsync(gameBoard, player);
+        //                    gameboard.LastPlayer = null;
+        //                    _gameRepository.SaveTurnAsync(gameboard, player);
         //                    Console.WriteLine($"Grattis {currentSquare.OccupiedBy.Name}!! Du har vunnit spelet!\n");
         //                    _gameEngine.EndGame();
         //                }
