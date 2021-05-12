@@ -29,7 +29,7 @@ namespace Ludo_API.Tests
 
             gameboard.Squares[0].OccupiedBy = players[0];
             gameboard.Squares[0].PieceCount = 1;
-            IGameRepository gameRepository = new GameRepositoryTest();
+            IGamesRepository gameRepository = new GamesRepositoryTest();
             IPlayerRepository playerRepository = new PlayerRepository();
             var game = new Game(gameRepository, gameboard);
             bool canMove = game.CanMoveToken(players[0], gameboard.Squares[players[0].StartPosition], 5);

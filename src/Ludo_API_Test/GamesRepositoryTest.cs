@@ -8,7 +8,7 @@ using Ludo_API.Repositories;
 
 namespace Ludo_API.Tests
 {
-    public class GameRepositoryTest : IGameRepository
+    public class GamesRepositoryTest : IGamesRepository
     {
         private List<Gameboard> _gameBoards = new();
 
@@ -67,6 +67,11 @@ namespace Ludo_API.Tests
 
             endSquare.OccupiedBy = player;
             endSquare.PieceCount++;
+        }
+
+        public Task CreateNewGame(LudoContext context)
+        {
+            throw new NotImplementedException();
         }
     }
 }

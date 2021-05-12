@@ -64,6 +64,11 @@ namespace Ludo_API.Models
             GreenTrack.AddRange(Enumerable.Range(55, 5));
         }
 
+        public Square GetSquare(int index)
+        {
+            return Squares.ElementAtOrDefault(index);
+        }
+
         public Gameboard(List<Player> players)
         {
             Players = players;

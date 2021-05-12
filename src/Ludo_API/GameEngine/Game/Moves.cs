@@ -12,9 +12,9 @@ namespace Ludo_API.GameEngine.Game
     public class Moves
     {
         private readonly IGameEngine _gameEngine;
-        private readonly IGameRepository _gameRepository;
+        private readonly IGamesRepository _gameRepository;
 
-        public Moves(IGameRepository gameRepository, IGameEngine gameEngine)
+        public Moves(IGamesRepository gameRepository, IGameEngine gameEngine)
         {
             _gameRepository = gameRepository;
             _gameEngine = gameEngine;
@@ -34,49 +34,49 @@ namespace Ludo_API.GameEngine.Game
 
             // get the id (index) of all of the player's pieces (excluding pieces in the "goal"),
             // and calculate how many pieces the player has on the their start position/square, and how many peieces they have on the board (including in the "goal")
-            foreach (var square in squares)
-            {
-                if (square.OccupiedBy == player && square.PieceCount > 0)
-                {
-                    piecesOnBoardCount += square.PieceCount ?? 0;
+            //foreach (var square in squares)
+            //{
+            //    if (square.OccupiedBy == player && square.PieceCount > 0)
+            //    {
+            //        piecesOnBoardCount += square.PieceCount ?? 0;
 
-                    if (square.ID == player.StartPosition)
-                    {
-                        piecesOnStartCount = square.PieceCount ?? 0;
-                    }
+            //        if (square.ID == player.StartPosition)
+            //        {
+            //            piecesOnStartCount = square.PieceCount ?? 0;
+            //        }
 
-                    if (square.ID != player.Track[^1])
-                    {
-                        piecesPositions.Add(square.ID);
-                    }
-                }
-            }
+            //        if (square.ID != player.Track[^1])
+            //        {
+            //            piecesPositions.Add(square.ID);
+            //        }
+            //    }
+            //}
 
             // The list of menu-options and their actions
             List<string> options = new();
             List<Func<bool>> optionActions = new();
 
             #region Populate the menu, and the list of Actions for the various options
-            // <-- Add possible actions to list
-            //foreach (int position in piecesPositions)
-            //{
-            //    if (position == player.StartPosition && piecesOnStartCount == 2)
-            //    {
-            //        options.Add($"Flytta en av dina pjäser på ruta {position}");
-            //        optionActions.Add(new Func<bool>(() =>
-            //        {
-            //            return MovePiece(gameBoard, squares, player, position, diceNumber);
-            //        }));
-            //    }
-            //    else
-            //    {
-            //        options.Add($"Flytta pjäs på ruta {position}");
-            //        optionActions.Add(new Func<bool>(() =>
-            //        {
-            //            return MovePiece(gameBoard, squares, player, position, diceNumber);
-            //        }));
-            //    }
-            //}
+             //< --Add possible actions to list
+            foreach (int position in piecesPositions)
+            {
+                if (position == player.StartPosition && piecesOnStartCount == 2)
+                {
+                    //options.Add($"Flytta en av dina pjäser på ruta {position}");
+                    //optionActions.Add(new Func<bool>(() =>
+                    //{
+                    //    return MovePiece(gameBoard, squares, player, position, diceNumber);
+                    //}));
+                }
+                else
+                {
+                    //options.Add($"Flytta pjäs på ruta {position}");
+                    //optionActions.Add(new Func<bool>(() =>
+                    //{
+                    //    return MovePiece(gameBoard, squares, player, position, diceNumber);
+                    //}));
+                }
+            }
 
             // Add the menu-option and Action for adding 2 new pieces onto the board at the player's start position/square
             if (isMoveToFirstPossible && diceNumber == 6 && piecesOnBoardCount <= 2)
@@ -156,7 +156,7 @@ namespace Ludo_API.GameEngine.Game
             //}
         }
 
-        public static bool AddPieces(List<Square> squares, Models.Player player, int position, int count)
+        public static bool AddPieces(List<Square> squares, Player player, int position, int count)
         {
             switch (count)
             {
@@ -288,7 +288,7 @@ namespace Ludo_API.GameEngine.Game
         //    return true;
         //}
 
-        public static bool CheckMoveOut(List<Square> squares, Models.Player player, int position)
+        public static bool CheckMoveOut(List<Square> squares, Player player, int position)
         {
             if (squares[position].OccupiedBy == player && squares[position].PieceCount > 0)
             {

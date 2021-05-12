@@ -11,7 +11,7 @@ namespace Ludo_API.GameEngine.Game
     //internal class TurnManager : ITurnBased
     internal class TurnManager
     {
-        private readonly IGameRepository _gameRepository;
+        private readonly IGamesRepository _gameRepository;
         private readonly Random _die;
         private readonly Game _game;
 

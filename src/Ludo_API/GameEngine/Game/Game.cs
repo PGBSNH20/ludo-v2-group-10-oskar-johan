@@ -9,27 +9,140 @@ namespace Ludo_API.GameEngine.Game
 {
     public class Game
     {
-        private readonly IGameRepository _gameRepository;
+        private readonly IGamesRepository _gameRepository;
         public Gameboard Gameboard { get; }
+        public List<Square> Squares { get; }
 
-        public Game(IGameRepository gameRepository, Gameboard gameboard)
+        public Game(IGamesRepository gameRepository, Gameboard gameboard)
         {
             _gameRepository = gameRepository;
             Gameboard = gameboard;
+            Squares = gameboard.Squares;
         }
 
         #region ILudoGame
-        public void GetPossibleMoves(Models.Player player, int diceNumber)
+        public void GetPossibleMoves(Player player, int diceNumber)
         {
             List<Square> moveableTokens = new();
-
-            foreach (var square in Gameboard.Squares.Where(gameboard => gameboard.OccupiedBy == player))
+            // todo: if we can fix the occupiedBy bug we can get rid of 's.PieceCount > 0'.
+            int tokensInPlay = 0;
+            var playerSquares = Squares.Where(s =>
             {
-                if (CanMoveToken(player, square, diceNumber))
+                bool hasTokenOnSquare = s.OccupiedBy == player && s.PieceCount > 0 && s.ID != player.Track[^1];
+
+                if (hasTokenOnSquare)
                 {
-                    moveableTokens.Add(square);
+                    tokensInPlay += s.PieceCount.Value;
+                }
+
+                return hasTokenOnSquare;
+            });
+
+            // Add the menu-option and Action for adding 2 new pieces onto the board at the player's start position/square
+            //if (CanMoveToSquare(Gameboard.GetSquare(player.StartPosition), player) != PossibleMoveAction.None && diceNumber == 6 && tokensInPlay <= 2)
+            if (CanMoveToSquare(Gameboard.GetSquare(player.StartPosition), player) && diceNumber == 6 && tokensInPlay <= 2)
+            {
+                new MoveAction
+                {
+                    SquareIndex = player.StartPosition,
+                    OptionText = $"Ta ut två spelpjäser till första rutan",
+                    NewPlayerValue = player,
+                    NewPieceCount = 2,
+                };
+                //options.Add($"Ta ut två spelpjäser till första rutan");
+                //optionActions.Add(new Func<bool>(() =>
+                //{
+                //    return AddPieces(squares, player, player.StartPosition, 2);
+                //}));
+            }
+
+            // Add the menu-option(s) and Action(s) for adding 1 new pieces onto the board at the player's 1st and/or 6th position/square.
+            if (tokensInPlay < 4)
+            {
+                //if (!Squares.Any(s => s.ID == player.StartPosition && s.OccupiedBy == player && s.PieceCount > 0) && diceNumber == 1)
+                //if (CanMoveToSquare(Squares[player.StartPosition], player) != PossibleMoveAction.None && diceNumber == 1)
+                //if (CanMoveToSquare(Gameboard.GetSquare(player.StartPosition), player) != PossibleMoveAction.None && diceNumber == 1)
+                if (CanMoveToSquare(Gameboard.GetSquare(player.StartPosition), player) && diceNumber == 1)
+                {
+                    new MoveAction
+                    {
+                        SquareIndex = player.StartPosition,
+                        OptionText = $"Ta ut en spelpjäs till ruta {player.StartPosition}",
+                        NewPlayerValue = player,
+                        NewPieceCount = 1,
+                    };
+                    //options.Add();
+                    //optionActions.Add(new Func<bool>(() =>
+                    //{
+                    //    return AddPieces(squares, player, player.StartPosition, 1);
+                    //}));
+                }
+                //else if (CanMoveToSquare(Gameboard.GetSquare(player.StartPosition + 5), player) != PossibleMoveAction.None && diceNumber == 6)
+                else if (CanMoveToSquare(Gameboard.GetSquare(player.StartPosition + 5), player) && diceNumber == 6)
+                {
+                    new MoveAction
+                    {
+                        SquareIndex = player.StartPosition + 5,
+                        OptionText = $"Ta ut en spelpjäs till ruta {player.StartPosition + 5}",
+                        NewPlayerValue = player,
+                        NewPieceCount = 1,
+                    };
+                    //options.Add();
+                    //optionActions.Add(new Func<bool>(() =>
+                    //{
+                    //    return AddPieces(squares, player, player.StartPosition + 5, 1);
+                    //}));
                 }
             }
+            else
+            {
+                foreach (var square in playerSquares)
+                {
+                    if (CanMoveToken(player, square, diceNumber))
+                    {
+                        moveableTokens.Add(square);
+                    }
+                }
+            }
+
+
+            //if (player)
+        }
+
+        public enum PossibleMoveAction
+        {
+            None,
+            Move,
+            Knockout
+        };
+
+        //public bool CanMoveTo(List<Square> squares, Player player, int position)
+        //public PossibleMoveAction CanMoveToSquare(Square squareToCheck, Player player)
+        public bool CanMoveToSquare(Square squareToCheck, Player player)
+        {
+            if (squareToCheck == null)
+            {
+                //return PossibleMoveAction.None;
+                return false;
+            }
+
+            if (squareToCheck.PieceCount > 0)
+            {
+
+                if (squareToCheck.OccupiedBy == player)
+                {
+                    //return PossibleMoveAction.None;
+                    return false;
+                }
+                else if (squareToCheck.OccupiedBy != null)
+                {
+                    //return PossibleMoveAction.Knockout;
+                    return true;
+                }
+            }
+
+            //return PossibleMoveAction.Move;
+            return true;
         }
 
         public void AddToken()
@@ -46,12 +159,12 @@ namespace Ludo_API.GameEngine.Game
         public bool CanMoveToken(Player player, Square startSquare, int diceNumber)
         {
             int startIndex = player.Track.FindIndex(x => x == startSquare.ID);
-            Square initialSquare = Gameboard.Squares[startSquare.ID];
+            Square initialSquare = Squares[startSquare.ID];
 
             for (int i = 1; i <= diceNumber; i++)
             {
                 int currentIndex = player.Track[startIndex + i];
-                Square currentSquare = Gameboard.Squares[currentIndex];
+                Square currentSquare = Squares[currentIndex];
                 bool backwardsMove = false;
 
                 if (currentIndex != player.GoalIndex && player == currentSquare.OccupiedBy && currentSquare.PieceCount > 0)

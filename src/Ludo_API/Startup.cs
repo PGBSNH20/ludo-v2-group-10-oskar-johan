@@ -1,4 +1,5 @@
 using Ludo_API.Database;
+using Ludo_API.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -34,6 +35,7 @@ namespace Ludo_API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Ludo_API", Version = "v1" });
             });
+            services.AddScoped<IGamesRepository, GamesRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -13,12 +13,12 @@ namespace Ludo_API.GameEngine
     public class GameEngine : IGameEngine
     {
         private readonly LudoContext _context;
-        private readonly IGameRepository _gameRepository;
+        private readonly IGamesRepository _gameRepository;
         private readonly IPlayerRepository _playerRepository;
         //private readonly IGameEngine _gameEngine;
 
         //internal GameEngine(IGameRepository gameRepository, IPlayerRepository playerRepository, IGameEngine gameEngine)
-        public GameEngine(LudoContext context, IGameRepository gameRepository, IPlayerRepository playerRepository)
+        public GameEngine(LudoContext context, IGamesRepository gameRepository, IPlayerRepository playerRepository)
         {
             _context = context;
             _gameRepository = gameRepository;
