@@ -45,7 +45,7 @@ namespace Ludo_API.Controllers
         // POST api/Games/New
         [HttpPost("[action]")]
         [ActionName("New")]
-        public async Task<ActionResult<int>> Post([FromBody] List<PlayerDTO> players)
+        public async Task<ActionResult<string>> Post([FromBody] List<PlayerDTO> players)
         {
             List<Player> newPlayers = new();
             Gameboard.CreateTracks();
@@ -68,8 +68,7 @@ namespace Ludo_API.Controllers
             }
 
             var gameboard = await _gameRepository.CreateNewGame(_context, new Gameboard(newPlayers));
-
-            return Ok(gameboard.ID);
+            return Ok(gameboard.GameId);
         }
 
         // PUT api/Games/{id}
