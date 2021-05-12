@@ -20,9 +20,8 @@ namespace Ludo_API.Repositories
             return await context.Gameboards.SingleOrDefaultAsync(g => g.ID == id);
         }
 
-        public async Task<Gameboard> CreateNewGame(LudoContext context)
+        public async Task<Gameboard> CreateNewGame(LudoContext context, Gameboard gameboard)
         {
-            var gameboard = new Gameboard();
             context.Gameboards.Add(gameboard);
             var saveOperation = await context.SaveChangesAsync();
             return gameboard;

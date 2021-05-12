@@ -47,6 +47,24 @@ namespace Ludo_API.Models
 
         }
 
+        public Gameboard(List<Player> players)
+        {
+            Players = players;
+            Squares = new List<Square>();
+            GameDate = DateTime.Now;
+
+            for (int i = 0; i < 60; i++)
+            {
+                Squares.Add(new Square
+                {
+                    ID = i,
+                    PieceCount = 0
+                });
+            }
+
+            CreateOrderPlayers();
+        }
+
         public static void CreateTracks()
         {
             YellowTrack.AddRange(Enumerable.Range(0, 45));
@@ -67,24 +85,6 @@ namespace Ludo_API.Models
         public Square GetSquare(int index)
         {
             return Squares.ElementAtOrDefault(index);
-        }
-
-        public Gameboard(List<Player> players)
-        {
-            Players = players;
-            Squares = new List<Square>();
-            GameDate = DateTime.Now;
-
-            for (int i = 0; i < 60; i++)
-            {
-                Squares.Add(new Square
-                {
-                    ID = i,
-                    PieceCount = 0
-                });
-            }
-
-            CreateOrderPlayers();
         }
 
         public void CreateOrderPlayers()

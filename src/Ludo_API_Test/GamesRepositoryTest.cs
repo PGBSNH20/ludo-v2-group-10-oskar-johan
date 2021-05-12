@@ -14,10 +14,12 @@ namespace Ludo_API.Tests
 
         public async Task AddNewGameAsync(Gameboard gameboard, Player players)
         {
+            throw new NotImplementedException();
         }
 
         public async Task SaveTurnAsync(Gameboard gameboard, Player player)
         {
+            throw new NotImplementedException();
         }
 
         public async Task<List<Gameboard>> GetAllGamesAsync()
@@ -70,6 +72,26 @@ namespace Ludo_API.Tests
         }
 
         public Task CreateNewGame(LudoContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Gameboard>> GetAllGames(LudoContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Gameboard> GetGame(LudoContext context, int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<Gameboard> IGamesRepository.CreateNewGame(LudoContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> DeleteGame(LudoContext context, int id)
         {
             throw new NotImplementedException();
         }

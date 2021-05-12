@@ -11,16 +11,34 @@ namespace Ludo_API_Test.TestRepositories
 {
     class TestGamesRepository : IGamesRepository
     {
-        public List<Gameboard> Gameboards { get; set; }
+        public List<Gameboard> Gameboards { get; set; } = new();
 
-        public Task<Gameboard> CreateNewGame(LudoContext context)
+        public TestGamesRepository (List<Gameboard> gameboards)
         {
-            throw new NotImplementedException();
+            Gameboards = gameboards;
+        }
+
+        public TestGamesRepository()
+        {
+        }
+
+        public Task<Gameboard> CreateNewGame(LudoContext context, Gameboard gameboard)
+        {
+            Gameboards.Add(gameboard);
+            return Task.FromResult(gameboard);
         }
 
         public Task<bool> DeleteGame(LudoContext context, int id)
         {
-            throw new NotImplementedException();
+            var gameboard = Gameboards.SingleOrDefault(g => g.ID == id);
+
+            if (gameboard == null)
+            {
+                return Task.FromResult(false);
+            }
+
+            Gameboards.Remove(gameboard);
+            return Task.FromResult(true);
         }
 
         public Task<List<Gameboard>> GetAllGames(LudoContext context)
