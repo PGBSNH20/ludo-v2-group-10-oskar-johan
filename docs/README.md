@@ -41,6 +41,8 @@
 #### **Basic**
 
 - api/Games
+- api/Games/New
+- api/NewGame
   - GET
   - PUT/PATCH
   - DELETE (admins only?)
