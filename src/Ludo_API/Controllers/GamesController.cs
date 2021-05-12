@@ -11,7 +11,7 @@ using System.Drawing;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace Ludo_API.Controller
+namespace Ludo_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -26,7 +26,7 @@ namespace Ludo_API.Controller
             _gameRepository = gameRepository;
         }
 
-        // GET: api/<Games>
+        // GET: api/Games
         [HttpGet]
         public async Task<IEnumerable<Gameboard>> GetAll()
         {
@@ -34,7 +34,7 @@ namespace Ludo_API.Controller
             return gameboards;
         }
 
-        // GET api/<Games>/5
+        // GET api/Games/{id}
         [HttpGet("{id}")]
         public async Task<Gameboard> Get(int id)
         {
@@ -42,12 +42,13 @@ namespace Ludo_API.Controller
             return gameboard;
         }
 
-        // POST api/<Games>
+        // POST api/Games/New
         [HttpPost("[action]")]
         [ActionName("New")]
         public async Task<ActionResult<int>> Post([FromBody] List<PlayerDTO> players)
         {
             List<Player> newPlayers = new();
+            Gameboard.CreateTracks();
 
             foreach (PlayerDTO p in players)
             {
@@ -65,19 +66,20 @@ namespace Ludo_API.Controller
 
                 newPlayers.Add(new(p.Name, color));
             }
+
             var gameboard = await _gameRepository.CreateNewGame(_context, new Gameboard(newPlayers));
-            
+
             return Ok(gameboard.ID);
         }
 
-        // PUT api/<Games>/5
+        // PUT api/Games/{id}
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
             throw new NotImplementedException();
         }
 
-        // DELETE api/<Games>/5
+        // DELETE api/<Games>/{id}
         [HttpDelete("{id}")]
         public async Task<bool> Delete(int id)
         {
