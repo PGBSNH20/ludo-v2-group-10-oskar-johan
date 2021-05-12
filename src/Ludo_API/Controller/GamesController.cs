@@ -13,12 +13,12 @@ namespace Ludo_API.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class Games : ControllerBase
+    public class GamesController : ControllerBase
     {
         private readonly LudoContext _context;
         private readonly IGamesRepository _gameRepository;
 
-        public Games(LudoContext context, IGamesRepository gameRepository)
+        public GamesController(LudoContext context, IGamesRepository gameRepository)
         {
             _context = context;
             _gameRepository = gameRepository;
@@ -58,9 +58,9 @@ namespace Ludo_API.Controller
 
         // DELETE api/<Games>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            throw new NotImplementedException();
+            return await _gameRepository.DeleteGame(_context, id);
         }
     }
 }

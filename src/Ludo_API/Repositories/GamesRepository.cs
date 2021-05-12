@@ -36,5 +36,19 @@ namespace Ludo_API.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public async Task<bool> DeleteGame(LudoContext context, int id)
+        {
+            var gameboard = await context.Gameboards.SingleOrDefaultAsync(g => g.ID == id);
+
+            if (gameboard == null)
+            {
+                return false;
+            }
+
+            context.Gameboards.Remove(gameboard);
+            await context.SaveChangesAsync();
+            return true;
+        }
     }
 }

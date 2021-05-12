@@ -14,5 +14,6 @@ namespace Ludo_API.Repositories
         Task<Gameboard> CreateNewGame(LudoContext context);
         Task SaveTurnAsync(Gameboard gameboard, Player player);
         void MoveToken(Player player, Square startSquare, Square endSquare);
+        Task<bool> DeleteGame(LudoContext context, int id);
     }
 }
