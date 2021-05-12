@@ -80,11 +80,11 @@ För att ett element räckans med i bedömningen ska det de bekrivas i docs mapp
 
 * Deployas till en webserver 
   * *docs/link.md*, hur har progammet deplyas, och vad är länken.
-* Inlogning, som är inplementerat med ASP.NET core [authentication och autherization](/PGBSNH20-backendweb/lectures/aaa-i18n)
+* Inlogning, som är inplementerat med ASP.NET core [authentication och autherization](https://pgbsnh20.github.io/PGBSNH20-backendweb/lectures/aaa-i18n)
     * *docs/vg_auth.md*, hur kan användern logga på? hur sparas data?
 * Möjlighet att bjuda in/utmana flera spelere via epost, använn en tjänst som [SendGrid](https://sendgrid.com) tiill detta
     * *docs/vg_email.md*, vilken service använns?
-* Spelets pjäserna på spelet ska uppdateras automatisk via [SignalR](/PGBSNH20-backendweb/lectures/asyncweb) eller en annan async teknologi (som webhooks)
+* Spelets pjäserna på spelet ska uppdateras automatisk via [SignalR](https://pgbsnh20.github.io/PGBSNH20-backendweb/lectures/asyncweb) eller en annan async teknologi (som webhooks)
     * *docs/vg_async.md*, ett diagram som viser dataflowet
 * Stöd för fler språk/kultur (eg. Svenska och engelska) i webbgränssnittet, baseret på vad som är konfigureret i webläseren eller vid login
     * *docs/vg_i18n.md*, vilka internationaliserings funktioner har ni använt
