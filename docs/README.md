@@ -41,7 +41,9 @@
 #### **Basic**
 
 - api/Games
+  - GET
 - api/Games/New
+  - POST
 - api/NewGame
   - GET
   - PUT/PATCH
