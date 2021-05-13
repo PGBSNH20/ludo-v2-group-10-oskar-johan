@@ -15,8 +15,6 @@ namespace Ludo_API.Models.DTO
         [Required]
         [IsColor("Invalid color format, value should be a hex color (e.g. #123cef)")]
         public string Color { get; set; } // e.g. "#ff00ff00" for green.
-        //[Required]
-        //[IsColor("Invalid color format, value should be a hex color (e.g. #123cef)")]
         //public int Color { get; set; } // e.g. 0xff00ff00 for green.
     }
 }

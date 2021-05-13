@@ -54,10 +54,10 @@ namespace Ludo_API.Controllers
 
             foreach (PlayerDTO p in players)
             {
-                if (string.IsNullOrWhiteSpace(p.Name) || p.Name.Length > 20)
-                {
-                    return BadRequest("Please enter a name, must be less than 20 characters");
-                }
+                //if (string.IsNullOrWhiteSpace(p.Name) || p.Name.Length > 20)
+                //{
+                //    return BadRequest("Please enter a name, must be less than 20 characters");
+                //}
 
                 var color = ColorTranslator.FromHtml(p.Color);
                 //var color = Color.FromArgb(p.Color);
