@@ -11,8 +11,12 @@ namespace Ludo_API.Models
     {
         [Key]
         public int ID { get; set; }
+        //[Key]
+        // https://stackoverflow.com/a/40917033
+        //public int GameId { get; set; }
 
         [Required]
+        // https://stackoverflow.com/a/40917033
         public string GameId { get; set; }
 
         public Player LastPlayer { get; set; }
@@ -88,6 +92,11 @@ namespace Ludo_API.Models
             GreenTrack.AddRange(Enumerable.Range(55, 5));
         }
 
+        /// <summary>
+        /// Get a Square with its index.
+        /// </summary>
+        /// <param name="index">The index of the Square to retrieve.</param>
+        /// <returns></returns>
         public Square GetSquare(int index)
         {
             return Squares.ElementAtOrDefault(index);
