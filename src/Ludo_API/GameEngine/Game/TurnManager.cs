@@ -8,12 +8,16 @@ using System.Threading.Tasks;
 namespace Ludo_API.GameEngine.Game
 {
 
-    //internal class TurnManager : ITurnBased
-    internal class TurnManager
+    internal class TurnManager : ITurnBased
+    //internal class TurnManager
     {
         private readonly IGamesRepository _gameRepository;
         private readonly Random _die;
         private readonly Game _game;
+
+        public TurnManager()
+        {
+        }
 
         public TurnManager(Game game)
         {
@@ -22,7 +26,7 @@ namespace Ludo_API.GameEngine.Game
         }
 
         #region ITurnBased
-        public Models.Player DecideWhoStarts(List<Models.Player> players)
+        public Player DecideWhoStarts(List<Player> players)
         {
             var startnumber = new Random();
             var start = startnumber.Next(0, players.Count);
@@ -34,7 +38,7 @@ namespace Ludo_API.GameEngine.Game
             throw new NotImplementedException();
         }
 
-        public void HandleTurn(Models.Player player)
+        public void HandleTurn(Player player)
         {
             //Console.WriteLine($"\nDet är {player.Name}s tur att slå.");
             //int choice = Menu.ShowMenu("Gör ditt val i listan\n", new string[]
@@ -74,12 +78,17 @@ namespace Ludo_API.GameEngine.Game
             }
         }
 
-        private int RollDice()
+        public int RollDice()
         {
             return _die.Next(1, 7);
         }
 
         public void EndTurn()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void HandleTurn()
         {
             throw new NotImplementedException();
         }
