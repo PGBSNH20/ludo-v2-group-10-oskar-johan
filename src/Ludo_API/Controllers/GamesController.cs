@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.ComponentModel.DataAnnotations;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -45,7 +46,8 @@ namespace Ludo_API.Controllers
         // POST api/Games/New
         [HttpPost("[action]")]
         [ActionName("New")]
-        public async Task<ActionResult<string>> Post([FromBody] List<PlayerDTO> players)
+        //public async Task<ActionResult<string>> Post([FromBody] List<PlayerDTO> players)
+        public async Task<ActionResult<int>> Post([FromBody] List<PlayerDTO> players)
         {
             List<Player> newPlayers = new();
             Gameboard.CreateTracks();
@@ -57,17 +59,19 @@ namespace Ludo_API.Controllers
                     return BadRequest("Please enter a name, must be less than 20 characters");
                 }
 
-                var color = Color.FromArgb(p.Color);
+                var color = ColorTranslator.FromHtml(p.Color);
+                //var color = Color.FromArgb(p.Color);
 
-                if (color == Color.Empty)
-                {
-                    return BadRequest("Invalid color selection");
-                }
+                //if (color.ToArgb() == Color.Empty.ToArgb())
+                //{
+                //    return BadRequest("Invalid color selection");
+                //}
 
                 newPlayers.Add(new(p.Name, color));
             }
 
             var gameboard = await _gameRepository.CreateNewGame(_context, new Gameboard(newPlayers));
+            //gameboard.SetPlayerColors();
             return Ok(gameboard.GameId);
         }
 

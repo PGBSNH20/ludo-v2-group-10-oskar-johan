@@ -13,13 +13,13 @@ namespace Ludo_API_Test.TestRepositories
     {
         public List<Gameboard> Gameboards { get; set; } = new();
 
+        public TestGamesRepository()
+        {
+        }
+
         public TestGamesRepository (List<Gameboard> gameboards)
         {
             Gameboards = gameboards;
-        }
-
-        public TestGamesRepository()
-        {
         }
 
         public Task<Gameboard> CreateNewGame(LudoContext context, Gameboard gameboard)
@@ -43,7 +43,7 @@ namespace Ludo_API_Test.TestRepositories
 
         public Task<List<Gameboard>> GetAllGames(LudoContext context)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(Gameboards);
         }
 
         public Task<Gameboard> GetGame(LudoContext context, int id)

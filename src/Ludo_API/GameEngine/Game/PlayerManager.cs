@@ -23,7 +23,7 @@ namespace Ludo_API.GameEngine.Game
                 players.Add(new Models.Player
                 {
                     Name = playerDTO.Name,
-                    Color = Color.FromArgb(playerDTO.Color),
+                    Color = ColorTranslator.FromHtml(playerDTO.Color),
                 });
             }
 

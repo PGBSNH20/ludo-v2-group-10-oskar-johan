@@ -16,8 +16,11 @@ namespace Ludo_API_Test
 {
     public class UnitTest_GamesController
     {
-        [Fact]
-        public async void On_DELETE_When_GameExists_Expect_GameDeletedSuccess()
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        public async void On_DELETE_When_GameExists_Expect_GameDeletedSuccess(int id)
         {
             // Arrange
             List<Gameboard> gameboards = new()
@@ -31,12 +34,12 @@ namespace Ludo_API_Test
             GamesController gamesController = new(null, gameRepo);
 
             // Act
-            bool success = await gamesController.Delete(1);
+            bool success = await gamesController.Delete(id);
 
             // Assert
             Assert.True(success);
             Assert.Equal(2, gameboards.Count);
-            Assert.DoesNotContain(gameboards, g => g.ID == 1);
+            Assert.DoesNotContain(gameboards, g => g.ID == id);
         }
 
         [Fact]
@@ -67,10 +70,11 @@ namespace Ludo_API_Test
             // Arrange
             List<PlayerDTO> playerDTOs = new()
             {
-                new() { Name = "Player1", Color = Color.Blue.ToArgb() },
-                new() { Name = "Player2", Color = Color.Red.ToArgb() },
-                new() { Name = "Player2", Color = Color.Yellow.ToArgb() },
-                new() { Name = "Player2", Color = Color.Green.ToArgb() },
+                //new() { Name = "Player1", Color = Color.Blue.ToArgb() },
+                new() { Name = "Player1", Color = "#0000ff" },
+                new() { Name = "Player2", Color = "#ff0000" },
+                new() { Name = "Player3", Color = "#ffff00" },
+                new() { Name = "Player4", Color = "#008000" },
             };
 
             IGamesRepository gameRepo = new TestGamesRepository();
@@ -78,11 +82,15 @@ namespace Ludo_API_Test
 
             // Act
             var actionResult = await gamesController.Post(playerDTOs);
+            var gameboards = await gameRepo.GetAllGames(null);
 
             // Assert
-            Assert.IsType<ActionResult<string>>(actionResult);
+            //Assert.IsType<ActionResult<string>>(actionResult);
+            Assert.IsType<ActionResult<int>>(actionResult);
             var result = Assert.IsType<OkObjectResult>(actionResult.Result);
-            Assert.IsType<Guid>(Guid.Parse((string)result.Value));
+            //Assert.IsType<Guid>(Guid.Parse((string)result.Value));
+            Assert.Equal(4, gameboards[0].Players.Count);
+            Assert.Equal("Player4", gameboards[0].Players.Last().Name);
         }
     }
 }
