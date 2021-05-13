@@ -120,6 +120,13 @@ namespace Ludo_API.GameEngine.Game
         //public PossibleMoveAction CanMoveToSquare(Square squareToCheck, Player player)
         public bool CanMoveToSquare(Square squareToCheck, Player player)
         {
+            //if (squareToCheck == null || squareToCheck.OccupiedBy == player)
+            //{
+            //    return false;
+            //}
+
+            //return true;
+
             if (squareToCheck == null)
             {
                 //return PossibleMoveAction.None;
@@ -155,6 +162,39 @@ namespace Ludo_API.GameEngine.Game
             _gameRepository.MoveToken(player, startSquare, endSquare);
             //throw new NotImplementedException();
         }
+
+        //public bool IsTokenMovePossible(Player player, Square startSquare, int diceRoll)
+        //{
+        //    int startIndex = player.Track.FindIndex(x => x == startSquare.ID);
+        //    Square initialSquare = Squares[startSquare.ID];
+
+        //    for (int i = 1; i <= diceNumber; i++)
+        //    {
+        //        // i: 3, 6 - 3 = 3
+        //        // i: 4, 6 - 4 = 2
+        //        // i: 5, 6 - 5 = 1
+        //        // i: 6, 6 - 6 = 0, 6 
+        //        int currentIndex = player.Track[startIndex + i];
+        //        Square currentSquare = Squares[currentIndex];
+        //        bool backwardsMove = false;
+
+        //        // If it's the last move.
+        //        if (currentIndex == player.GoalIndex)
+        //        {
+
+        //            if (i == diceNumber) {
+        //                // goal
+        //                return true
+        //            }
+
+        //            // move backwards
+        //            backwardsMove = true;
+        //        }
+
+        //        // normal move
+        //        bool canMove = CanMoveToSquare(currentSquare, player)
+        //    }
+        //}
 
         public bool CanMoveToken(Player player, Square startSquare, int diceNumber)
         {

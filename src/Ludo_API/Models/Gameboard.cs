@@ -45,6 +45,7 @@ namespace Ludo_API.Models
         public List<Color> ColorOrder = new() { Color.Yellow, Color.Red, Color.Blue, Color.Green };
         #endregion
 
+        #region Constructors
         public Gameboard()
         {
 
@@ -68,6 +69,7 @@ namespace Ludo_API.Models
 
             CreateOrderPlayers();
         }
+        #endregion
 
         public static void CreateTracks()
         {
