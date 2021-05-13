@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Ludo_API.Models.DTO
 {
-    public struct PossibleMoveDTO
+    public record PossibleMoveDTO
     {
         public int MoveId { get; set; }
         public string MoveDescription { get; set; }
