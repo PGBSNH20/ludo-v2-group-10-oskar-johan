@@ -92,5 +92,38 @@ namespace Ludo_API_Test
             Assert.Equal(4, gameboards[0].Players.Count);
             Assert.Equal("Player4", gameboards[0].Players.Last().Name);
         }
+
+        // note: this might not be possible in a unit test (has to be an integration test?)
+        //[Theory]
+        ////[InlineData("Player1", "#0000f", "Invalid color format, value should be a hex color (e.g. #123cef)")]
+        //[InlineData("Player1", "0000ff", "Invalid color format, value should be a hex color (e.g. #123cef)")]
+        //[InlineData("Player1", "", "Invalid color format, value should be a hex color (e.g. #123cef)")]
+        //[InlineData("Player1", "#", "Invalid color format, value should be a hex color (e.g. #123cef)")]
+        //[InlineData("Player1", "fff", "Invalid color format, value should be a hex color (e.g. #123cef)")]
+        //[InlineData("Player1", null, "Invalid color format, value should be a hex color (e.g. #123cef)")]
+        //[InlineData("", "#0000ff", "Name length must be between 1 and 25.")] // todo: regex match instead of hardcoding 'name', '1' and '25'?
+        //[InlineData("namenamenamenamenamenamename", "#0000ff", "Name length must be between 1 and 25.")] // todo: regex match instead of hardcoding 'name', '1' and '25'?
+        //[InlineData(null, "#0000ff", "Name length must be between 1 and 25.")] // todo: regex match instead of hardcoding 'name', '1' and '25'?
+        //public async void On_POST_When_Invalid_Expect_BadRequest(string name, string color, string errorMessage)
+        //{
+        //    // Arrange
+        //    List<PlayerDTO> playerDTOs = new()
+        //    {
+        //        new() { Name = name, Color = color },
+        //    };
+
+        //    IGamesRepository gameRepo = new TestGamesRepository();
+        //    GamesController gamesController = new(null, gameRepo);
+
+        //    // Act
+        //    var actionResult = await gamesController.Post(playerDTOs);
+        //    var gameboards = await gameRepo.GetAllGames(null);
+        //    // actionResult = Actionresult<int> where actionResult.Result = BadRequestObjectResult and actionResult.Result.Value == errorMessage
+
+        //    // Assert
+        //    var result = Assert.IsType<BadRequestObjectResult>(actionResult.Result);
+        //    Assert.Equal(errorMessage, (string)result.Value);
+        //    //Assert.
+        //}
     }
 }
