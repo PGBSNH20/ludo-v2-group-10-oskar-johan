@@ -1,4 +1,5 @@
 ﻿using Ludo_API.Database;
+using Ludo_API.GameEngine.Game;
 using Ludo_API.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -47,6 +48,33 @@ namespace Ludo_API.Repositories
 
             context.Gameboards.Remove(gameboard);
             await context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> ExecuteMoveAction(LudoContext context, MoveAction moveAction)
+        {
+            if (moveAction.StartSquare != null)
+            {
+                var startSquare = await context.Squares.SingleOrDefaultAsync(s => s.ID == moveAction.StartSquare.SquareIndex);
+                if (startSquare == null)
+                {
+                    return false;
+                }
+                startSquare.Tenant = moveAction.StartSquare;
+            }
+
+            if (moveAction.DestinationSquare != null)
+            {
+                var destinationSquare = await context.Squares.SingleOrDefaultAsync(s => s.ID == moveAction.DestinationSquare.SquareIndex);
+                if (destinationSquare == null)
+                {
+                    return false;
+                }
+                destinationSquare.Tenant = moveAction.DestinationSquare;
+            }
+
+            await context.SaveChangesAsync();
+
             return true;
         }
     }

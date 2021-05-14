@@ -15,18 +15,18 @@ namespace Ludo_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GameController : ControllerBase
+    public class GameplayController : ControllerBase
     {
         private readonly LudoContext _context;
         private readonly IGamesRepository _gamesRepository;
-        IMoveActionsRepository _moveActionRepository,
+        private readonly IMoveActionsRepository _moveActionRepository;
         private readonly ITurnBased _turnManager;
 
-        public GameController(
+        public GameplayController(
             LudoContext context,
             IGamesRepository gameRepository,
             IMoveActionsRepository moveActionRepository,
-            ITurnBased turnManager,
+            ITurnBased turnManager
             )
         {
             _context = context;
@@ -35,7 +35,7 @@ namespace Ludo_API.Controllers
             _turnManager = turnManager;
         }
 
-        // POST api/Games/New
+        // POST api/Gameplay/New
         //[HttpGet("[action]")]
         //public async Task<ActionResult<int>> Get...(
         //    [Required][FromBody] int gameId,
@@ -44,10 +44,9 @@ namespace Ludo_API.Controllers
         //{
         //}
 
-        // POST api/Games/RollDie
+        // POST api/Gameplay/RollDie
         [HttpPost("[action]")]
         [ActionName("RollDie")]
-        //public async Task<ActionResult<PossibleMoveDTO[]>> Post(
         public async Task<ActionResult<List<MoveAction>>> PostRollDie(
             [Required][FromBody] int gameId,
             [Required][FromBody] int playerId
@@ -67,26 +66,36 @@ namespace Ludo_API.Controllers
                 return NotFound($"Can't find player with the id {playerId}");
             }
 
-            // HandleTurn implies that the entire turn is handled when called?
-            return Ok(_turnManager.HandleTurn(player));
-            // So maybe it's better to make individual calls anyway?
-            //int dieRoll = _turnManager.RollDice();
-            //_game.GetPossibleMoves(player, diceNumber);
-            //_turnManager.GetPossibleMoves(player);
+            var moveActions = _turnManager.HandleTurn(player);
 
-            //return new List; //  temp
+            return Ok(await _moveActionRepository.AddMoveActions(_context, moveActions));
         }
 
-        // POST api/Games/ChoseAction
+        // POST api/Gameplay/ChoseAction
         [HttpPost("[action]")]
         [ActionName("ChooseAction")]
-        //public async Task<ActionResult<PossibleMoveDTO[]>> Post(
-        public async Task<ActionResult<List<MoveAction>>> PostChooseAction(
+        public async Task<ActionResult<bool>> PostChooseAction(
             [Required][FromBody] int moveActionId,
             [Required][FromBody] int playerId
             )
         {
-            // todo
+            var moveAction = await _moveActionRepository.GetMoveAction(_context, moveActionId);
+
+            if (moveAction == null)
+            {
+                // todo: maybe replace NotFound with another error
+                return NotFound($"Can't find a move action with id {moveActionId}");
+            }
+
+            bool success = await _gamesRepository.ExecuteMoveAction(_context, moveAction);
+
+            if (success)
+            {
+                return Ok();
+            }
+
+            // todo: maybe replace NotFound with another error
+            return BadRequest("Move unsuccessful");
         }
     }
 }
