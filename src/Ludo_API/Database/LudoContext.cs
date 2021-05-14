@@ -1,4 +1,5 @@
-﻿using Ludo_API.Models;
+﻿using Ludo_API.GameEngine.Game;
+using Ludo_API.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace Ludo_API.Database
         public DbSet<Player> Players { get; set; }
         public DbSet<Gameboard> Gameboards { get; set; }
         public DbSet<Square> Squares { get; set; }
+        public DbSet<MoveAction> MoveActions { get; set; }
 
         public LudoContext(DbContextOptions<LudoContext> options) : base(options)
         {

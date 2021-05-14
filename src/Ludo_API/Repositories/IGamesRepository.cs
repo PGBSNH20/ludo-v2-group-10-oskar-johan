@@ -1,4 +1,5 @@
 ﻿using Ludo_API.Database;
+using Ludo_API.GameEngine.Game;
 using Ludo_API.Models;
 using System;
 using System.Collections.Generic;
@@ -15,5 +16,6 @@ namespace Ludo_API.Repositories
         Task SaveTurnAsync(Gameboard gameboard, Player player);
         void MoveToken(Player player, Square startSquare, Square endSquare);
         Task<bool> DeleteGame(LudoContext context, int id);
+        Task<bool> ExecuteMoveAction(LudoContext context, MoveAction moveAction);
     }
 }
