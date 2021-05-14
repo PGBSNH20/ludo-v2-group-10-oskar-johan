@@ -84,6 +84,7 @@ namespace Ludo_API.Controllers
             if (moveAction == null)
             {
                 // todo: maybe replace NotFound with another error
+                // e.g. StatusCode(HttpStatusCode.InternalServerError, "error message");
                 return NotFound($"Can't find a move action with id {moveActionId}");
             }
 
@@ -95,6 +96,7 @@ namespace Ludo_API.Controllers
             }
 
             // todo: maybe replace NotFound with another error
+            // e.g. StatusCode(HttpStatusCode.InternalServerError, "error message");
             return BadRequest("Move unsuccessful");
         }
     }
