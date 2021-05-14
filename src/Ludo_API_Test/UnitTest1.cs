@@ -5,42 +5,66 @@ using Ludo_API_Test.TestRepositories;
 using System.Collections.Generic;
 using System.Drawing;
 using Xunit;
+using Ludo_API_Test;
 
 namespace Ludo_API.Tests
 {
     public class Ludo_API_Test
     {
-        [Fact]
-        public void MovePiece_PathIsClear_MoveIsSuccessful()
+        //[Fact]
+        [Theory]
+        [InlineData(0, 5, 0, 6, 1, true)]
+        public async void MovePiece_PathIsClear_MoveIsSuccessful(
+            int squareIndex,
+            int diceRoll,
+            int player1Index,
+            int player2Index,
+            int moveActionCountExpected,
+            bool moveSuccessfulExpected
+            )
         {
-            //Arrange
+            // Arrange
             Gameboard.CreateTracks();
 
-            List<Player> players = new List<Models.Player>
+            List<Player> players = new()
             {
-                new Player("LudoPlayer", Color.Yellow)
+                new Player("LudoPlayer1", Color.Yellow),
+                new Player("LudoPlayer2", Color.Blue),
             };
+            players.ForEach(p => p.SetTrack()); // note: might be unnecessary if SetTrack can be called from the parameterless Player constructor without breaking Entity Framework.
 
             Gameboard gameboard = new Gameboard(players);
+            gameboard.Squares[player1Index].Tenant = new SquareTenant(player1Index, players[0], 1);
+            gameboard.Squares[player2Index].Tenant = new SquareTenant(player2Index, players[1], 1);
 
-            gameboard.Squares[0].OccupiedBy = players[0];
-            gameboard.Squares[0].PieceCount = 1;
-            IGamesRepository gameRepository = new TestGamesRepository();
-            IPlayerRepository playerRepository = new PlayerRepository();
+            IGamesRepository gameRepository = new TestGamesRepository
+            {
+                Squares = gameboard.Squares, // note: this is hacky, fixme: the repository should take a gameboardId
+            };
+            IPlayerRepository playerRepository = new TestPlayerRepository();
+            await playerRepository.AddPlayers(null, players);
+            await gameRepository.CreateNewGame(null, gameboard);
+
             var game = new Game(gameRepository, gameboard);
-            bool canMove = game.CanMoveToSquare(players[0], gameboard.Squares[players[0].StartPosition], 5, out _);
-            game.MoveToken(players[0], gameboard.Squares[0], gameboard.Squares[5]);
+            //var turnManager = new TurnManager(game);
 
-            // Assert that move was successful
-            Assert.True(canMove);
+            // Act
+            //var moveActions = turnManager.HandleTurn(players[0]);
+            var moveActions = game.GetPossibleMoves(players[0], diceRoll);
+            bool moveSuccessfulActual = await gameRepository.ExecuteMoveAction(null, moveActions[0]);
 
-            // Assert that player has moved from initial position
-            Assert.Null(gameboard.Squares[0].OccupiedBy);
-            Assert.Equal(0, gameboard.Squares[0].PieceCount);
+            // Assert
+            //Assert.Single(moveActions);
+            Assert.Equal(moveActionCountExpected, moveActions.Count);
+            Assert.Equal(moveSuccessfulExpected, moveSuccessfulActual);
 
-            // Assert that player has moved to target position
-            Assert.Equal(players[0], gameboard.Squares[5].OccupiedBy);
-            Assert.Equal(1, gameboard.Squares[5].PieceCount);
+            //// Assert that player has moved from initial square
+            Assert.Equal(new SquareTenant(player1Index, null, 0), gameboard.Squares[player1Index].Tenant);
+            //Assert.Equal(0, gameboard.Squares[player1Index].Tenant.PieceCount);
+
+            //// Assert that player has moved to target square
+            Assert.Equal(players[0], gameboard.Squares[player1Index + diceRoll].Tenant.Player);
+            Assert.Equal(1, gameboard.Squares[player1Index + diceRoll].Tenant.PieceCount);
         }
 
         //[Fact]
@@ -57,10 +81,10 @@ namespace Ludo_API.Tests
         //    Gameboard gameboard = new Gameboard(players);
 
         //    gameboard.Squares[0].OccupiedBy = players[0];
-        //    gameboard.Squares[0].PieceCount = 1;
+        //    gameboard.Squares[0].Tenant?.PieceCount = 1;
 
         //    gameboard.Squares[2].OccupiedBy = players[0];
-        //    gameboard.Squares[2].PieceCount = 1;
+        //    gameboard.Squares[2].Tenant?.PieceCount = 1;
 
         //    IGameRepository gameRepository = new TestGamesRepository();
 
@@ -72,11 +96,11 @@ namespace Ludo_API.Tests
 
         //    //Assert that player has NOT moved from initial position
         //    Assert.Equal(players[0], gameboard.Squares[0].OccupiedBy);
-        //    Assert.Equal(1, gameboard.Squares[0].PieceCount);
+        //    Assert.Equal(1, gameboard.Squares[0].Tenant?.PieceCount);
 
         //    //Assert that player has NOT moved to target position
         //    Assert.Null(gameboard.Squares[5].OccupiedBy);
-        //    Assert.Equal(0, gameboard.Squares[5].PieceCount);
+        //    Assert.Equal(0, gameboard.Squares[5].Tenant?.PieceCount);
         //}
 
         //[Fact]
@@ -93,7 +117,7 @@ namespace Ludo_API.Tests
         //    Gameboard gameboard = new Gameboard(players);
 
         //    gameboard.Squares[42].OccupiedBy = players[0];
-        //    gameboard.Squares[42].PieceCount = 1;
+        //    gameboard.Squares[42].Tenant?.PieceCount = 1;
 
         //    IGameRepository gameRepository = new TestGamesRepository();
 
@@ -105,11 +129,11 @@ namespace Ludo_API.Tests
 
         //    //Assert that player has moved from initial position
         //    Assert.Null(gameboard.Squares[42].OccupiedBy);
-        //    Assert.Equal(0, gameboard.Squares[42].PieceCount);
+        //    Assert.Equal(0, gameboard.Squares[42].Tenant?.PieceCount);
 
         //    //Assert that player has moved to target position
         //    Assert.Equal(players[0], gameboard.Squares[41].OccupiedBy);
-        //    Assert.Equal(1, gameboard.Squares[41].PieceCount);
+        //    Assert.Equal(1, gameboard.Squares[41].Tenant?.PieceCount);
         //}
 
         //[Fact]
@@ -126,10 +150,10 @@ namespace Ludo_API.Tests
         //    Gameboard gameboard = new Gameboard(players);
 
         //    gameboard.Squares[44].OccupiedBy = players[0];
-        //    gameboard.Squares[44].PieceCount = 1;
+        //    gameboard.Squares[44].Tenant?.PieceCount = 1;
 
         //    gameboard.Squares[41].OccupiedBy = players[0];
-        //    gameboard.Squares[41].PieceCount = 1;
+        //    gameboard.Squares[41].Tenant?.PieceCount = 1;
 
         //    //Act
         //    bool result = Moves.MoveBackwards(gameboard.Squares, players[0], 3, 44, gameboard.Squares[44]);
@@ -139,11 +163,11 @@ namespace Ludo_API.Tests
 
         //    //Assert that player has not moved
         //    Assert.Equal(players[0], gameboard.Squares[44].OccupiedBy);
-        //    Assert.Equal(1, gameboard.Squares[44].PieceCount);
+        //    Assert.Equal(1, gameboard.Squares[44].Tenant?.PieceCount);
 
         //    //Assert that piececount is still 1 on target position.
         //    Assert.Equal(players[0], gameboard.Squares[41].OccupiedBy);
-        //    Assert.Equal(1, gameboard.Squares[41].PieceCount);
+        //    Assert.Equal(1, gameboard.Squares[41].Tenant?.PieceCount);
         //}
 
         //[Fact]
@@ -161,7 +185,7 @@ namespace Ludo_API.Tests
         //    Gameboard gameboard = new Gameboard(players);
 
         //    gameboard.Squares[0].OccupiedBy = players[1];
-        //    gameboard.Squares[0].PieceCount = 1;
+        //    gameboard.Squares[0].Tenant?.PieceCount = 1;
 
         //    //Act
         //    bool result = Moves.CheckMoveOut(gameboard.Squares, players[0], players[0].StartPosition);
@@ -185,7 +209,7 @@ namespace Ludo_API.Tests
 
         //    var ludoPlayerStartPosition = players[0].StartPosition;
         //    gameboard.Squares[ludoPlayerStartPosition].OccupiedBy = players[0];
-        //    gameboard.Squares[ludoPlayerStartPosition].PieceCount = 1;
+        //    gameboard.Squares[ludoPlayerStartPosition].Tenant?.PieceCount = 1;
 
         //    //Act
         //    bool result = Moves.CheckMoveOut(gameboard.Squares, players[0], players[0].StartPosition);
@@ -207,7 +231,7 @@ namespace Ludo_API.Tests
 
         //    Gameboard gameboard = new Gameboard(players);
         //    var playerStartPosition = players[0].StartPosition;
-        //    Assert.Equal(0, gameboard.Squares[playerStartPosition].PieceCount);
+        //    Assert.Equal(0, gameboard.Squares[playerStartPosition].Tenant?.PieceCount);
 
         //    //Act
         //    bool result = Moves.AddPieces(gameboard.Squares, gameboard.Players[0], playerStartPosition, 2);
@@ -216,7 +240,7 @@ namespace Ludo_API.Tests
         //    Assert.True(result);
         //    //Assert that player has moved to target position
         //    Assert.Equal(players[0], gameboard.Squares[playerStartPosition].OccupiedBy);
-        //    Assert.Equal(2, gameboard.Squares[playerStartPosition].PieceCount);
+        //    Assert.Equal(2, gameboard.Squares[playerStartPosition].Tenant?.PieceCount);
         //}
 
         //[Fact]
