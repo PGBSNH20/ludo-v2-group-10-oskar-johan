@@ -10,6 +10,8 @@ namespace Ludo_API.Repositories
 {
     public interface IGamesRepository
     {
+        Task AddNewGameAsync(Gameboard gameboard, Player players);
+        Task<List<Gameboard>> GetAllGamesAsync();
         Task<List<Gameboard>> GetAllGames(LudoContext context);
         Task<Gameboard> GetGame(LudoContext context, int id);
         Task<Gameboard> CreateNewGame(LudoContext context, Gameboard gameboard);
