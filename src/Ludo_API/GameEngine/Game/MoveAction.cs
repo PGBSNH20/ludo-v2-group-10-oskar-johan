@@ -39,9 +39,12 @@ namespace Ludo_API.GameEngine.Game
 
         #region NonDataMembers
         /// <summary>
-        /// The < Square
+        /// This holds the new value for the <see cref="Square"/> a piece is moved from.
         /// </summary>
         public SquareTenant StartSquare { get; init; }
+        /// <summary>
+        /// This holds the new value for the <see cref="Square"/> a piece is moved from.
+        /// </summary>
         [Required] // note: will this work? will it serialize it even though it's not a [DataMember]? ((if used as input DTO) will it throw/error because it's not set?)
         public SquareTenant DestinationSquare { get; init; }
         #endregion

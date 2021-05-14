@@ -65,37 +65,54 @@ namespace Ludo_API.GameEngine.Game
         /// <returns></returns>
         public List<MoveAction> GetPossibleMoves(Player player, int diceNumber)
         {
-            int tokensInPlay = 0;
+            int piecesOnBoardCount = 0;
             List<MoveAction> moveActions = new();
 
-            var playerSquares = Squares.Where(s =>
+            var playerOwnedSquares = Squares.Where(s =>
             {
                 // todo: fix the "OccupiedBy != null when s.PieceCount == 0" bug and remove " && s.PieceCount > 0"
                 bool hasTokenOnSquare = s.OccupiedBy == player && s.PieceCount > 0 && s.ID != player.Track[^1];
 
+                piecesOnBoardCount += s.PieceCount ?? 0;
+
                 if (hasTokenOnSquare)
                 {
-                    tokensInPlay += s.PieceCount.Value;
+                    piecesOnBoardCount += s.PieceCount.Value;
                 }
 
                 return hasTokenOnSquare;
             });
 
             // "Move piece" actions:
-            foreach (Square square in playerSquares)
+            foreach (Square square in playerOwnedSquares)
             {
+                bool validMove = CanMoveToSquare(player, square, diceNumber, out Square destinationSquare);
+                string optionText;
+                SquareTenant startSquare;
+
+                if (square.PieceCount == 2)
+                {
+                    optionText = $"Move one of your pieces from {square.ID} to {destinationSquare.ID}";
+                    startSquare = new SquareTenant(square.ID, player, 1);
+                }
+                else
+                {
+                    optionText = $"Move your piece from {square.ID} to {destinationSquare.ID}";
+                    startSquare = new SquareTenant(square.ID, null, 0);
+                }
+
                 moveActions.Add(new()
                 {
                     PlayerId = player.ID,
-                    ValidMove = CanMoveToSquare(player, square, diceNumber, out Square destinationSquare),
-                    OptionText = $"Move piece from {square.ID} to {destinationSquare.ID}",
-                    StartSquare = new SquareTenant(square.ID, null, 0), // todo: if move from first square with 2 pieces this should be 'new SquareTenant(square.ID, player, 1)
+                    ValidMove = validMove,
+                    OptionText = optionText,
+                    StartSquare = startSquare, // todo: if move from first square with 2 pieces this should be 'new SquareTenant(square.ID, player, 1)
                     DestinationSquare = new SquareTenant(destinationSquare.ID, player, 2)
                 });
             }
 
             #region "Insert New Piece(s)" actions:
-            if (tokensInPlay <= 2 && CanInsertTokenAt(Gameboard.GetSquare(player.StartPosition), player) && diceNumber == 6)
+            if (piecesOnBoardCount <= 2 && CanInsertTokenAt(Gameboard.GetSquare(player.StartPosition), player) && diceNumber == 6)
             {
                 moveActions.Add(new()
                 {
@@ -106,7 +123,7 @@ namespace Ludo_API.GameEngine.Game
                 });
             }
 
-            if (tokensInPlay < 4)
+            if (piecesOnBoardCount < 4)
             {
                 if (CanInsertTokenAt(Gameboard.GetSquare(player.StartPosition), player) && diceNumber == 1)
                 {
