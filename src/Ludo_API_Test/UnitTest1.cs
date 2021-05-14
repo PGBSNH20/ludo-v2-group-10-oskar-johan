@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
-using Xunit;
-using Ludo_API;
-using Ludo_API.Database;
-using Ludo_API.Models;
-using System.Linq;
-using Ludo_API.Tests;
-using Ludo_API.Repositories;
 using Ludo_API.GameEngine.Game;
+using Ludo_API.Models;
+using Ludo_API.Repositories;
+using Ludo_API_Test.TestRepositories;
+using System.Collections.Generic;
 using System.Drawing;
+using Xunit;
 
 namespace Ludo_API.Tests
 {
@@ -29,7 +25,7 @@ namespace Ludo_API.Tests
 
             gameboard.Squares[0].OccupiedBy = players[0];
             gameboard.Squares[0].PieceCount = 1;
-            IGamesRepository gameRepository = new GamesRepositoryTest();
+            IGamesRepository gameRepository = new TestGamesRepository();
             IPlayerRepository playerRepository = new PlayerRepository();
             var game = new Game(gameRepository, gameboard);
             bool canMove = game.CanMoveToSquare(players[0], gameboard.Squares[players[0].StartPosition], 5, out _);
@@ -66,7 +62,7 @@ namespace Ludo_API.Tests
         //    gameboard.Squares[2].OccupiedBy = players[0];
         //    gameboard.Squares[2].PieceCount = 1;
 
-        //    IGameRepository gameRepository = new GameRepositoryTest();
+        //    IGameRepository gameRepository = new TestGamesRepository();
 
         //    //Act
         //    var moved = new Moves(gameRepository, new GameEngine(gameRepository)).MovePiece(gameboard, gameboard.Squares, players[0], 0, 5);
@@ -99,7 +95,7 @@ namespace Ludo_API.Tests
         //    gameboard.Squares[42].OccupiedBy = players[0];
         //    gameboard.Squares[42].PieceCount = 1;
 
-        //    IGameRepository gameRepository = new GameRepositoryTest();
+        //    IGameRepository gameRepository = new TestGamesRepository();
 
         //    //Act
         //    bool result = new Moves(gameRepository, new GameEngine(gameRepository)).MovePiece(gameboard, gameboard.Squares, players[0], 42, 5);
@@ -234,7 +230,7 @@ namespace Ludo_API.Tests
         //        new Models.Player("LudoPlayer", 14)
         //    };
 
-        //    IGameRepository gameRepository = new GameRepositoryTest();
+        //    IGameRepository gameRepository = new TestGamesRepository();
         //    Gameboard gameboard = new Gameboard(players);
         //    new Moves(gameRepository, new GameEngine(gameRepository));
 
@@ -246,7 +242,7 @@ namespace Ludo_API.Tests
         //public void GetAllGamesAndLoadGame_StartAndGoalPosition_CorrectIndex()
         //{
         //    //Arrange
-        //    IGameRepository gameRepository = new GameRepositoryTest();
+        //    IGameRepository gameRepository = new TestGamesRepository();
         //    IGameEngine gameEngine = new GameEngine(gameRepository);
         //    Gameboard.CreateTracks();
         //    var gameboards = gameRepository.GetAllGamesAsync().Result;
