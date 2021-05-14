@@ -9,10 +9,11 @@ namespace Ludo_API.Repositories
 {
     public class PlayerRepository : IPlayerRepository
     {
-        public void AddPlayers(LudoContext context, List<Player> players)
+        public async Task<List<Player>> AddPlayers(LudoContext context, List<Player> players)
         {
             context.Players.AddRange(players);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
+            return players;
         }
     }
 }

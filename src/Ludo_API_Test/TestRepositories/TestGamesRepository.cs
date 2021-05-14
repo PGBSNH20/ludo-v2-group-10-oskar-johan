@@ -1,4 +1,5 @@
-﻿using Ludo_API.Database;
+﻿using Ludo_API;
+using Ludo_API.Database;
 using Ludo_API.GameEngine.Game;
 using Ludo_API.Models;
 using Ludo_API.Repositories;
@@ -54,7 +55,8 @@ namespace Ludo_API_Test.TestRepositories
                     squares.Add(new Square
                     {
                         ID = j,
-                        PieceCount = 0
+                        //PieceCount = 0
+                        Tenant = new SquareTenant(i, null, 0),
                     });
                 }
 
@@ -64,8 +66,9 @@ namespace Ludo_API_Test.TestRepositories
                     new Player( $"Randa {i + 10}", Color.Red)
                 };
 
-                squares[players[i].StartPosition].OccupiedBy = players[i];
-                squares[players[i].StartPosition].PieceCount = 1;
+                //squares[players[i].StartPosition].Tenant?.Player = players[i];
+                //squares[players[i].StartPosition].Tenant?.PieceCount = 1;
+                squares[players[i].StartPosition].Tenant = new SquareTenant(players[i].StartPosition, players[i], 1);
 
                 Gameboard gb = new Gameboard()
                 {
@@ -85,6 +88,12 @@ namespace Ludo_API_Test.TestRepositories
         public Task<Gameboard> CreateNewGame(LudoContext context, Gameboard gameboard)
         {
             Gameboards.Add(gameboard);
+            gameboard.Squares.ForEach(s =>
+            {
+                s.Gameboard = gameboard;
+                s.GameboardId = gameboard.ID;
+            });
+            Squares = gameboard.Squares;
             return Task.FromResult(gameboard);
         }
 
@@ -111,21 +120,23 @@ namespace Ludo_API_Test.TestRepositories
             throw new NotImplementedException();
         }
 
-        public void MoveToken(Player player, Square startSquare, Square endSquare)
-        {
-            startSquare.OccupiedBy = null;
-            startSquare.PieceCount = 0;
+        //public void MoveToken(Player player, Square startSquare, Square endSquare)
+        //{
+        //    startSquare.Tenant = new SquareTenant(startSquare.ID, null, 0);
+        //    //startSquare.Tenant?.Player = null;
+        //    //startSquare.Tenant?.PieceCount = 0;
 
-            endSquare.OccupiedBy = player;
-            endSquare.PieceCount++;
-        }
+        //    startSquare.Tenant = new SquareTenant(startSquare.ID, player, (endSquare.Tenant?.PieceCount).GetValueOrDefault() + 1);
+        //    //endSquare.Tenant?.Player = player;
+        //    //endSquare.Tenant?.PieceCount++;
+        //}
 
         //public Task<bool> ExecuteMoveAction(LudoContext context, MoveAction moveAction)
         public async Task<bool> ExecuteMoveAction(LudoContext context, MoveAction moveAction)
         {
             if (moveAction.StartSquare != null)
             {
-                var startSquare = Squares.SingleOrDefault(s => s.ID == moveAction.StartSquare.SquareIndex);
+                    var startSquare = Squares.SingleOrDefault(s => s.ID == moveAction.StartSquare?.SquareIndex);
 
                 if (startSquare != null)
                 {

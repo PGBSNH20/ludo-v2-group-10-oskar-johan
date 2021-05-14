@@ -9,6 +9,6 @@ namespace Ludo_API.Repositories
 {
     public interface IPlayerRepository
     {
-        void AddPlayers(LudoContext context, List<Player> players);
+        Task<List<Player>> AddPlayers(LudoContext context, List<Player> players);
     }
 }

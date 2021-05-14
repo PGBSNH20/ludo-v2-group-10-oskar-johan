@@ -33,6 +33,10 @@ namespace Ludo_API.GameEngine.Game
         public string OptionText { get; init; }
 
         [Required]
+        [DataMember]
+        public int DiceRoll { get; init; }
+
+        [Required]
         [DataMember] // unnecessary? // (if used as input DTO) make it impossible to set this property on input
         public bool ValidMove { get; init; }
         #endregion

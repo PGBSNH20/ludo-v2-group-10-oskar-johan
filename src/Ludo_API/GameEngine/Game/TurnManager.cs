@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Ludo_API.GameEngine.Game
 {
 
-    internal class TurnManager : ITurnBased
+    public class TurnManager : ITurnBased
     //internal class TurnManager
     {
         private readonly IGamesRepository _gameRepository;

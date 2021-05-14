@@ -54,7 +54,7 @@ namespace Ludo_API.Controllers
         {
             var game = await _gamesRepository.GetGame(_context, gameId);
 
-            if (game == null || game.Squares.Any(square => square.PieceCount >= 4))
+            if (game == null || game.Squares.Any(square => square.Tenant?.PieceCount >= 4))
             {
                 return NotFound($"Can't find an active game with the id {gameId}");
             }

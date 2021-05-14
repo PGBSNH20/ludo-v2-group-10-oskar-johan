@@ -30,7 +30,10 @@ namespace Ludo_API_Test
                 new() { ID = 3 }
             };
 
-            IGamesRepository gameRepo = new TestGamesRepository(gameboards);
+            IGamesRepository gameRepo = new TestGamesRepository
+            {
+                Gameboards = gameboards,
+            };
             GamesController gamesController = new(null, gameRepo);
 
             // Act
@@ -53,7 +56,10 @@ namespace Ludo_API_Test
                 new() { ID = 3 }
             };
 
-            IGamesRepository gameRepo = new TestGamesRepository(gameboards);
+            IGamesRepository gameRepo = new TestGamesRepository
+            {
+                Gameboards = gameboards,
+            };
             GamesController gamesController = new(null, gameRepo);
 
             // Act
