@@ -7,7 +7,7 @@ namespace Ludo_API.GameEngine
     {
         Player DecideWhoStarts(List<Player> players);
         void NextTurn();
-        void HandleTurn(Models.Player player);
+        List<MoveAction> HandleTurn(Models.Player player);
         void EndTurn();
         int RollDice();
         void HandleTurn();

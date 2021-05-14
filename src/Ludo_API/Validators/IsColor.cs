@@ -18,7 +18,7 @@ namespace Ludo_API.Validators
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            if (Regex.IsMatch((string)value, "#[0-9a-fA-F]{3}|[0-9a-fA-F]{6}"))
+            if (value != null && Regex.IsMatch((string)value, "#[0-9a-fA-F]{3}|[0-9a-fA-F]{6}"))
             {
                 return ValidationResult.Success;
             }

@@ -57,10 +57,14 @@ namespace Ludo_API.GameEngine.Game
             throw new Exception(""); // is it correct to throw? the loop should handle all cases where we want to return a bool.
         }
 
-        public void GetPossibleMoves(Player player, int diceNumber)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="diceNumber"></param>
+        /// <returns></returns>
+        public List<MoveAction> GetPossibleMoves(Player player, int diceNumber)
         {
-            List<Square> moveableTokens = new();
-            // todo: if we can fix the occupiedBy bug we can get rid of 's.PieceCount > 0'.
             int tokensInPlay = 0;
             List<MoveAction> moveActions = new();
 
@@ -85,7 +89,7 @@ namespace Ludo_API.GameEngine.Game
                     PlayerId = player.ID,
                     ValidMove = CanMoveToSquare(player, square, diceNumber, out Square destinationSquare),
                     OptionText = $"Move piece from {square.ID} to {destinationSquare.ID}",
-                    StartSquare = new SquareTenant(square.ID, player, 0),
+                    StartSquare = new SquareTenant(square.ID, null, 0), // todo: if move from first square with 2 pieces this should be 'new SquareTenant(square.ID, player, 1)
                     DestinationSquare = new SquareTenant(destinationSquare.ID, player, 2)
                 });
             }
@@ -126,6 +130,8 @@ namespace Ludo_API.GameEngine.Game
                 }
             }
             #endregion
+
+            return moveActions;
         }
     }
 }

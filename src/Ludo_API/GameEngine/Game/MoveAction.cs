@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
@@ -9,34 +10,39 @@ using System.Threading.Tasks;
 
 namespace Ludo_API.GameEngine.Game
 {
+    // https://docs.microsoft.com/en-us/aspnet/web-api/overview/formats-and-model-binding/json-and-xml-serialization#what-gets-serialized
     [DataContract] // note: does this work for json?
     public record MoveAction
     {
         [Key]
-        [DataMember] // (if used as input DTO) make it impossible to set this property on input
+        [DataMember] // unnecessary? // (if used as input DTO) make it impossible to set this property on input
         public int Id { get; init; }
 
         [Required]
-        [DataMember]
+        [DataMember] // unnecessary?
         public int GameId { get; init; } // necessary?
         #region DataMembers
 
+        [ForeignKey("Player")]
         [Required]
-        [DataMember]
+        [DataMember] // unnecessary?
         public int PlayerId { get; init; } // necessary?
 
         [Required]
-        [DataMember]
+        [DataMember] // unnecessary?
         public string OptionText { get; init; }
 
         [Required]
-        [DataMember] // (if used as input DTO) make it impossible to set this property on input
+        [DataMember] // unnecessary? // (if used as input DTO) make it impossible to set this property on input
         public bool ValidMove { get; init; }
         #endregion
 
         #region NonDataMembers
-        [Required] // note: will this work? will it serialize it even though it's not a [DataMember]? ((if used as input DTO) will it throw/error because it's not set?)
+        /// <summary>
+        /// The < Square
+        /// </summary>
         public SquareTenant StartSquare { get; init; }
+        [Required] // note: will this work? will it serialize it even though it's not a [DataMember]? ((if used as input DTO) will it throw/error because it's not set?)
         public SquareTenant DestinationSquare { get; init; }
         #endregion
 

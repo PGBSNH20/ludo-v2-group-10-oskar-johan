@@ -32,7 +32,7 @@ namespace Ludo_API.Tests
             IGamesRepository gameRepository = new GamesRepositoryTest();
             IPlayerRepository playerRepository = new PlayerRepository();
             var game = new Game(gameRepository, gameboard);
-            bool canMove = game.CanMoveToken(players[0], gameboard.Squares[players[0].StartPosition], 5);
+            bool canMove = game.CanMoveToSquare(players[0], gameboard.Squares[players[0].StartPosition], 5, out _);
             game.MoveToken(players[0], gameboard.Squares[0], gameboard.Squares[5]);
 
             // Assert that move was successful

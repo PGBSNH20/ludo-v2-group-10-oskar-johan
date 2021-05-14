@@ -17,7 +17,6 @@ namespace Ludo_API.Models
         public string Name { get; set; }
 
         [Required]
-        [Range(Int32.MinValue, Int32.MaxValue)]
         public Int32 ColorArgb
         {
             get
