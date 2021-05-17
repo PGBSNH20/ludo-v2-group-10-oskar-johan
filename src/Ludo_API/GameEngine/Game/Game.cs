@@ -2,6 +2,7 @@
 using Ludo_API.Repositories;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,6 +25,28 @@ namespace Ludo_API.GameEngine.Game
         {
             // note: this assumes that the OccupiedBy != null when PieceCount > 0 bug is fixed.
             return !(squareToCheck is null || squareToCheck.Tenant?.Player == player);
+        }
+
+        public enum MoveMessagesEnum
+        {
+            [Description("You can't pass or stop on a square you occupy")]
+            CantPassYourOwn,
+            [Description("You've knocked your opponent's piece(s) out.")]
+            KnockOutOpponent,
+            [Description("You've moved a piece to the goal square.")]
+            PieceEnteredGoal,
+        };
+        public struct MoveMessagesStruct
+        {
+            public const string CantPassYourOwn = "You can't pass or stop on a square you occupy";
+            public const string KnockOutOpponent = "You've knocked your opponent's piece(s) out.";
+            public const string PieceEnteredGoal = "You've moved a piece to the goal square.";
+        }
+        static public class MoveMessagesClass
+        {
+            public const string CantPassYourOwn = "You can't pass or stop on a square you occupy";
+            public const string KnockOutOpponent = "You've knocked your opponent's piece(s) out.";
+            public const string PieceEnteredGoal = "You've moved a piece to the goal square.";
         }
 
         public bool CanMoveToSquare(Player player, Square startSquare, int diceRoll, out Square endSquare)
