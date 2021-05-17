@@ -20,9 +20,6 @@
    1. Exit to menu (this informs of the `auto-save` feature)
    1. [Throw dice ↓](###-(1.2.)-Player-throws-dice:)
 
-
-### (1.2.) Player throws dice:
-
 1. Player selects `throw dice`-option → `Request` is sent to WebApp (with `<form POST>`?).
 1. WebApp (server) forwards request to API → POST @ `api/Game/ThrowDice` with:
    > fixme: name `ThrowDice`?
@@ -105,4 +102,4 @@
         Player nextPlayer,
     }
     ```
-1. [Go back (step 1.).](##-New-Turn)
+1. Go back to [(step 1. of "New Turn")](##-New-Turn) to handle the next turn.
