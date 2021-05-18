@@ -6,19 +6,36 @@ using System.Collections.Generic;
 using System.Drawing;
 using Xunit;
 using Ludo_API_Test;
+using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace Ludo_API.Tests
 {
     public class Ludo_API_Test
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="diceRoll"></param>
+        /// <param name="player1Index"></param>
+        /// <param name="player2Index"></param>
+        /// <param name="moveActionCountExpected">
+        /// Example: If <paramref name="diceRoll"/> == 6, we would expect 3 MoveActions since the player can chose to; take out 2 pieces
+        /// to their "Start" Square; 1 piece to the sixth square from; or move their piece already on the gameboard.
+        /// </param>
+        /// <param name="moveSuccessfulExpected"></param>
         //[Fact]
         [Theory]
-        [InlineData(0, 5, 0, 6, 1, true)]
+        [InlineData(5, 0, 6, 1, 1, true)]
+        [InlineData(2, 38, 0, 1, 1, true)]
+        [InlineData(2, 38, 0, 2, 1, true)]
+        //[InlineData(6, 0, 5, 1, 1, true)] // fixme: doesn't work
+        [InlineData(3, 38, 0, 2, 1, true)]
         public async void MovePiece_PathIsClear_MoveIsSuccessful(
-            int squareIndex,
             int diceRoll,
             int player1Index,
             int player2Index,
+            int player2PieceCount,
             int moveActionCountExpected,
             bool moveSuccessfulExpected
             )
@@ -28,14 +45,14 @@ namespace Ludo_API.Tests
 
             List<Player> players = new()
             {
-                new Player("LudoPlayer1", Color.Yellow),
-                new Player("LudoPlayer2", Color.Blue),
+                new Player("Player1", Color.Yellow),
+                new Player("Player2", Color.Blue),
             };
             players.ForEach(p => p.SetTrack()); // note: might be unnecessary if SetTrack can be called from the parameterless Player constructor without breaking Entity Framework.
 
-            Gameboard gameboard = new Gameboard(players);
+            Gameboard gameboard = new(players);
             gameboard.Squares[player1Index].Tenant = new SquareTenant(player1Index, players[0], 1);
-            gameboard.Squares[player2Index].Tenant = new SquareTenant(player2Index, players[1], 1);
+            gameboard.Squares[player2Index].Tenant = new SquareTenant(player2Index, players[1], player2PieceCount);
 
             IGamesRepository gameRepository = new TestGamesRepository
             {
@@ -73,18 +90,21 @@ namespace Ludo_API.Tests
         //    //Arrange
         //    Gameboard.CreateTracks();
 
-        //    List<Models.Player> players = new List<Models.Player>
+        //    List<Player> players = new List<Models.Player>
         //    {
-        //        new Models.Player("LudoPlayer", 14)
+        //        new Player("LudoPlayer", Color.Yellow)
+        //        //new Models.Player("LudoPlayer", 14)
         //    };
 
         //    Gameboard gameboard = new Gameboard(players);
 
-        //    gameboard.Squares[0].OccupiedBy = players[0];
-        //    gameboard.Squares[0].Tenant?.PieceCount = 1;
+        //    gameboard.Squares[0].Tenant = new SquareTenant(0, players[0], 1);
+        //    //gameboard.Squares[0].OccupiedBy = players[0];
+        //    //gameboard.Squares[0].Tenant?.PieceCount = 1;
 
-        //    gameboard.Squares[2].OccupiedBy = players[0];
-        //    gameboard.Squares[2].Tenant?.PieceCount = 1;
+        //    gameboard.Squares[2].Tenant = new SquareTenant(2, players[0], 1);
+        //    //gameboard.Squares[2].OccupiedBy = players[0];
+        //    //gameboard.Squares[2].Tenant?.PieceCount = 1;
 
         //    IGameRepository gameRepository = new TestGamesRepository();
 

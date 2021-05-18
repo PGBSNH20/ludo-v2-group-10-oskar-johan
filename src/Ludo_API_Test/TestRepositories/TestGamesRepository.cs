@@ -132,7 +132,7 @@ namespace Ludo_API_Test.TestRepositories
         //}
 
         //public Task<bool> ExecuteMoveAction(LudoContext context, MoveAction moveAction)
-        public async Task<bool> ExecuteMoveAction(LudoContext context, MoveAction moveAction)
+        public Task<bool> ExecuteMoveAction(LudoContext context, MoveAction moveAction)
         {
             if (moveAction.StartSquare != null)
             {
@@ -150,13 +150,13 @@ namespace Ludo_API_Test.TestRepositories
 
                 if (destinationSquare == null)
                 {
-                    return false;
+                    return Task.FromResult(false);
                 }
 
                 destinationSquare.Tenant = moveAction.DestinationSquare;
             }
 
-            return true;
+            return Task.FromResult(true);
         }
     }
 }
