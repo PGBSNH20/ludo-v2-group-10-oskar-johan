@@ -12,6 +12,7 @@ namespace Ludo_API.Models.DTO
         [Required]
         [StringLength(25, ErrorMessage = "{0} length must be between {2} and {1}.", MinimumLength = 1)]
         public string Name { get; set; }
+
         [Required]
         [IsColor("Invalid color format, value should be a hex color (e.g. #123cef)")]
         public string Color { get; set; } // e.g. "#ff00ff00" for green.

@@ -34,6 +34,7 @@ namespace Ludo_WebApp.Pages.Ludo
         {
             if (!ModelState.IsValid)
             {
+                ModelState.AddModelError("", "This is an error, you are a failure.");
                 return Page();
             }
 

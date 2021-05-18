@@ -66,9 +66,9 @@ namespace Ludo_API.Models
         }
         #endregion
 
-        public void SetTrack()
+        public bool SetTrack()
         {
-            if (Color.ToArgb() == Color.Yellow.ToArgb())
+            if (Color.ToArgb() == Color.Gold.ToArgb())
             {
                 Track = Gameboard.YellowTrack;
             }
@@ -86,11 +86,13 @@ namespace Ludo_API.Models
             }
             else
             {
+                throw new Exception("The player's color does not match any of allowed colours.");
                 // todo: error handling?
             }
 
             StartPosition = Track[0];
             GoalIndex = Track[^1];
+            return true;
         }
     }
 }

@@ -46,7 +46,7 @@ namespace Ludo_API.Models
         public static List<int> GreenTrack = new();
 
         [NotMapped]
-        public List<Color> ColorOrder = new() { Color.Yellow, Color.Red, Color.Blue, Color.Green };
+        public List<Color> ColorOrder = new() { Color.Gold, Color.Red, Color.Blue, Color.Green };
         #endregion
 
         #region Constructors
