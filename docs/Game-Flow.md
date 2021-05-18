@@ -1,7 +1,9 @@
 # Game Flows
 
+## New Game (old)
+
 1. Load page (asp.net razor)
-2. Select "New game"
+1. Select "New game"
     1. Input number of players, player names and select colors (and UI language?)
     1. Submit → ASP.NET razor → Rest POST request `PlayerDTO[]` → Ludo_API
     1. Ludo_API → error || redirect → (`localhost:port/ludo/{gameboardId}`)
@@ -13,6 +15,22 @@
             1. POST localhost:port/api/Game/RollDie
             1. List of options
             1. Choose option →
+
+## New Game (new)
+
+1. [x] On the start page `localhost:port/` Player clicks "New Game".
+1. [x] Player is redirect to `localhost:port/Ludo/New`.
+1. [x] Player enters their name and selects a colour, and then clicks the submit-button.
+1. [x] Ludo_WebApp handles form POST and sends a POST request to Ludo_API.
+1. [in-progress] Ludo_API handles POST request and creates a new game (gameboard and 1 player).
+1. Ludo_API responds with a `gameId`, and Ludo_WebApp redirects to `Ludo/{gameId}`.
+1. Player shares/sends invite link `Ludo/{gameId}`.
+1. New players open `Ludo/{gameId}`, enter a name and select a colour.
+    1. If the selected colour has been chosen by another player an error is returned and the player is prompted to try again.
+1. The player who created the game can at any time chose to start the game.
+1. When started the invite link will no longer work for anyone but the players in the game.
+1. The game has started and the first player is prompted to start their turn.
+
 
 ## New Turn
 
