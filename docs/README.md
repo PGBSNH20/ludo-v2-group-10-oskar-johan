@@ -8,6 +8,14 @@
 - [Endpoints](#Endpoints)
 - [Credits & Sources](#Credits-&-Sources)
 
+## TODO (document this)
+- Validation attributes
+- Why use DI for `Turnmanager : ITurnBased`?
+  - Multiple rule sets?
+
+## TODO (include in video presentation)
+- Validation attributes
+
 ## Process
 
 ## Database
@@ -40,18 +48,78 @@
 
 #### **Basic**
 
+---
+
+---
+
 - api/Games
+
   - GET
-  - PUT/PATCH
+    - Get all games
+      // todo: update when authentication/authorization has been implemented.
   - DELETE (admins only?)
+    - Delete all games
+      <br>// note: do we want this?
+      <br>// todo: update when authentication/authorization has been implemented.
+
+---
+
+- api/Games/{id}
+
+  - GET
+    - Get the game with the specified {id}
+      // todo: update when authentication/authorization has been implemented.
+  - PUT/PATCH
+
+    - Update the game with the specified {id}
+      <br>// note: do we want this?
+      <br>// todo: update when authentication/authorization has been implemented.
+
+  - DELETE (admins only?)
+    - Delete the game with the specified {id}
+      // todo: update when authentication/authorization has been implemented.
+
+---
+
+- api/Games/New
+
   - POST
+
+    - Add a new game
+
+      ```csharp
+      // request:
+      header: {
+        // apikey or another form of authentication
+      },
+      body: {
+        players: [
+          {
+            string name,
+            ? color
+          },
+          {
+            string name,
+            ? color
+          }
+        ]
+      }
+
+      // Possible responses:
+      header: {},
+      body: {
+        
+      }
+      ```
 
 ---
 
 #### **Get/set Game Data/Options (min & max player count, available colors, AI-players available?, gameboard info?, rules?)**
 
 - api/LudoGameInfo
+
   - GET
+
     ```csharp
     // request body:
     {
@@ -70,6 +138,7 @@
     NotFound() // ???; Necessary?
     401 // Unauthorized; Necessary?
     ```
+
   - PUT || PATCH
 
     ```csharp
@@ -200,7 +269,9 @@
 ---
 
 - api/Game/{gameId}
+
   - POST
+
     ```csharp
     // request body:
     {
@@ -269,11 +340,29 @@
     ```csharp
     // request body:
     {
+      int/string gameId,
+      int playerId
     }
 
     // Possible responses:
     Ok {
-      dieRoll: [1-6]
+      gameId: {int}/{Guid},
+      playerId: {int},
+      dieRoll: [1-6],
+      possibleMoves: [
+        {
+          int moveId,
+          string "Insert 1 pieces/tokens to square {index}"
+        },
+        {
+          int moveId,
+          string "Insert 2 pieces/tokens to square {index}"
+        },
+        {
+          int moveId,
+          string "Move piece/token on Square {index}"
+        }
+      ]
     }
     401 // Unauthorized; Necessary?
     ```

@@ -11,6 +11,13 @@ namespace Ludo_API.Models
     {
         [Key]
         public int ID { get; set; }
+        //[Key]
+        // https://stackoverflow.com/a/40917033
+        //public int GameId { get; set; }
+
+        [Required]
+        // https://stackoverflow.com/a/40917033
+        public string GameId { get; set; }
 
         public Player LastPlayer { get; set; }
 
@@ -42,10 +49,32 @@ namespace Ludo_API.Models
         public List<Color> ColorOrder = new() { Color.Yellow, Color.Red, Color.Blue, Color.Green };
         #endregion
 
+        #region Constructors
         public Gameboard()
         {
 
         }
+
+        public Gameboard(List<Player> players)
+        {
+            GameId = Guid.NewGuid().ToString();
+            Players = players;
+            Squares = new List<Square>();
+            GameDate = DateTime.Now;
+
+            for (int i = 0; i < 60; i++)
+            {
+                Squares.Add(new Square
+                {
+                    ID = i,
+                    //PieceCount = 0,
+                    Tenant = new SquareTenant(i, null, 0),
+                });
+            }
+
+            CreateOrderPlayers();
+        }
+        #endregion
 
         public static void CreateTracks()
         {
@@ -64,22 +93,14 @@ namespace Ludo_API.Models
             GreenTrack.AddRange(Enumerable.Range(55, 5));
         }
 
-        public Gameboard(List<Player> players)
+        /// <summary>
+        /// Get a Square with its index.
+        /// </summary>
+        /// <param name="index">The index of the Square to retrieve.</param>
+        /// <returns></returns>
+        public Square GetSquare(int index)
         {
-            Players = players;
-            Squares = new List<Square>();
-            GameDate = DateTime.Now;
-
-            for (int i = 0; i < 60; i++)
-            {
-                Squares.Add(new Square
-                {
-                    ID = i,
-                    PieceCount = 0
-                });
-            }
-
-            CreateOrderPlayers();
+            return Squares.ElementAtOrDefault(index);
         }
 
         public void CreateOrderPlayers()

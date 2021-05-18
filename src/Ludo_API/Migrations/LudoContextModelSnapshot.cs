@@ -29,6 +29,10 @@ namespace Ludo_API.Migrations
                     b.Property<DateTime>("GameDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("GameId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("LastPlayerID")
                         .HasColumnType("int");
 
