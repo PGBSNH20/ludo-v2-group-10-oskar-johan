@@ -82,8 +82,8 @@ namespace Ludo_API.Controllers
         public async Task<ActionResult<int>> Post([FromBody] NewGameDTO newGameDTO)
         //public async Task<ActionResult<NewGameDTO>> Post([FromBody] NewGameDTO newGameDTO)
         {
-            //List<Player> newPlayers = new();
-            //Gameboard.CreateTracks();
+            List<Player> newPlayers = new();
+            Gameboard.CreateTracks();
 
             //foreach (PlayerDTO p in players)
             //{
@@ -103,10 +103,21 @@ namespace Ludo_API.Controllers
             //    newPlayers.Add(new(p.Name, color));
             //}
 
-            //var gameboard = await _gameRepository.CreateNewGame(_context, new Gameboard(newPlayers));
-            ////gameboard.SetPlayerColors();
-            //return Ok(gameboard.GameId);
-            return Ok(1);
+            var color = ColorTranslator.FromHtml(newGameDTO.FirstPlayerColor);
+            newPlayers.Add(new(newGameDTO.FirstPlayerName, color));
+
+            try
+            {
+                var gameboard = new Gameboard(newPlayers);
+                gameboard = await _gameRepository.CreateNewGame(_context, gameboard);
+                //gameboard.SetPlayerColors();
+                return Ok(gameboard.ID);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+            //return Ok(1);
         }
 
         // PUT api/Games/{id}
