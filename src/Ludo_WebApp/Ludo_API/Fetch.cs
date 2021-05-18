@@ -8,7 +8,7 @@ namespace Ludo_WebApp.Ludo_API
 {
     public static class Fetch
     {
-        private const string _baseURL = "https://localhost:44376/api/";
+        private const string _baseURL = "https://localhost:44376/api";
 
         private struct RequestURLs
         {
@@ -55,8 +55,9 @@ namespace Ludo_WebApp.Ludo_API
             var client = new RestClient(_baseURL);
             var request = new RestRequest(RequestURLs.NewGame);
             request.AddJsonBody(newGameDTO);
+            //request.OnBeforeDeserialization = r => { r.ContentType = "application/json"; };
 
-            try
+            try // todo: fix getting and returning the error msg from throw in SetTrack
             {
                 //await client.PostAsync<GameDTO>(request);
                 int response = await client.PostAsync<int>(request);
