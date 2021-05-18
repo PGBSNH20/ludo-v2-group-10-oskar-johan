@@ -67,7 +67,8 @@ namespace Ludo_API.Models
                 Squares.Add(new Square
                 {
                     ID = i,
-                    PieceCount = 0
+                    //PieceCount = 0,
+                    Tenant = new SquareTenant(i, null, 0),
                 });
             }
 

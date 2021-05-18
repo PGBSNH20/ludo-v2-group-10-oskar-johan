@@ -18,19 +18,22 @@ namespace Ludo_API.GameEngine.Game
         [DataMember] // unnecessary? // (if used as input DTO) make it impossible to set this property on input
         public int Id { get; init; }
 
-        [Required]
+        //[ForeignKey("Gameboard")]
         [DataMember] // unnecessary?
         public int GameId { get; init; } // necessary?
         #region DataMembers
 
         [ForeignKey("Player")]
-        [Required]
         [DataMember] // unnecessary?
         public int PlayerId { get; init; } // necessary?
 
         [Required]
         [DataMember] // unnecessary?
         public string OptionText { get; init; }
+
+        [Range(1, 6, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
+        [DataMember] // unnecessary?
+        public int DiceRoll { get; init; }
 
         [Required]
         [DataMember] // unnecessary? // (if used as input DTO) make it impossible to set this property on input

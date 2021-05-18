@@ -27,10 +27,10 @@ namespace Ludo_API.Repositories
             var saveOperation = await context.SaveChangesAsync();
             return gameboard;
         }
-        public void MoveToken(Player player, Square startSquare, Square endSquare)
-        {
-            throw new NotImplementedException();
-        }
+        //public void MoveToken(Player player, Square startSquare, Square endSquare)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public Task SaveTurnAsync(Gameboard gameboard, Player player)
         {
@@ -56,26 +56,38 @@ namespace Ludo_API.Repositories
             if (moveAction.StartSquare != null)
             {
                 var startSquare = await context.Squares.SingleOrDefaultAsync(s => s.ID == moveAction.StartSquare.SquareIndex);
-                if (startSquare == null)
+
+                if (startSquare != null)
                 {
-                    return false;
+                    startSquare.Tenant = moveAction.StartSquare;
                 }
-                startSquare.Tenant = moveAction.StartSquare;
             }
 
             if (moveAction.DestinationSquare != null)
             {
                 var destinationSquare = await context.Squares.SingleOrDefaultAsync(s => s.ID == moveAction.DestinationSquare.SquareIndex);
+
                 if (destinationSquare == null)
                 {
                     return false;
                 }
+
                 destinationSquare.Tenant = moveAction.DestinationSquare;
             }
 
             await context.SaveChangesAsync();
 
             return true;
+        }
+
+        public Task AddNewGameAsync(Gameboard gameboard, Player players)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Gameboard>> GetAllGamesAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }
