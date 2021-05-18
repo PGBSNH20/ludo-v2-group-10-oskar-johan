@@ -19,6 +19,44 @@ namespace Ludo_API.Migrations
                 .HasAnnotation("ProductVersion", "5.0.5")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Ludo_API.GameEngine.Game.MoveAction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("DestinationSquareID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DiceRoll")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GameId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("OptionText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PlayerId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StartSquareID")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("ValidMove")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DestinationSquareID");
+
+                    b.HasIndex("StartSquareID");
+
+                    b.ToTable("MoveActions");
+                });
+
             modelBuilder.Entity("Ludo_API.Models.Gameboard", b =>
                 {
                     b.Property<int>("ID")
@@ -58,7 +96,8 @@ namespace Ludo_API.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
 
                     b.HasKey("ID");
 
@@ -75,19 +114,54 @@ namespace Ludo_API.Migrations
                     b.Property<int>("GameboardId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("OccupiedByID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PieceCount")
+                    b.Property<int?>("TenantID")
                         .HasColumnType("int");
 
                     b.HasKey("ID", "GameboardId");
 
                     b.HasIndex("GameboardId");
 
-                    b.HasIndex("OccupiedByID");
+                    b.HasIndex("TenantID");
 
                     b.ToTable("Squares");
+                });
+
+            modelBuilder.Entity("Ludo_API.SquareTenant", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("PieceCount")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PlayerID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SquareIndex")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("PlayerID");
+
+                    b.ToTable("SquareTenant");
+                });
+
+            modelBuilder.Entity("Ludo_API.GameEngine.Game.MoveAction", b =>
+                {
+                    b.HasOne("Ludo_API.SquareTenant", "DestinationSquare")
+                        .WithMany()
+                        .HasForeignKey("DestinationSquareID");
+
+                    b.HasOne("Ludo_API.SquareTenant", "StartSquare")
+                        .WithMany()
+                        .HasForeignKey("StartSquareID");
+
+                    b.Navigation("DestinationSquare");
+
+                    b.Navigation("StartSquare");
                 });
 
             modelBuilder.Entity("Ludo_API.Models.Gameboard", b =>
@@ -114,13 +188,22 @@ namespace Ludo_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Ludo_API.Models.Player", "OccupiedBy")
+                    b.HasOne("Ludo_API.SquareTenant", "Tenant")
                         .WithMany()
-                        .HasForeignKey("OccupiedByID");
+                        .HasForeignKey("TenantID");
 
                     b.Navigation("Gameboard");
 
-                    b.Navigation("OccupiedBy");
+                    b.Navigation("Tenant");
+                });
+
+            modelBuilder.Entity("Ludo_API.SquareTenant", b =>
+                {
+                    b.HasOne("Ludo_API.Models.Player", "Player")
+                        .WithMany()
+                        .HasForeignKey("PlayerID");
+
+                    b.Navigation("Player");
                 });
 
             modelBuilder.Entity("Ludo_API.Models.Gameboard", b =>
