@@ -1,0 +1,26 @@
+﻿body {
+}
+
+.gameboard {
+  display: grid;
+  grid-template: repeat(11, 1fr) / repeat(11, 1fr);
+
+  width: 720px;
+  height: 720px;
+  margin: 0 auto;
+  background-color: #34495e;
+  color: #fff;
+  border: 3px solid #2c3e50;
+  border-radius: 6px;
+}
+
+.square {
+  border: 3px solid #2c3e50;
+  border-radius: 3px;
+  font-family: Helvetica;
+  font-weight: bold;
+  font-size: 4em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

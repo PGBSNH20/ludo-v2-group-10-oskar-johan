@@ -48,22 +48,23 @@ namespace Ludo_API.Controllers
         [HttpPost("[action]")]
         [ActionName("RollDie")]
         public async Task<ActionResult<List<MoveAction>>> PostRollDie(
-            [Required][FromBody] int gameId,
-            [Required][FromBody] int playerId
+        //[Required][FromBody] int gameId, // fixme: only one [FromBody]
+        //[Required][FromBody] int playerId // fixme: only one [FromBody]
+            [Required][FromBody] PostRollDieDTO postRollDieDTO
         )
         {
-            var game = await _gamesRepository.GetGame(_context, gameId);
+            var game = await _gamesRepository.GetGame(_context, postRollDieDTO.GameId);
 
             if (game == null || game.Squares.Any(square => square.Tenant?.PieceCount >= 4))
             {
-                return NotFound($"Can't find an active game with the id {gameId}");
+                return NotFound($"Can't find an active game with the id {postRollDieDTO.GameId}");
             }
 
-            var player = game.Players.SingleOrDefault(player => player.ID == playerId);
+            var player = game.Players.SingleOrDefault(player => player.ID == postRollDieDTO.PlayerId);
 
             if (player == null)
             {
-                return NotFound($"Can't find player with the id {playerId}");
+                return NotFound($"Can't find player with the id {postRollDieDTO.PlayerId}");
             }
 
             var moveActions = _turnManager.HandleTurn(player);
@@ -75,8 +76,8 @@ namespace Ludo_API.Controllers
         [HttpPost("[action]")]
         [ActionName("ChooseAction")]
         public async Task<ActionResult<bool>> PostChooseAction(
-            [Required][FromBody] int moveActionId,
-            [Required][FromBody] int playerId
+            [Required][FromBody] int moveActionId // fixme: only one [FromBody],  use DTO model?
+            //[Required][FromBody] int playerId // fixme: only one [FromBody], use DTO model?
             )
         {
             var moveAction = await _moveActionRepository.GetMoveAction(_context, moveActionId);

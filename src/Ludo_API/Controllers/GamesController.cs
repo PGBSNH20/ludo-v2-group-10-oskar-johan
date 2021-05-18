@@ -43,36 +43,70 @@ namespace Ludo_API.Controllers
             return gameboard;
         }
 
+        //// POST api/Games/New
+        //[HttpPost("[action]")]
+        //[ActionName("New")]
+        ////public async Task<ActionResult<string>> Post([FromBody] List<PlayerDTO> players)
+        //public async Task<ActionResult<int>> Post([FromBody] List<PlayerDTO> players)
+        //{
+        //    List<Player> newPlayers = new();
+        //    Gameboard.CreateTracks();
+
+        //    foreach (PlayerDTO p in players)
+        //    {
+        //        //if (string.IsNullOrWhiteSpace(p.Name) || p.Name.Length > 20)
+        //        //{
+        //        //    return BadRequest("Please enter a name, must be less than 20 characters");
+        //        //}
+
+        //        var color = ColorTranslator.FromHtml(p.Color);
+        //        //var color = Color.FromArgb(p.Color);
+
+        //        //if (color.ToArgb() == Color.Empty.ToArgb())
+        //        //{
+        //        //    return BadRequest("Invalid color selection");
+        //        //}
+
+        //        newPlayers.Add(new(p.Name, color));
+        //    }
+
+        //    var gameboard = await _gameRepository.CreateNewGame(_context, new Gameboard(newPlayers));
+        //    //gameboard.SetPlayerColors();
+        //    return Ok(gameboard.GameId);
+        //}
+
         // POST api/Games/New
         [HttpPost("[action]")]
         [ActionName("New")]
         //public async Task<ActionResult<string>> Post([FromBody] List<PlayerDTO> players)
-        public async Task<ActionResult<int>> Post([FromBody] List<PlayerDTO> players)
+        public async Task<ActionResult<int>> Post([FromBody] NewGameDTO newGameDTO)
+        //public async Task<ActionResult<NewGameDTO>> Post([FromBody] NewGameDTO newGameDTO)
         {
-            List<Player> newPlayers = new();
-            Gameboard.CreateTracks();
+            //List<Player> newPlayers = new();
+            //Gameboard.CreateTracks();
 
-            foreach (PlayerDTO p in players)
-            {
-                //if (string.IsNullOrWhiteSpace(p.Name) || p.Name.Length > 20)
-                //{
-                //    return BadRequest("Please enter a name, must be less than 20 characters");
-                //}
+            //foreach (PlayerDTO p in players)
+            //{
+            //    //if (string.IsNullOrWhiteSpace(p.Name) || p.Name.Length > 20)
+            //    //{
+            //    //    return BadRequest("Please enter a name, must be less than 20 characters");
+            //    //}
 
-                var color = ColorTranslator.FromHtml(p.Color);
-                //var color = Color.FromArgb(p.Color);
+            //    var color = ColorTranslator.FromHtml(p.Color);
+            //    //var color = Color.FromArgb(p.Color);
 
-                //if (color.ToArgb() == Color.Empty.ToArgb())
-                //{
-                //    return BadRequest("Invalid color selection");
-                //}
+            //    //if (color.ToArgb() == Color.Empty.ToArgb())
+            //    //{
+            //    //    return BadRequest("Invalid color selection");
+            //    //}
 
-                newPlayers.Add(new(p.Name, color));
-            }
+            //    newPlayers.Add(new(p.Name, color));
+            //}
 
-            var gameboard = await _gameRepository.CreateNewGame(_context, new Gameboard(newPlayers));
-            //gameboard.SetPlayerColors();
-            return Ok(gameboard.GameId);
+            //var gameboard = await _gameRepository.CreateNewGame(_context, new Gameboard(newPlayers));
+            ////gameboard.SetPlayerColors();
+            //return Ok(gameboard.GameId);
+            return Ok(1);
         }
 
         // PUT api/Games/{id}

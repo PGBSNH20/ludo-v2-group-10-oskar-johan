@@ -1,0 +1,34 @@
+﻿@page
+@model Ludo_WebApp.Pages.Ludo.NewModel
+@{
+}
+
+<h1>New Game</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="NewGame.PlayerCount" class="control-label"></label>
+                <input asp-for="NewGame.PlayerCount" class="form-control" /> <!-- todo: switch to type="range"? -->
+                <span asp-validation-for="NewGame.PlayerCount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NewGame.FirstPlayerName" class="control-label"></label>
+                <input asp-for="NewGame.FirstPlayerName" class="form-control" />
+                <span asp-validation-for="NewGame.FirstPlayerName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @foreach (var color in Model.Colors)
+                {
+                    <input type="radio" asp-for="NewGame.FirstPlayerColor" value="@color.Value" />
+                    <label asp-for="NewGame.FirstPlayerColor" class="control-label" style="color:@color.Value">@color.Key</label> <!-- todo: fix clicking labels always selects first radio-input -->
+                }
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>

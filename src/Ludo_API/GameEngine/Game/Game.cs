@@ -27,6 +27,8 @@ namespace Ludo_API.GameEngine.Game
             return !(squareToCheck is null || squareToCheck.Tenant?.Player == player);
         }
 
+        // todo: remove or pick one of these?
+        #region todo: remove or pick one of these?
         public enum MoveMessagesEnum
         {
             [Description("You can't pass or stop on a square you occupy")]
@@ -48,6 +50,7 @@ namespace Ludo_API.GameEngine.Game
             public const string KnockOutOpponent = "You've knocked your opponent's piece(s) out.";
             public const string PieceEnteredGoal = "You've moved a piece to the goal square.";
         }
+        #endregion
 
         public bool CanMoveToSquare(Player player, Square startSquare, int diceRoll, out Square endSquare)
         {

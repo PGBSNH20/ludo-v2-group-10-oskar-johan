@@ -1,0 +1,43 @@
+﻿@page "{id:int?}"
+@model Ludo_WebApp.Pages.Ludo.IndexModel
+
+@{
+    ViewData["Title"] = "Ludo Game";
+    int columnCount = 11,
+        rowCount = 11;
+}
+
+<!-- todo: autogenerate squares? -->
+<div class="gameboard">
+    <!-- row: -->
+    <!--<div class="square"></div>
+    <div class="square"></div>
+    <div class="square"></div>
+    <div class="square"></div>
+    <div class="square"></div>
+    <div class="square"></div>
+    <div class="square"></div>
+    <div class="square"></div>
+    <div class="square"></div>
+    <div class="square"></div>
+    <div class="square"></div>-->
+    <!-- row: -->
+    <!--<div class="square"></div>
+    <div class="square"></div>
+    <div class="square"></div>
+    <div class="square"></div>
+    <div class="square"></div>
+    <div class="square"></div>
+    <div class="square"></div>
+    <div class="square"></div>
+    <div class="square"></div>
+    <div class="square"></div>
+    <div class="square"></div>-->
+    @for (int y = 0; y < rowCount; y++)
+    {
+        @for (int x = 0; x < rowCount; x++)
+        {
+            <div class="square"></div>
+        }
+    }
+</div>
