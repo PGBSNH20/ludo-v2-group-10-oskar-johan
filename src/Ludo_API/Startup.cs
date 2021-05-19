@@ -62,8 +62,6 @@ namespace Ludo_API
             {
                 endpoints.MapControllers();
             });
-
-            new GameboardDataORM();
         }
     }
 }

@@ -2,12 +2,14 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.Web.Script.Serialization;
+//using System.Web.Script.Serialization;
 
 namespace Ludo_API.Models
 {
@@ -118,6 +120,7 @@ namespace Ludo_API.Models
     public class TrackColorData
     {
         public Color Color { get; }
+        public string ColorHex { get; }
         public char ColorMapKey { get; }
         public List<int> Track { get; }
         public int StartIndex { get; }
@@ -133,9 +136,24 @@ namespace Ludo_API.Models
         }
     }
 
-    static public class GameboardData
+    //public class GameboardData : IGameboardData
+    public class GameboardData
     {
-
+        public int RowCount { get; set; }
+        public int ColumnCount { get; set; }
+        public int[] GameboardSquareIndices { get; set; }
+        //public List<List<string>> GameboardSquareIndices { get; set; }
+        public int[,] GameboardMapIndices { get; set; }
+        public string[,] GameboardMapIndices_squarestrings { get; set; }
+        public string[] GameboardMapIndices_rowstrings { get; set; }
+        //[JsonConverter(typeof(StringArray1dTo2dConverter))]
+        //public List<List<string>> GameboardMapIndices_rowstrings { get; set; }
+        public string[,] GameboardMapColors { get; set; }
+        //[JsonConverter(typeof(StringArray1dTo2dConverter))]
+        //public List<List<string>> GameboardMapColors_rowstrings { get; set; }
+        public string[] GameboardMapColors_rowstrings { get; set; }
+        //public JsonKeyValue Colors { get; set; }
+        public Dictionary<string, TrackColorData> Colors { get; set; }
     }
 
     public class JsonKeyValue
@@ -153,12 +171,32 @@ namespace Ludo_API.Models
 
         static public async Task LoadDataAsync()
         {
-            string serializedJsonData = await File.ReadAllTextAsync("GameboardConfigData.json");
+            string serializedJsonData;
+            try
+            {
+                var a = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                var b = Path.Combine(a, @"Data\GameboardData.json");
+                serializedJsonData = await File.ReadAllTextAsync(b);
+                var jsonData = JsonConvert.DeserializeObject<GameboardData>(serializedJsonData);
+                //var jsonData = JsonConvert.DeserializeObject<GameboardData>(serializedJsonData, new JsonSerializerSettings
+                //{
+                //    Converters = 
+                //});
+                var c1 = jsonData.GameboardMapIndices_rowstrings[10].Split(",")[10];
+                //var c1 = jsonData.GameboardMapIndices_squarestrings[10, 10];
+                var c2 = jsonData.GameboardMapIndices_squarestrings[10, 10];
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                throw;
+            }
             //var jsonData = await JsonSerializer.DeserializeAsync(serializedJsonData, typeof(string, object));
             //JavaScriptSerializer oJS = new JavaScriptSerializer();
             //RootObject oRootObject = new RootObject();
             //oRootObject = oJS.Deserialize<RootObject>(Your JSon String);
-            var jsonData = JsonConvert.DeserializeObject<JsonKeyValue>(serializedJsonData);
+            //var jsonData = JsonConvert.DeserializeObject<JsonKeyValue>(serializedJsonData);
+            //var rootKeys = jsonData.KeyValuePair.Keys;
         }
     }
 }

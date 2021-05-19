@@ -1,3 +1,4 @@
+using Ludo_API.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -13,6 +14,8 @@ namespace Ludo_API
     {
         public static void Main(string[] args)
         {
+
+            new GameboardDataORM();
             CreateHostBuilder(args).Build().Run();
         }
 
