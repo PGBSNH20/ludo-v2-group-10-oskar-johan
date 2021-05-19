@@ -12,7 +12,7 @@ namespace Ludo_WebApp.Pages.Ludo
     public class NewModel : PageModel
     {
         [BindProperty]
-        public NewGameDTO NewGame { get; set; }
+        public NewPlayerDTO NewPlayer { get; set; }
 
         //[BindProperty]
         //public string Color { get; set; }
@@ -34,12 +34,12 @@ namespace Ludo_WebApp.Pages.Ludo
         {
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("", "This is an error, you are a failure.");
+                ModelState.AddModelError("", "ModelState invalid");
                 return Page();
             }
 
             // call API to create game
-            var response = await Fetch.PostNewGameAsync(NewGame);
+            var response = await Fetch.PostNewGameAsync(NewPlayer);
 
             // redirect to Ludo/{id}
             //e.g. return RedirectToPage("./Index/{id}");

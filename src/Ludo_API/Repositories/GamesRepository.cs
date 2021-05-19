@@ -1,6 +1,7 @@
 ﻿using Ludo_API.Database;
 using Ludo_API.GameEngine.Game;
 using Ludo_API.Models;
+using Ludo_API.Models.DTO;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,10 @@ namespace Ludo_API.Repositories
 
         public async Task<Gameboard> GetGame(LudoContext context, int id)
         {
-            return await context.Gameboards.SingleOrDefaultAsync(g => g.ID == id);
+            return await context.Gameboards.
+                Include(s => s.Squares).
+                Include(p => p.Players).
+                SingleOrDefaultAsync(g => g.ID == id);
         }
 
         public async Task<Gameboard> CreateNewGame(LudoContext context, Gameboard gameboard)
@@ -88,6 +92,11 @@ namespace Ludo_API.Repositories
         public Task<List<Gameboard>> GetAllGamesAsync()
         {
             throw new NotImplementedException();
+        }
+
+        public Task AddPlayerAsync(Gameboard gameboard, NewPlayerDTO newPlayerDTO)
+        {
+            gameboard.Players.Add(new)
         }
     }
 }

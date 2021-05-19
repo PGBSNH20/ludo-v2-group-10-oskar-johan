@@ -43,7 +43,7 @@ namespace Ludo_WebApp.Ludo_API
         //    }
         //}
 
-        public static async Task<int> PostNewGameAsync(NewGameDTO newGameDTO)
+        public static async Task<int> PostNewGameAsync(NewPlayerDTO newPlayerDTO)
         {
             //var postParking = new PostParking()
             //{
@@ -54,7 +54,36 @@ namespace Ludo_WebApp.Ludo_API
 
             var client = new RestClient(_baseURL);
             var request = new RestRequest(RequestURLs.NewGame);
-            request.AddJsonBody(newGameDTO);
+            request.AddJsonBody(newPlayerDTO);
+            //request.OnBeforeDeserialization = r => { r.ContentType = "application/json"; };
+
+            try // todo: fix getting and returning the error msg from throw in SetTrack
+            {
+                //await client.PostAsync<GameDTO>(request);
+                int response = await client.PostAsync<int>(request);
+                //var response = await client.PostAsync<NewGameDTO>(request);
+                return response;
+            }
+            catch (Exception e)
+            {
+                // log the error?
+                // do error handling stuff?
+                throw; // remove?
+            }
+        }
+
+        public static async Task<int> PostAddPlayerAsync(NewPlayerDTO newPlayerDTO)
+        {
+            //var postParking = new PostParking()
+            //{
+            //    Traveller = personName,
+            //    StarShip = starshipsname,
+            //    SpaceportId = spaceportId
+            //};
+
+            var client = new RestClient(_baseURL);
+            var request = new RestRequest(RequestURLs.NewGame);
+            request.AddJsonBody(newPlayerDTO);
             //request.OnBeforeDeserialization = r => { r.ContentType = "application/json"; };
 
             try // todo: fix getting and returning the error msg from throw in SetTrack

@@ -8,6 +8,38 @@
     var random = new Random();
 }
 
+<h1>Join Game</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-page-handler="AddPlayer" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <!--<div class="form-group">
+                <label asp-for="NewGame.PlayerCount" class="control-label"></label>
+                <input asp-for="NewGame.PlayerCount" class="form-control" />-->
+            <!-- todo: switch to type="range"? -->
+            <!--<span asp-validation-for="NewGame.PlayerCount" class="text-danger"></span>
+            </div>-->
+            <div class="form-group">
+                <label asp-for="NewPlayer.PlayerName" class="control-label"></label>
+                <input asp-for="NewPlayer.PlayerName" class="form-control" />
+                <span asp-validation-for="NewPlayer.PlayerName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @foreach (var color in Model.Colors2)
+                {
+                    <input type="radio" asp-for="NewPlayer.PlayerColor" value="@color.Value" />
+                    <label asp-for="NewPlayer.PlayerColor" class="control-label" style="color:@color.Value">@color.Key</label> <!-- todo: fix clicking labels always selects first radio-input -->
+                }
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
 <!-- todo: autogenerate squares? -->
 <div class="gameboard row">
     <div class="col-md-9">
@@ -17,13 +49,13 @@
                 @for (int x = 0; x < Model.ColumnCount; x++)
                 {
                     int squareIndex = Model.SquareIndices[y, x];
-                    if (!Model.Colors.TryGetValue(Model.SquareColors[y, x], out squareColor))
+                    if (!Model.Colors2.TryGetValue(Model.SquareColors[y, x], out squareColor))
                     {
                         squareColor = ("error", "pink");
                     }
 
                     @*<div class="square" data-square-id="@(y * columnCount + x)"></div> // This*@
-                    var randomColor = Model.Colors.ElementAt(random.Next(0, Model.Colors.Count));
+                var randomColor = Model.Colors2.ElementAt(random.Next(0, Model.Colors2.Count));
 
                     <div @Html.Raw(squareIndex != -1 ? "class=\"square\"" : "")
                          @(squareIndex is >= 0 or >= -4 and <= -3 ? $"data-square-id=\"{@Model.SquareIndices[y, x]}\"" : "")
@@ -70,3 +102,5 @@
     </div>
 </div>
 
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/ludo.js"></script>

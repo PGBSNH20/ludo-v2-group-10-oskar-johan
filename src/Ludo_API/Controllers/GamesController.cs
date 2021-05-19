@@ -79,7 +79,7 @@ namespace Ludo_API.Controllers
         [HttpPost("[action]")]
         [ActionName("New")]
         //public async Task<ActionResult<string>> Post([FromBody] List<PlayerDTO> players)
-        public async Task<ActionResult<int>> Post([FromBody] NewGameDTO newGameDTO)
+        public async Task<ActionResult<int>> Post([FromBody] NewPlayerDTO newPlayerDTO)
         //public async Task<ActionResult<NewGameDTO>> Post([FromBody] NewGameDTO newGameDTO)
         {
             List<Player> newPlayers = new();
@@ -103,8 +103,8 @@ namespace Ludo_API.Controllers
             //    newPlayers.Add(new(p.Name, color));
             //}
 
-            var color = ColorTranslator.FromHtml(newGameDTO.FirstPlayerColor);
-            newPlayers.Add(new(newGameDTO.FirstPlayerName, color));
+            var color = ColorTranslator.FromHtml(newPlayerDTO.PlayerColor);
+            newPlayers.Add(new(newPlayerDTO.PlayerName, color));
 
             try
             {
@@ -133,5 +133,40 @@ namespace Ludo_API.Controllers
         {
             return await _gameRepository.DeleteGame(_context, id);
         }
+
+        // POST api/Games/AddPlayer
+        [HttpPost("[action]")]
+        [ActionName("AddPlayer")]
+        //public async Task<ActionResult<string>> Post([FromBody] List<PlayerDTO> players)
+        public async Task<ActionResult<int>> PostAddPlayer([FromBody] NewPlayerDTO newPlayerDTO)
+        //public async Task<ActionResult<NewGameDTO>> Post([FromBody] NewGameDTO newGameDTO)
+        {
+            var gameboard = _gameRepository.GetGame(_context, newPlayerDTO.GameId);
+
+            
+
+
+
+
+
+
+            List<Player> newPlayers = new();
+            Gameboard.CreateTracks();
+
+            var color = ColorTranslator.FromHtml(newPlayerDTO.PlayerColor);
+            newPlayers.Add(new(newPlayerDTO.PlayerName, color));
+
+            try
+            {
+                var gameboard = new Gameboard(newPlayers);
+                gameboard = await _gameRepository.CreateNewGame(_context, gameboard);
+                //gameboard.SetPlayerColors();
+                return Ok(gameboard.ID);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+            //return Ok(1);
+        }
     }
-}
