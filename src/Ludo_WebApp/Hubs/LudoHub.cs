@@ -10,7 +10,7 @@ namespace Ludo_WebApp.Hubs
     {
         public async Task SendMessage(string user, string message)
         {
-            await Clients.All.SendAsync("RecieveMessage", user, message);
+            await Clients.All.SendAsync("ReceiveMessage", user, message);
         }
     }
 }
