@@ -3,41 +3,70 @@
 
 @{
     ViewData["Title"] = "Ludo Game";
-    int columnCount = 11,
-        rowCount = 11;
+
+    (string colorName, string colorHex) squareColor;
+    var random = new Random();
 }
 
 <!-- todo: autogenerate squares? -->
-<div class="gameboard">
-    <!-- row: -->
-    <!--<div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>-->
-    <!-- row: -->
-    <!--<div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>
-    <div class="square"></div>-->
-    @for (int y = 0; y < rowCount; y++)
-    {
-        @for (int x = 0; x < rowCount; x++)
-        {
-            <div class="square"></div>
-        }
-    }
+<div class="gameboard row">
+    <div class="col-md-9">
+        <div class="squares">
+            @for (int y = 0; y < Model.RowCount; y++)
+            {
+                @for (int x = 0; x < Model.ColumnCount; x++)
+                {
+                    int squareIndex = Model.SquareIndices[y, x];
+                    if (!Model.Colors.TryGetValue(Model.SquareColors[y, x], out squareColor))
+                    {
+                        squareColor = ("error", "pink");
+                    }
+
+                    @*<div class="square" data-square-id="@(y * columnCount + x)"></div> // This*@
+                    var randomColor = Model.Colors.ElementAt(random.Next(0, Model.Colors.Count));
+
+                    <div @Html.Raw(squareIndex != -1 ? "class=\"square\"" : "")
+                         @(squareIndex is >= 0 or >= -4 and <= -3 ? $"data-square-id=\"{@Model.SquareIndices[y, x]}\"" : "")
+                         data-square-color="@squareColor.colorName"
+                         style="border-color: @squareColor.colorHex; color: @(Model.SquareColors[y, x] == 'x' ? squareColor.colorHex : randomColor.Value.colorHex)"
+                         draggable="true">@(Model.SquareColors[y, x] == 'x' ? squareColor.colorName.ToUpper() : (squareIndex != -1 && randomColor.Key != ' ' && randomColor.Key != 'x' ? "●" : ""))</div>// This
+                }
+            }
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="row">
+            <form method="post">
+                <div class="form-group">
+                    <div class="row">
+                        <label @* asp-for="" *@ class="control-label" for="TEMPATTRIBUTE_select_piece" style="display: block; color: #fff">Move piece on square:</label>
+                        <!--<input--> @* asp-for="" *@ <!--class="form-control" />-->
+                        <span @* asp-validation-for="" *@ class="text-danger" name="TEMPATTRIBUTE_select_piece"></span>
+                    </div>
+                    <div class="row">
+                        <select size="4">
+                            <option data-square-move-from-id="0">Add new piece to square 0</option>
+                            <option data-square-move-from-id="10">Square 10</option>
+                            <option data-square-move-from-id="29">Square 29</option>
+                            <option data-square-move-from-id="44">Square 44</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <label @* asp-for="" *@ class="control-label" for="TEMPATTRIBUTE_select_piece" style="display: block; color: #fff">Move piece to: square:</label>
+                        <!--<input--> @* asp-for="" *@ <!--class="form-control" />-->
+                        <span @* asp-validation-for="" *@ class="text-danger" name="TEMPATTRIBUTE_select_piece"></span>
+                    </div>
+                    <div class="row">
+                        <select size="3">
+                            <option data-square-move-to-id="14">Square 14</option>
+                            <option data-square-move-to-id="33">Square 33</option>
+                            <option data-square-move-to-id="47">Square 47</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
+
