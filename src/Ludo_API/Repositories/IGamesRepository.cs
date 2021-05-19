@@ -19,5 +19,6 @@ namespace Ludo_API.Repositories
         //void MoveToken(Player player, Square startSquare, Square endSquare);
         Task<bool> DeleteGame(LudoContext context, int id);
         Task<bool> ExecuteMoveAction(LudoContext context, MoveAction moveAction);
+        Task<Gameboard> AddPlayerAsync(LudoContext context, Gameboard gameboard, Player player);
     }
 }

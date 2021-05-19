@@ -138,35 +138,27 @@ namespace Ludo_API.Controllers
         [HttpPost("[action]")]
         [ActionName("AddPlayer")]
         //public async Task<ActionResult<string>> Post([FromBody] List<PlayerDTO> players)
-        public async Task<ActionResult<int>> PostAddPlayer([FromBody] NewPlayerDTO newPlayerDTO)
+        public async Task<ActionResult<Gameboard>> PostAddPlayer([FromBody] NewPlayerDTO newPlayerDTO)
         //public async Task<ActionResult<NewGameDTO>> Post([FromBody] NewGameDTO newGameDTO)
         {
-            var gameboard = _gameRepository.GetGame(_context, newPlayerDTO.GameId);
-
-            
-
-
-
-
-
-
-            List<Player> newPlayers = new();
-            Gameboard.CreateTracks();
-
-            var color = ColorTranslator.FromHtml(newPlayerDTO.PlayerColor);
-            newPlayers.Add(new(newPlayerDTO.PlayerName, color));
-
             try
             {
-                var gameboard = new Gameboard(newPlayers);
-                gameboard = await _gameRepository.CreateNewGame(_context, gameboard);
-                //gameboard.SetPlayerColors();
-                return Ok(gameboard.ID);
+                var gameboard = await _gameRepository.GetGame(_context, newPlayerDTO.GameId);
+
+                Gameboard.CreateTracks();
+
+                var color = ColorTranslator.FromHtml(newPlayerDTO.PlayerColor);
+
+                Player player = new(newPlayerDTO.PlayerName, color);
+
+                gameboard = await _gameRepository.AddPlayerAsync(_context, gameboard, player);
+
+                return Ok(gameboard);
             }
             catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
-            //return Ok(1);
         }
     }
+}
