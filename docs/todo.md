@@ -12,16 +12,23 @@
 - API and database:
     - [ ] Finalize the API.
     - [ ] Finalize the database structure.
+        - [ ] New Game created by column?
+    - [ ] ??? - ORM for reading game/config data from a (e.g. json) file containing things such as gameboard layout and information about squares(e.g. color, index ...)?
 - WebApp
-    - [ ] Create a webapp project.
+    - [x] Create a webapp project.
     - [ ] Create Ludo GUI.
+        - [ ] ??? - History page (old games)?
+        - [ ] ??? - Profile page?
+        - [ ] ??? - Login/Create account page?
     - [ ] Create unique URL for each game.
+        - [ ] Uses gameboard id for, switch to something that's harder to guess (e.g. [`class ShortGuid` url friendly base64 encoded guid](../src/Ludo_API/Utils/ShortGuid.cs)?
 - API or/and WebApp?:
     - [ ] Basic authentication?
     - [ ] (in progress) Validate input.
 
 ## Optional elements ("VG")
 - [ ] Deploy a web server.
+    - How?
 - [ ] Login in functionality (authentication & authorization).
 - [ ] Invite players via email.
 - [ ] Update GUI asynchronously (e.g. position of `token`s) (live).
