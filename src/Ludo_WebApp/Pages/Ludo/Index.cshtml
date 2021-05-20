@@ -11,14 +11,16 @@
     var random = new Random();
 }
 
-<h1>Join Game</h1>
-
 @{
     if (Model.Gameboard != null && Model.Gameboard.GameStartDate == null)
     {
+        @* todo: only show this to the player who created the game. *@
         <form method="post" asp-page-handler="StartGame">
             <input type="submit" value="Start Game" class="btn btn-primary" />
         </form>
+
+        @* todo: don't show the "join game" section for the player who created the game. *@
+        <h1>Join Game</h1>
 
         <div class="row">
             <div class="col-md-4">
@@ -51,7 +53,7 @@
     }
     // note: else is disabled for development purposes
     // todo: reenable else for production code
-    @*else*@ 
+    @*else*@
     {
         <!-- todo: autogenerate squares? -->
         <div class="gameboard row">

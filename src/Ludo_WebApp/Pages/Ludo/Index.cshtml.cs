@@ -19,10 +19,10 @@ namespace Ludo_WebApp.Pages.Ludo
 
     public class IndexModel : PageModel
     {
-        [BindProperty]
+        //[BindProperty(SupportsGet = true)]
         public NewPlayerDTO NewPlayer { get; set; }
 
-        [BindProperty]
+        //[BindProperty(SupportsGet = true)]
         public GameboardDTO Gameboard { get; set; }
 
         //[BindProperty]
@@ -106,6 +106,7 @@ namespace Ludo_WebApp.Pages.Ludo
             if (restResponse.StatusCode != HttpStatusCode.OK)
             {
                 // todo: do something
+                throw new Exception("Fixme");
                 return;
             }
 
@@ -130,7 +131,7 @@ namespace Ludo_WebApp.Pages.Ludo
             return RedirectToPage("./Index/", new { id = response });
         }
 
-        public async Task<IActionResult> OnPostStartGameAsync()
+        public async Task<IActionResult> OnPostStartGameAsync(GameboardDTO gameboard)
         {
             if (!ModelState.IsValid)
             {
@@ -145,7 +146,7 @@ namespace Ludo_WebApp.Pages.Ludo
             ////e.g. return RedirectToPage("./Index/{id}");
             //return RedirectToPage("./Index/", new { id = response });
 
-            var restResponse = await Fetch.StartGameAsync(Gameboard.ID);
+            var restResponse = await Fetch.StartGameAsync(gameboard.ID);
 
             if (restResponse.StatusCode != HttpStatusCode.OK)
             {
@@ -154,7 +155,9 @@ namespace Ludo_WebApp.Pages.Ludo
             }
 
             Gameboard = restResponse.Data;
-            return new OkResult();
+            //return RedirectToRoute(Request.Path.Value, new { id = gameboard.ID });
+            var a = Request.Path;
+            return RedirectToRoute(Request.Path);
         }
     }
 }
