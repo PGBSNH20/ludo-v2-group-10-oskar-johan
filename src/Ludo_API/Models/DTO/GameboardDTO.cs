@@ -10,8 +10,8 @@ namespace Ludo_API.Models.DTO
         public Player CurrentPlayer { get; set; }
         public List<Square> Squares { get; set; }
         public List<Player> Players { get; set; }
-        public DateTime GameDate  { get; set; } // todo: rename to something like "lastturndate"
-        public DateTime GameStartDate { get; set; }
+        public DateTime? GameDate  { get; set; } // todo: rename to something like "lastturndate"
+        public DateTime? GameStartDate { get; set; }
         //GameboardData GameboardData { get; set; } // Add ColorOrder?
 
         public GameboardDTO(Gameboard gameboard)

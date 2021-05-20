@@ -28,8 +28,8 @@ namespace Ludo_API.Models
         [Required]
         public List<Player> Players { get; set; }
 
-        public DateTime GameDate { get; set; } // todo: rename to something like "lastturndate"
-        public DateTime GameStartDate { get; set; }
+        public DateTime? GameDate { get; set; } // todo: rename to something like "lastturndate"
+        public DateTime? GameStartDate { get; set; }
 
         #region NotMappedVariables
         [NotMapped]
