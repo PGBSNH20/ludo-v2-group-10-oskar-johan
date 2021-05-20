@@ -15,8 +15,8 @@ namespace Ludo_API.Repositories
         public async Task<List<Gameboard>> GetAllGames(LudoContext context)
         {
             return await context.Gameboards
-                //.Include(s => s.Squares)
-                //.Include(p => p.Players)
+                .Include(s => s.Squares)
+                .Include(p => p.Players)
                 .ToListAsync();
         }
 

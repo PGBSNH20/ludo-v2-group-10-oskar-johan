@@ -1,1 +1,14 @@
-POST localhost,41433
+###
+GET localhost:44376/api/Games/
+
+###
+
+POST localhost:44376/api/Games/AddPlayer
+Content-Type: application/json
+//apikey: apikey1234_visitor
+ 
+{
+    "GameId":1,
+    "PlayerName":"Oskar",
+    "PlayerColor": "#FF0000"
+}

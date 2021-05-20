@@ -54,7 +54,7 @@ namespace Ludo_API.Models
         public Player()
         {
             // todo: test if this is called before or after EF Core initializes the object
-            SetTrack();
+            //SetTrack();
         }
 
         public Player(string name, Color color)

@@ -137,9 +137,7 @@ namespace Ludo_API.Controllers
         // POST api/Games/AddPlayer
         [HttpPost("[action]")]
         [ActionName("AddPlayer")]
-        //public async Task<ActionResult<string>> Post([FromBody] List<PlayerDTO> players)
         public async Task<ActionResult<Gameboard>> PostAddPlayer([FromBody] NewPlayerDTO newPlayerDTO)
-        //public async Task<ActionResult<NewGameDTO>> Post([FromBody] NewGameDTO newGameDTO)
         {
             try
             {
