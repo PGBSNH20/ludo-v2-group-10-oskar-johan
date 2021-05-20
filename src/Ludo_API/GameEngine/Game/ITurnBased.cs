@@ -6,10 +6,10 @@ namespace Ludo_API.GameEngine.Game
     public interface ITurnBased
     {
         Player DecideWhoStarts(List<Player> players);
-        void NextTurn();
+        //void NextTurn();
         List<MoveAction> HandleTurn(Models.Player player);
-        void EndTurn();
+        //void EndTurn();
         int RollDice();
-        void HandleTurn();
+        //void HandleTurn();
     }
 }

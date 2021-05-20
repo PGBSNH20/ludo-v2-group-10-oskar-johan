@@ -33,8 +33,36 @@ namespace Ludo_API.GameEngine.Game
             return players[start];
         }
 
+        //public Player GetNextPlayer(Player player)
+        //{
+            // update to use repo
+            // pseudo:
+            //GameboardData.Colors.TryGetValue(Gameboard.CurrentPlayer.Color);
+
+            //int currentPlayerColorIndex = Gameboard.ColorOrder.FindIndex(c => c == Gameboard.CurrentPlayer.Color);
+
+            //int nextPlayerColorIndex = currentPlayerColorIndex + 1 < OrderPlayers.Count ? currentPlayerColorIndex + 1 : 0;
+
+            //Color nextPlayerColor = Gameboard.ColorOrder.ElementAtOrDefault(currentPlayerColorIndex)
+
+
+            //var NextPlayer  = Gameboard.Players.SingleOrDefault(p => p.Color == nextPlayerColor);
+
+            //Gameboard.CurrentPlayer = NextPlayer();
+            //return NextPlayer;
+        //}
+
+        public void StartGame()
+        {
+            // move inline?
+            //Player player = DecideWhoStarts();
+            // update database with startdate
+            NextTurn();
+        }
+
         public void NextTurn()
         {
+            // Get data from database
             throw new NotImplementedException();
         }
 
@@ -83,15 +111,15 @@ namespace Ludo_API.GameEngine.Game
             return _die.Next(1, 7);
         }
 
-        public void EndTurn()
-        {
-            throw new NotImplementedException();
-        }
+        //public void EndTurn()
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public void HandleTurn()
-        {
-            throw new NotImplementedException();
-        }
+        //public void HandleTurn()
+        //{
+        //    throw new NotImplementedException();
+        //}
         #endregion
     }
 }

@@ -10,26 +10,26 @@ using System.Threading.Tasks;
 
 namespace Ludo_API.GameEngine.Game
 {
-    public class PlayerManager
-    {
-        internal List<Models.Player> CreatePlayers(LudoContext context, IPlayerRepository playerRepository, GameOptions gameOptions)
-        {
-            List<Models.Player> players = new();
+    //public class PlayerManager
+    //{
+    //    internal List<Models.Player> CreatePlayers(LudoContext context, IPlayerRepository playerRepository, GameOptions gameOptions)
+    //    {
+    //        List<Models.Player> players = new();
 
-            foreach (var playerDTO in gameOptions.PlayersDTO)
-            {
-                // Validate Input (or earlier)?
-                // Convert Colors?
-                players.Add(new Models.Player
-                {
-                    Name = playerDTO.Name,
-                    Color = ColorTranslator.FromHtml(playerDTO.Color),
-                });
-            }
+    //        foreach (var playerDTO in gameOptions.PlayersDTO)
+    //        {
+    //            // Validate Input (or earlier)?
+    //            // Convert Colors?
+    //            players.Add(new Models.Player
+    //            {
+    //                Name = playerDTO.Name,
+    //                Color = ColorTranslator.FromHtml(playerDTO.Color),
+    //            });
+    //        }
 
-            playerRepository.AddPlayers(context, players);
-            // ??? var players = context.Players.Where(p => p.gameId == gameId);
-            return players;
-        }
-    }
+    //        playerRepository.AddPlayers(context, players);
+    //        // ??? var players = context.Players.Where(p => p.gameId == gameId);
+    //        return players;
+    //    }
+    //}
 }
