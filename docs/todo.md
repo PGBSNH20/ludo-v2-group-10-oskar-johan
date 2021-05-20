@@ -19,7 +19,7 @@
     - [ ] Create Ludo GUI.
         - [ ] ??? - History page (old games)?
         - [ ] ??? - Profile page?
-        - [ ] ??? - Login/Create account page?
+        - [ ] ??? - Login/Create account page/component/?
     - [ ] Create unique URL for each game.
         - [ ] Uses gameboard id for, switch to something that's harder to guess (e.g. [`class ShortGuid` url friendly base64 encoded guid](../src/Ludo_API/Utils/ShortGuid.cs)?
 - API or/and WebApp?:
@@ -32,5 +32,6 @@
 - [ ] Login in functionality (authentication & authorization).
 - [ ] Invite players via email.
 - [ ] Update GUI asynchronously (e.g. position of `token`s) (live).
+    - SignalR?
 - [ ] i18n - localization of GUI.
 - [ ] Responsive "mobile friendly" UI (html).
