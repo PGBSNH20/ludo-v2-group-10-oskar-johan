@@ -129,5 +129,32 @@ namespace Ludo_WebApp.Pages.Ludo
             //e.g. return RedirectToPage("./Index/{id}");
             return RedirectToPage("./Index/", new { id = response });
         }
+
+        public async Task<IActionResult> OnPostStartGameAsync()
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "ModelState invalid");
+                return Page();
+            }
+
+            //// call API to create game
+            //var response = ;
+
+            //// redirect to Ludo/{id}
+            ////e.g. return RedirectToPage("./Index/{id}");
+            //return RedirectToPage("./Index/", new { id = response });
+
+            var restResponse = await Fetch.StartGameAsync(Gameboard.ID);
+
+            if (restResponse.StatusCode != HttpStatusCode.OK)
+            {
+                // todo: do something
+                return new BadRequestResult();
+            }
+
+            Gameboard = restResponse.Data;
+            return new OkResult();
+        }
     }
 }

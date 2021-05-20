@@ -163,5 +163,15 @@ namespace Ludo_API_Test.TestRepositories
         {
             throw new NotImplementedException();
         }
+
+        public Task<int> StartGameAsync(LudoContext context, Gameboard gameboard)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SaveTurnAsync(LudoContext context, Gameboard gameboard, Player player)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

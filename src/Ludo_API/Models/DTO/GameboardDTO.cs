@@ -7,6 +7,7 @@ namespace Ludo_API.Models.DTO
 {
     public class GameboardDTO
     {
+        public int ID { get; set; }
         public Player CurrentPlayer { get; set; }
         public List<Square> Squares { get; set; }
         public List<Player> Players { get; set; }

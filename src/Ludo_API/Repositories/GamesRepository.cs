@@ -39,7 +39,13 @@ namespace Ludo_API.Repositories
         //    throw new NotImplementedException();
         //}
 
-        public Task SaveTurnAsync(Gameboard gameboard, Player player)
+        public async Task<int> StartGameAsync(LudoContext context, Gameboard gameboard)
+        {
+            gameboard.GameStartDate = DateTime.Now;
+            return await context.SaveChangesAsync();
+        }
+
+        public Task SaveTurnAsync(LudoContext context, Gameboard gameboard, Player player)
         {
             throw new NotImplementedException();
         }

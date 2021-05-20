@@ -17,6 +17,7 @@ namespace Ludo_WebApp.Ludo_API
             internal static string NewGame = "/Games/New/";
             internal static string AddPlayer = "/Games/AddPlayer/";
             internal static string GetGame = "/Games/";
+            internal static string StartGame = "/Games/StartGame/";
         }
 
         //// Generic method for fetching data from the API (swapi.com)
@@ -111,5 +112,29 @@ namespace Ludo_WebApp.Ludo_API
                 //throw; // remove?
             }
         }
+
+        //internal static Task PostStartGameAsync(NewPlayerDTO newPlayer)
+        internal async static Task<IRestResponse<GameboardDTO>> StartGameAsync(int gameId)
+        {
+            var client = new RestClient(_baseURL);
+            var request = new RestRequest(RequestURLs.StartGame, Method.POST);
+            request.AddJsonBody(gameId);
+
+            try // todo: fix getting and returning the error msg from throw in SetTrack
+            {
+                //return await client.GetAsync<GameboardDTO>(request);
+                return await client.ExecuteAsync<GameboardDTO>(request);
+            }
+            catch (Exception e)
+            {
+                // log the error?
+                // do error handling stuff?
+                return null;
+                //throw; // remove?
+            }
+        }
+
+        //internal async static Task<IRestResponse<T> PostAsync<T1, T2>(T1 object) {
+        //    }
     }
 }

@@ -164,5 +164,31 @@ namespace Ludo_API.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        // POST api/Games/AddPlayer
+        [HttpPost("[action]")]
+        [ActionName("StartGame")]
+        public async Task<ActionResult<GameboardDTO>> PostStartGame([FromBody] int gameId)
+        {
+            try
+            {
+                var gameboard = await _gameRepository.GetGame(_context, gameId);
+
+                if (gameboard == null)
+                {
+                    return NotFound($"There is no game with the id {gameId}.");
+                }
+
+                await _gameRepository.StartGameAsync(_context, gameboard);
+                return Ok(new GameboardDTO(gameboard));
+            }
+            catch (Exception e)
+            {
+                // log exception?
+                //return BadRequest(e.Message);
+                return BadRequest("Something went wrong.");
+                throw;
+            }
+        }
     }
 }
