@@ -1,7 +1,9 @@
 ﻿using Ludo_WebApp.Models;
+using Microsoft.AspNetCore.Mvc;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Ludo_WebApp.Ludo_API
@@ -13,6 +15,8 @@ namespace Ludo_WebApp.Ludo_API
         private struct RequestURLs
         {
             internal static string NewGame = "/Games/New/";
+            internal static string AddPlayer = "/Games/AddPlayer/";
+            internal static string GetGame = "/Games/";
         }
 
         //// Generic method for fetching data from the API (swapi.com)
@@ -45,13 +49,6 @@ namespace Ludo_WebApp.Ludo_API
 
         public static async Task<int> PostNewGameAsync(NewPlayerDTO newPlayerDTO)
         {
-            //var postParking = new PostParking()
-            //{
-            //    Traveller = personName,
-            //    StarShip = starshipsname,
-            //    SpaceportId = spaceportId
-            //};
-
             var client = new RestClient(_baseURL);
             var request = new RestRequest(RequestURLs.NewGame);
             request.AddJsonBody(newPlayerDTO);
@@ -74,13 +71,6 @@ namespace Ludo_WebApp.Ludo_API
 
         public static async Task<int> PostAddPlayerAsync(NewPlayerDTO newPlayerDTO)
         {
-            //var postParking = new PostParking()
-            //{
-            //    Traveller = personName,
-            //    StarShip = starshipsname,
-            //    SpaceportId = spaceportId
-            //};
-
             var client = new RestClient(_baseURL);
             var request = new RestRequest(RequestURLs.NewGame);
             request.AddJsonBody(newPlayerDTO);
@@ -98,6 +88,26 @@ namespace Ludo_WebApp.Ludo_API
                 // log the error?
                 // do error handling stuff?
                 throw; // remove?
+            }
+        }
+
+        // api/Games/{id}
+        //internal async static Task<ActionResult<GameboardDTO>> GetGame(int gameId)
+        internal async static Task<GameboardDTO> GetGame(int gameId)
+        {
+            var client = new RestClient(_baseURL);
+            var request = new RestRequest(RequestURLs.GetGame + gameId);
+
+            try // todo: fix getting and returning the error msg from throw in SetTrack
+            {
+                return await client.GetAsync<GameboardDTO>(request);
+            }
+            catch (Exception e)
+            {
+                // log the error?
+                // do error handling stuff?
+                return null;
+                //throw; // remove?
             }
         }
     }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Ludo_WebApp.Ludo_API;
 using Ludo_WebApp.Models;
@@ -20,6 +21,12 @@ namespace Ludo_WebApp.Pages.Ludo
     {
         [BindProperty]
         public NewPlayerDTO NewPlayer { get; set; }
+
+        [BindProperty]
+        public GameboardDTO Gameboard { get; set; }
+
+        //[BindProperty]
+        //public GameboardDTO gameboard { get; set; }
 
         //[BindProperty]
         //public string Color { get; set; }
@@ -83,8 +90,27 @@ namespace Ludo_WebApp.Pages.Ludo
             {'y',' ',' ',' ','y',' ',' ',' ',' ',' ','g'},
         };
 
-        public void OnGet()
+        //public async Task<IActionResult> OnGet()
+        public async Task OnGet(int? id)
         {
+            if (id == null)
+            {
+                // todo: do something
+                return;
+            }
+
+            // Get Gameboard if one exists with this id.
+            GameboardDTO gameboard = await Fetch.GetGame(id.Value);
+
+            //if (gameboard == null)
+            //{
+            //    // todo: do something
+            //    return;
+            //}
+
+            Gameboard = gameboard;
+
+            // todo: update the html
         }
 
         public async Task<IActionResult> OnPostAddPlayerAsync()

@@ -37,10 +37,16 @@ namespace Ludo_API.Controllers
 
         // GET api/Games/{id}
         [HttpGet("{id}")]
-        public async Task<Gameboard> Get(int id)
+        public async Task<ActionResult<GameboardDTO>> Get(int id)
         {
             var gameboard = await _gameRepository.GetGame(_context, id);
-            return gameboard;
+
+            if (gameboard == null)
+            {
+                return NotFound("No game with that id exists");
+            }
+
+            return Ok(new GameboardDTO(gameboard));
         }
 
         //// POST api/Games/New
