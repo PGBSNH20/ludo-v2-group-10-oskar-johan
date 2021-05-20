@@ -62,7 +62,6 @@ namespace Ludo_API.Models
             GameId = Guid.NewGuid().ToString();
             Players = players;
             Squares = new List<Square>();
-            GameStartDate = DateTime.Now;
 
             for (int i = 0; i < 60; i++)
             {
