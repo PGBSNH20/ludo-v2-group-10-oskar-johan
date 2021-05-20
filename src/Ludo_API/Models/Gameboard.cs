@@ -15,11 +15,12 @@ namespace Ludo_API.Models
         // https://stackoverflow.com/a/40917033
         //public int GameId { get; set; }
 
-        [Required]
+        //[Required]
         // https://stackoverflow.com/a/40917033
         public string GameId { get; set; }
 
         public Player LastPlayer { get; set; }
+        public Player CurrentPlayer { get; set; }
 
         [Required]
         public List<Square> Squares { get; set; }
@@ -28,6 +29,7 @@ namespace Ludo_API.Models
         public List<Player> Players { get; set; }
 
         public DateTime GameDate { get; set; }
+        public DateTime GameStartDate { get; set; }
 
         #region NotMappedVariables
         [NotMapped]
