@@ -28,7 +28,7 @@ namespace Ludo_API.Models
         [Required]
         public List<Player> Players { get; set; }
 
-        public DateTime GameDate { get; set; }
+        public DateTime GameDate { get; set; } // todo: rename to something like "lastturndate"
         public DateTime GameStartDate { get; set; }
 
         #region NotMappedVariables
@@ -62,7 +62,7 @@ namespace Ludo_API.Models
             GameId = Guid.NewGuid().ToString();
             Players = players;
             Squares = new List<Square>();
-            GameDate = DateTime.Now;
+            GameStartDate = DateTime.Now;
 
             for (int i = 0; i < 60; i++)
             {
