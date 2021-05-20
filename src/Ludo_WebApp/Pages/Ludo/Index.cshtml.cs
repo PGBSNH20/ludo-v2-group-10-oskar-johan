@@ -100,15 +100,16 @@ namespace Ludo_WebApp.Pages.Ludo
             }
 
             // Get Gameboard if one exists with this id.
-            GameboardDTO gameboard = await Fetch.GetGame(id.Value);
+            var restResponse = await Fetch.GetGame(id.Value);
+            var statusCode = restResponse.StatusCode;
 
-            //if (gameboard == null)
-            //{
-            //    // todo: do something
-            //    return;
-            //}
+            if (restResponse.StatusCode != HttpStatusCode.OK)
+            {
+                // todo: do something
+                return;
+            }
 
-            Gameboard = gameboard;
+            Gameboard = restResponse.Data;
 
             // todo: update the html
         }

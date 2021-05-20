@@ -93,14 +93,15 @@ namespace Ludo_WebApp.Ludo_API
 
         // api/Games/{id}
         //internal async static Task<ActionResult<GameboardDTO>> GetGame(int gameId)
-        internal async static Task<GameboardDTO> GetGame(int gameId)
+        internal async static Task<IRestResponse<GameboardDTO>> GetGame(int gameId)
         {
             var client = new RestClient(_baseURL);
-            var request = new RestRequest(RequestURLs.GetGame + gameId);
+            var request = new RestRequest(RequestURLs.GetGame + gameId, Method.GET);
 
             try // todo: fix getting and returning the error msg from throw in SetTrack
             {
-                return await client.GetAsync<GameboardDTO>(request);
+                //return await client.GetAsync<GameboardDTO>(request);
+                return await client.ExecuteAsync<GameboardDTO>(request);
             }
             catch (Exception e)
             {
