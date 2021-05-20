@@ -10,8 +10,8 @@ Content-Type: application/json
 //apikey: apikey1234_visitor
  
 {
-    "GameId":1,
-    "PlayerName":"Ludo Player",
+    "GameId": 4,
+    "PlayerName": "Ludo Player 3",
     "PlayerColor": "#FF0000"
 }
 

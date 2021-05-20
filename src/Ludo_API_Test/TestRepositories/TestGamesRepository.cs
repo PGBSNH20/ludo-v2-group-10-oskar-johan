@@ -158,5 +158,10 @@ namespace Ludo_API_Test.TestRepositories
 
             return Task.FromResult(true);
         }
+
+        public Task<Gameboard> AddPlayerAsync(LudoContext context, Gameboard gameboard, Player player)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

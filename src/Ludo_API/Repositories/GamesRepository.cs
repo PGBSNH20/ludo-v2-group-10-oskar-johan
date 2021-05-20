@@ -99,6 +99,11 @@ namespace Ludo_API.Repositories
 
         public async Task<Gameboard> AddPlayerAsync(LudoContext context, Gameboard gameboard, Player player)
         {
+            if (gameboard.Players.Any(p => p.Color == player.Color))
+            {
+                throw new Exception("Color is used by another player");
+            }
+
             gameboard.Players.Add(player);
             //context.Players.Add(player);
             //context.Gameboards.Add(gameboard);
