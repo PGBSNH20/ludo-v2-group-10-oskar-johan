@@ -1,14 +1,29 @@
-###
+### Get all games
 GET localhost:44376/api/Games/
 
-###
+### Get game by ID
+GET localhost:44376/api/Games/1
 
+### Add player to Game with specific ID
 POST localhost:44376/api/Games/AddPlayer
 Content-Type: application/json
 //apikey: apikey1234_visitor
  
 {
     "GameId":1,
+    "PlayerName":"Ludo Player",
+    "PlayerColor": "#FF0000"
+}
+
+### Create new game
+POST localhost:44376/api/Games/New
+Content-Type: application/json
+//apikey: apikey1234_visitor
+ 
+{
+    //"GameId":1,
     "PlayerName":"Oskar",
     "PlayerColor": "#FF0000"
 }
+
+
