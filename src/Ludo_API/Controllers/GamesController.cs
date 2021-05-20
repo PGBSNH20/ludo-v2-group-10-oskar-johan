@@ -84,30 +84,10 @@ namespace Ludo_API.Controllers
         // POST api/Games/New
         [HttpPost("[action]")]
         [ActionName("New")]
-        //public async Task<ActionResult<string>> Post([FromBody] List<PlayerDTO> players)
         public async Task<ActionResult<int>> Post([FromBody] NewPlayerDTO newPlayerDTO)
-        //public async Task<ActionResult<NewGameDTO>> Post([FromBody] NewGameDTO newGameDTO)
         {
             List<Player> newPlayers = new();
             Gameboard.CreateTracks();
-
-            //foreach (PlayerDTO p in players)
-            //{
-            //    //if (string.IsNullOrWhiteSpace(p.Name) || p.Name.Length > 20)
-            //    //{
-            //    //    return BadRequest("Please enter a name, must be less than 20 characters");
-            //    //}
-
-            //    var color = ColorTranslator.FromHtml(p.Color);
-            //    //var color = Color.FromArgb(p.Color);
-
-            //    //if (color.ToArgb() == Color.Empty.ToArgb())
-            //    //{
-            //    //    return BadRequest("Invalid color selection");
-            //    //}
-
-            //    newPlayers.Add(new(p.Name, color));
-            //}
 
             var color = ColorTranslator.FromHtml(newPlayerDTO.PlayerColor);
             newPlayers.Add(new(newPlayerDTO.PlayerName, color));
