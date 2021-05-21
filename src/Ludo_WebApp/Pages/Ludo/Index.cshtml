@@ -50,7 +50,7 @@
                     <div class="form-group">
                         @foreach (var color in Model.Colors)
                         {
-                            <input type="radio" asp-for="NewPlayer.PlayerColor" value="@color.Key"  id="color-radio-@color.Key" />
+                            <input type="radio" asp-for="NewPlayer.PlayerColor" value="@color.Key" id="color-radio-@color.Key" />
                             <label asp-for="NewPlayer.PlayerColor" class="control-label" style="color:@color.Value" for="color-radio-@color.Key">@color.Key</label> <!-- todo: fix clicking labels always selects first radio-input -->
                             <span asp-validation-for="NewPlayer.PlayerColor" class="text-danger"></span>
                         }
@@ -136,9 +136,11 @@
 
 <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/ludo.js"></script>
-@*@if Model.Gameboard.
+@*
+    @if Model.Gameboard.
     <script type="text/javascript">
         $(function () {
             setInterval
-        })*@
+        })
     </script>
+*@

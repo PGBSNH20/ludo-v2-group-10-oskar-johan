@@ -10,13 +10,6 @@ using System.Linq.Expressions;
 
 namespace Ludo_API.Models
 {
-    public class test
-    {
-        public test(string test)
-        {
-
-        }
-    }
     public class Player
     {
         public const string ValidColorsPattern = "Yellow|Red|Blue|Green";

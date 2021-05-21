@@ -30,7 +30,7 @@ namespace Ludo_API.Repositories
                 context.MoveActions.RemoveRange(context.MoveActions.Where(ma => ma.GameId == gameId));
                 await context.SaveChangesAsync();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // logging?
                 throw;

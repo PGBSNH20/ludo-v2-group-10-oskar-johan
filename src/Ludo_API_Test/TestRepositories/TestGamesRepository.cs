@@ -60,7 +60,7 @@ namespace Ludo_API_Test.TestRepositories
                     });
                 }
 
-                List<Player> players = new List<Player>
+                List<Player> players = new()
                 {
                     new Player($"Oskar {i + 10}", "Yellow"),
                     new Player( $"Randa {i + 10}", "Red")
@@ -70,7 +70,7 @@ namespace Ludo_API_Test.TestRepositories
                 //squares[players[i].StartPosition].Tenant?.PieceCount = 1;
                 squares[players[i].StartPosition].Tenant = new SquareTenant(players[i].StartPosition, players[i], 1);
 
-                Gameboard gb = new Gameboard()
+                Gameboard gb = new()
                 {
                     ID = i,
                     LastPlayer = players[i],

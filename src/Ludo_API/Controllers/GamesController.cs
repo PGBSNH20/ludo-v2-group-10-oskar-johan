@@ -40,14 +40,14 @@ namespace Ludo_API.Controllers
             return gameboards;
         }
 
-        /// <summary>
-        /// todo: fill me
-        /// </summary>
-        /// <param name="playerId">todo: fill me</param>
-        /// <param name="includeNew">todo: fill me</param>
-        /// <param name="includeActive">todo: fill me</param>
-        /// <param name="includeCompleted">todo: fill me</param>
-        /// <returns></returns>
+        // /// <summary>
+        // /// todo: fill me
+        // /// </summary>
+        // /// <param name="playerId">todo: fill me</param>
+        // /// <param name="includeNew">todo: fill me</param>
+        // /// <param name="includeActive">todo: fill me</param>
+        // /// <param name="includeCompleted">todo: fill me</param>
+        // /// <returns></returns>
         //// POST api/Games/GetGamesForPlayer/{playerId}?includeNew=bool&includeActive=boolincludeCompleted=bool
         //// alt:
         //// POST api/Games/GetGamesForPlayer/{playerId}
@@ -127,25 +127,24 @@ namespace Ludo_API.Controllers
             //return Ok(1);
         }
 
-        /// <summary>
-        /// todo: enter summary for method
-        /// </summary>
-        /// <param name="id">todo: enter summary for id parameter</param>
-        /// <param name="value">todo: enter summary for value parameter</param>
-        /// <returns>void</returns>
-        // PUT api/Games/{id}
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-            throw new NotImplementedException();
-        }
+        ///// <summary>
+        ///// todo: enter summary for method
+        ///// </summary>
+        ///// <param name="id">todo: enter summary for id parameter</param>
+        ///// <param name="value">todo: enter summary for value parameter</param>
+        ///// <returns>void</returns>
+        //// PUT api/Games/{id}
+        //[HttpPut("{id}")]
+        //public void Put(int id, [FromBody] string value)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         // DELETE api/Games/{id}
         /// <summary>
         /// todo: enter summary for method
         /// </summary>
         /// <param name="id">todo: enter summary for id parameter</param>
-        /// <param name="value">todo: enter summary for value parameter</param>
         /// <returns>void</returns>
         [HttpDelete("{id}")]
         public async Task<bool> Delete(int id)
@@ -214,7 +213,7 @@ namespace Ludo_API.Controllers
                 await _gameRepository.StartGameAsync(_context, gameboard);
                 return Ok(new GameboardDTO(gameboard));
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // log exception?
                 //return BadRequest(e.Message);

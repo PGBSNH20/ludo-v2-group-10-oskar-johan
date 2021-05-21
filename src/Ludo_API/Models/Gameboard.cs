@@ -36,16 +36,16 @@ namespace Ludo_API.Models
         public List<Player> OrderPlayers { get; set; }
 
         [NotMapped]
-        public static List<int> YellowTrack = new();
+        public static List<int> YellowTrack { get; set; } = new();
 
         [NotMapped]
-        public static List<int> RedTrack = new();
+        public static List<int> RedTrack { get; set; } = new();
 
         [NotMapped]
-        public static List<int> BlueTrack = new();
+        public static List<int> BlueTrack { get; set; } = new();
 
         [NotMapped]
-        public static List<int> GreenTrack = new();
+        public static List<int> GreenTrack { get; set; } = new();
 
         [NotMapped]
         public List<string> ColorOrder = Player.GetValidColors();

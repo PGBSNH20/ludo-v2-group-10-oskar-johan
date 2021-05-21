@@ -64,7 +64,7 @@ namespace Ludo_WebApp.Ludo_API
                 //var response = await client.PostAsync<NewGameDTO>(request);
                 return response;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // log the error?
                 // do error handling stuff?
@@ -87,7 +87,7 @@ namespace Ludo_WebApp.Ludo_API
                 //var response = await client.PostAsync<NewGameDTO>(request);
                 return response;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // log the error?
                 // do error handling stuff?
@@ -107,7 +107,7 @@ namespace Ludo_WebApp.Ludo_API
                 //return await client.GetAsync<GameboardDTO>(request);
                 return await client.ExecuteAsync<GameboardDTO>(request);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // log the error?
                 // do error handling stuff?
@@ -128,7 +128,7 @@ namespace Ludo_WebApp.Ludo_API
                 //return await client.GetAsync<GameboardDTO>(request);
                 return await client.ExecuteAsync<GameboardDTO>(request);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // log the error?
                 // do error handling stuff?

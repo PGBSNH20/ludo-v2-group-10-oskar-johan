@@ -15,9 +15,9 @@ namespace Ludo_API.GameEngine.Game
         private readonly Random _die;
         private readonly Game _game;
 
-        public TurnManager()
-        {
-        }
+        //public TurnManager()
+        //{
+        //}
 
         public TurnManager(Game game)
         {

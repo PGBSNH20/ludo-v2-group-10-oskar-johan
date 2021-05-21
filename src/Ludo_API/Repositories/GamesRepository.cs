@@ -109,7 +109,7 @@ namespace Ludo_API.Repositories
         {gameboard.Players.Add(player);
             //context.Players.Add(player);
             //context.Gameboards.Add(gameboard);
-            var saveOperation = await context.SaveChangesAsync();
+            await context.SaveChangesAsync();
 
             return gameboard;
         }
