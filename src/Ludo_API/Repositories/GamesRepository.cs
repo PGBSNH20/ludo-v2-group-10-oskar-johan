@@ -5,6 +5,7 @@ using Ludo_API.Models.DTO;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -104,18 +105,19 @@ namespace Ludo_API.Repositories
         }
 
         public async Task<Gameboard> AddPlayerAsync(LudoContext context, Gameboard gameboard, Player player)
-        {
-            if (gameboard.Players.Any(p => p.Color == player.Color))
-            {
-                throw new Exception("Color is used by another player");
-            }
-
-            gameboard.Players.Add(player);
+        {gameboard.Players.Add(player);
             //context.Players.Add(player);
             //context.Gameboards.Add(gameboard);
             var saveOperation = await context.SaveChangesAsync();
 
             return gameboard;
+        }
+
+        public async Task<bool> IsColorTaken(LudoContext context, int gameboardId, Color color)
+        {
+            //var context.Gameboards.Include(g => g.Players)?.AnyAsync(g.Color == player.Color);
+            var a = context.Gameboards.Include(g => g.Players);
+            return true;
         }
     }
 }

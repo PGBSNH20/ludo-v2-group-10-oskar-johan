@@ -70,17 +70,17 @@ namespace Ludo_WebApp.Ludo_API
             }
         }
 
-        public static async Task<int> PostAddPlayerAsync(NewPlayerDTO newPlayerDTO)
+        public static async Task<GameboardDTO> PostAddPlayerAsync(NewPlayerDTO newPlayerDTO)
         {
             var client = new RestClient(_baseURL);
-            var request = new RestRequest(RequestURLs.NewGame);
+            var request = new RestRequest(RequestURLs.AddPlayer);
             request.AddJsonBody(newPlayerDTO);
             //request.OnBeforeDeserialization = r => { r.ContentType = "application/json"; };
 
             try // todo: fix getting and returning the error msg from throw in SetTrack
             {
                 //await client.PostAsync<GameDTO>(request);
-                int response = await client.PostAsync<int>(request);
+                GameboardDTO response = await client.PostAsync<GameboardDTO>(request);
                 //var response = await client.PostAsync<NewGameDTO>(request);
                 return response;
             }

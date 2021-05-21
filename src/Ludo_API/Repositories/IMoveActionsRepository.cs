@@ -9,5 +9,6 @@ namespace Ludo_API
     {
         Task<List<MoveAction>> AddMoveActions(LudoContext context, List<MoveAction> moveActions);
         Task<MoveAction> GetMoveAction(LudoContext context, int moveActionId);
+        Task DeleteMoveActions(LudoContext context, int gameId);
     }
 }

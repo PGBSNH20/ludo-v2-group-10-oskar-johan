@@ -33,7 +33,7 @@ namespace Ludo_WebApp.Pages.Ludo
 
         public Dictionary<string, string> Colors { get; set; } = new()
         {
-            { "Yellow", "#ffd700" },
+            { "Yellow", "#cfae00" },
             { "Red", "#ff0000" },
             { "Blue", "#0000ff" },
             { "Green", "#008000" },
@@ -115,7 +115,8 @@ namespace Ludo_WebApp.Pages.Ludo
             // todo: update the html
         }
 
-        public async Task<IActionResult> OnPostAddPlayerAsync()
+        //[NonHandler]
+        public async Task<IActionResult> OnPostAddPlayerAsync(int id, NewPlayerDTO newPlayer)
         {
             if (!ModelState.IsValid)
             {
@@ -123,12 +124,14 @@ namespace Ludo_WebApp.Pages.Ludo
                 return Page();
             }
 
-            // call API to create game
+            newPlayer.GameId = id;
+
+            // call API to the add player
             var response = await Fetch.PostAddPlayerAsync(NewPlayer);
 
             // redirect to Ludo/{id}
             //e.g. return RedirectToPage("./Index/{id}");
-            return RedirectToPage("./Index/", new { id = response });
+            return RedirectToPage("./Index/", new { id = response.ID });
         }
 
         public async Task<IActionResult> OnPostStartGameAsync(GameboardDTO gameboard)

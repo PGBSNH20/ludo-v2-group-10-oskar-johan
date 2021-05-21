@@ -75,7 +75,7 @@ namespace Ludo_API.Controllers
         // POST api/Gameplay/ChoseAction
         [HttpPost("[action]")]
         [ActionName("ChooseAction")]
-        public async Task<ActionResult<bool>> PostChooseAction(
+        public async Task<ActionResult<string>> PostChooseAction(
             [Required][FromBody] int moveActionId // fixme: only one [FromBody],  use DTO model?
             //[Required][FromBody] int playerId // fixme: only one [FromBody], use DTO model?
             )
@@ -91,14 +91,16 @@ namespace Ludo_API.Controllers
 
             bool success = await _gamesRepository.ExecuteMoveAction(_context, moveAction);
 
+            await _moveActionRepository.DeleteMoveActions(_context, moveAction.GameId);
+
             if (success)
             {
-                return Ok();
+                return Ok("Move action was succesfully executed");
             }
 
             // todo: maybe replace NotFound with another error
             // e.g. StatusCode(HttpStatusCode.InternalServerError, "error message");
-            return BadRequest("Move unsuccessful");
+            return BadRequest("Move was unsuccessful.");
         }
     }
 }

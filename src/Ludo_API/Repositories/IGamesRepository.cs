@@ -3,6 +3,7 @@ using Ludo_API.GameEngine.Game;
 using Ludo_API.Models;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,5 +22,6 @@ namespace Ludo_API.Repositories
         Task<bool> DeleteGame(LudoContext context, int id);
         Task<bool> ExecuteMoveAction(LudoContext context, MoveAction moveAction);
         Task<Gameboard> AddPlayerAsync(LudoContext context, Gameboard gameboard, Player player);
+        Task<bool> IsColorTaken(LudoContext context, int gameboardId, Color color);
     }
 }

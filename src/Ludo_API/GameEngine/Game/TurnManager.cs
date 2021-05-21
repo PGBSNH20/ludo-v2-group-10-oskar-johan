@@ -68,42 +68,8 @@ namespace Ludo_API.GameEngine.Game
 
         public List<MoveAction> HandleTurn(Player player)
         {
-            //Console.WriteLine($"\nDet är {player.Name}s tur att slå.");
-            //int choice = Menu.ShowMenu("Gör ditt val i listan\n", new string[]
-            //{
-            //    "Slå tärningen",
-            //    "Avsluta"
-            //});
-
-            // Send message to client with options?
-            //int choice = 0; // note: temporary variable.
-
-            //switch (choice)
-            //{
-            //    case 0:
-            //        int diceNumber;
-            //        do
-            //        {
             int diceNumber = RollDice();
-            //Console.WriteLine($"{player.Name} slog {diceNumber}");
             return _game.GetPossibleMoves(player, diceNumber);
-                        //new Moves(_gameRepository, this).GameMove(_game.Gameboard, _game.Gameboard.Squares, diceNumber, player);
-                    //} while (diceNumber == 6);
-
-            //        _game.Gameboard.LastPlayer = player;
-            //        _gameRepository.SaveTurnAsync(_game.Gameboard, player);
-            //        break;
-            //    case 1:
-            //        //Console.WriteLine("\nTack för idag!");
-            //        // Send message to client?
-            //        //EndGame();
-            //        break;
-            //    default:
-            //        //Console.WriteLine("Något gick fel!");
-            //        // Send message to client?
-            //        //EndGame();
-            //        break;
-            //}
         }
 
         public int RollDice()

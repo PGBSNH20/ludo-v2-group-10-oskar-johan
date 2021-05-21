@@ -44,6 +44,7 @@ namespace Ludo_WebApp.Pages.Ludo
             // redirect to Ludo/{id}
             //e.g. return RedirectToPage("./Index/{id}");
             return RedirectToPage("./Index/", new { id = response });
+            return RedirectToPage("./Index/", new { id = response });
         }
     }
 }
