@@ -117,7 +117,7 @@ namespace Ludo_API_Test.TestRepositories
 
         public Task<Gameboard> GetGame(LudoContext context, int id)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(Gameboards.SingleOrDefault(g => g.ID == id));
         }
 
         //public void MoveToken(Player player, Square startSquare, Square endSquare)
@@ -170,6 +170,11 @@ namespace Ludo_API_Test.TestRepositories
         }
 
         public Task SaveTurnAsync(LudoContext context, Gameboard gameboard, Player player)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> IsColorTaken(LudoContext context, int gameboardId, Color color)
         {
             throw new NotImplementedException();
         }

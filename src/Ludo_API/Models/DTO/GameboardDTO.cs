@@ -17,6 +17,7 @@ namespace Ludo_API.Models.DTO
 
         public GameboardDTO(Gameboard gameboard)
         {
+            ID = gameboard.ID;
             CurrentPlayer = gameboard.CurrentPlayer;
             Squares = gameboard.Squares;
             Players = gameboard.Players;

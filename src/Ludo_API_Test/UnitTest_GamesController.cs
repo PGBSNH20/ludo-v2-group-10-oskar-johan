@@ -16,6 +16,88 @@ namespace Ludo_API_Test
 {
     public class UnitTest_GamesController
     {
+        [Fact]
+        public void On_GET_Games__When_Games_Exists__Expect_All_Games()
+        {
+            // Arrange
+            List<Gameboard> gameboards = new()
+            {
+                new() { ID = 1 },
+                new() { ID = 2 },
+                new() { ID = 3 }
+            };
+
+            IGamesRepository gameRepo = new TestGamesRepository
+            {
+                Gameboards = gameboards,
+            };
+
+            GamesController gamesController = new(null, gameRepo);
+
+            // Act
+            var actualGames = gamesController.GetAll().Result.ToList();
+
+            // Assert
+            Assert.Equal(gameboards, actualGames);
+            Assert.Equal(1, actualGames[0].ID);
+            Assert.Equal(2, actualGames[1].ID);
+            Assert.Equal(3, actualGames[2].ID);
+        }
+
+        [Fact]
+        public void On_GET_Games__When_No_Games_Exists__Expect_Empty_List()
+        {
+            // Arrange
+            List<Gameboard> gameboards = new();
+
+            IGamesRepository gameRepo = new TestGamesRepository
+            {
+                Gameboards = gameboards,
+            };
+
+            GamesController gamesController = new(null, gameRepo);
+
+            // Act
+            var actualGames = gamesController.GetAll().Result;
+
+            // Assert
+            Assert.Empty(actualGames);
+        }
+
+        [Fact]
+        public async Task On_GET_Game_By_ID__When_Game_Exist__Expect_Single_Game()
+        {
+            // Arrange
+            List<Gameboard> gameboards = new()
+            {
+                new() { ID = 1 },
+                new() { ID = 2 },
+                new() { ID = 3 }
+            };
+
+            IGamesRepository gameRepo = new TestGamesRepository
+            {
+                Gameboards = gameboards,
+            };
+
+            GamesController gamesController = new(null, gameRepo);
+
+            //// Act
+            //var actualGame = await gamesController.Get(2).Result.Value;
+
+            //// Assert
+            //Assert.Equal(2, actualGame.ID);
+
+            // Act
+            var actualGame = await gamesController.Get(2);
+            var actualGameResult = actualGame.Result;
+            var actualGameValue = actualGameResult.Value;
+
+            // Assert
+            Assert.Equal(2, actualGameValue.ID);
+        }
+
+
         [Theory]
         [InlineData(1)]
         [InlineData(2)]
@@ -69,6 +151,9 @@ namespace Ludo_API_Test
             Assert.False(success);
             Assert.Equal(3, gameboards.Count);
         }
+
+
+
 
         // Disabled 2021-05-18 12:14
         //[Fact]
