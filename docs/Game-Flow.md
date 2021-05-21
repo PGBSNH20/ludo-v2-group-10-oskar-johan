@@ -22,10 +22,10 @@
 1. [x] Player is redirect to `localhost:port/Ludo/New`.
 1. [x] Player enters their name and selects a colour, and then clicks the submit-button.
 1. [x] Ludo_WebApp handles form POST and sends a POST request to Ludo_API.
-1. [in-progress] Ludo_API handles POST request and creates a new game (gameboard and 1 player).
-1. Ludo_API responds with a `gameId`, and Ludo_WebApp redirects to `Ludo/{gameId}`.
-1. Player shares/sends invite link `Ludo/{gameId}`.
-1. New players open `Ludo/{gameId}`, enter a name and select a colour.
+1. [x] Ludo_API handles POST request and creates a new game (gameboard and 1 player).
+1. [x] Ludo_API responds with a `gameId`, and Ludo_WebApp redirects to `Ludo/{gameId}`.
+1. [x] Player shares/sends invite link `Ludo/{gameId}`.
+1. [x] New players open `Ludo/{gameId}`, enter a name and select a colour.
     1. If the selected colour has been chosen by another player an error is returned and the player is prompted to try again.
 1. The player who created the game can at any time chose to start the game.
 1. When started the invite link will no longer work for anyone but the players in the game.
