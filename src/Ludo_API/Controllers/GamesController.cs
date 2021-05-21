@@ -1,4 +1,5 @@
-﻿using Ludo_API.Database;
+﻿using Ludo_API.Data;
+using Ludo_API.Database;
 using Ludo_API.Models;
 using Ludo_API.Models.DTO;
 using Ludo_API.Repositories;
@@ -90,28 +91,34 @@ namespace Ludo_API.Controllers
             return Ok(new GameboardDTO(gameboard));
         }
 
-        // POST api/Games/New
         /// <summary>
         /// Create a new game.
         /// </summary>
         /// <param name="newPlayerDTO">A NewPlayerDTO object containing the name and chosen id of the player creating the game.</param>
         /// <returns>int: ID of the new gameboard whichs represents a game. </returns>
+        // POST api/Games/New
         [HttpPost("[action]")]
         [ActionName("New")]
         public async Task<ActionResult<int>> Post([FromBody] NewPlayerDTO newPlayerDTO)
+        //public async Task<ActionResult<GameboardDTO>> Post([FromBody] NewPlayerDTO newPlayerDTO)
+        //public async Task<ActionResult<gameboard>> Post([FromBody] NewPlayerDTO newPlayerDTO)
         {
             List<Player> newPlayers = new();
             Gameboard.CreateTracks();
 
-            var color = ColorTranslator.FromHtml(newPlayerDTO.PlayerColor);
-            newPlayers.Add(new(newPlayerDTO.PlayerName, color));
+            //var color = ColorTranslator.FromHtml(newPlayerDTO.PlayerColor);
+            //newPlayers.Add(new(newPlayerDTO.PlayerName, newPlayerDTO.PlayerColor));
+            newPlayers.Add(new(newPlayerDTO));
 
             try
             {
                 var gameboard = new Gameboard(newPlayers);
                 gameboard = await _gameRepository.CreateNewGame(_context, gameboard);
                 //gameboard.SetPlayerColors();
-                return Ok(gameboard.ID);
+                //var gameboardDTO = new GameboardDTO(gameboard);
+                return Ok(new SimpleResponse<int>(gameboard.ID));
+                //return Ok(gameboardDTO);
+                //return Ok(gameboard);
             }
             catch (Exception e)
             {
@@ -166,14 +173,15 @@ namespace Ludo_API.Controllers
                 var gameboard = await _gameRepository.GetGame(_context, newPlayerDTO.GameId.Value);
                 Gameboard.CreateTracks();
 
-                var color = ColorTranslator.FromHtml(newPlayerDTO.PlayerColor);
-                Player player = new(newPlayerDTO.PlayerName, color);
-
-                if (await _gameRepository.IsColorTaken(_context, gameboard.ID, color))
+                if (await _gameRepository.IsColorTaken(_context, gameboard.ID, newPlayerDTO.PlayerColor))
                 {
-                    throw new Exception("Color is used by another player");
+                    //throw new Exception("Color is used by another player");
+                    return BadRequest($"The color {newPlayerDTO.PlayerColor} is used by another player, please try again.");
                 }
 
+                //var color = ColorTranslator.FromHtml(newPlayerDTO.PlayerColor);
+                //Player player = new(newPlayerDTO.PlayerName, color);
+                Player player = new(newPlayerDTO);
                 gameboard = await _gameRepository.AddPlayerAsync(_context, gameboard, player);
 
                 return Ok(new GameboardDTO(gameboard));

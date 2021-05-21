@@ -45,8 +45,8 @@ namespace Ludo_API.Tests
 
             List<Player> players = new()
             {
-                new Player("Player1", Color.Yellow),
-                new Player("Player2", Color.Blue),
+                new Player("Player1", "Yellow"),
+                new Player("Player2", "Blue"),
             };
             players.ForEach(p => p.SetTrack()); // note: might be unnecessary if SetTrack can be called from the parameterless Player constructor without breaking Entity Framework.
 

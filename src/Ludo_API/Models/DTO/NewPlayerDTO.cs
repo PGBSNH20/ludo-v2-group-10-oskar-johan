@@ -19,7 +19,8 @@ namespace Ludo_API.Models.DTO
         public string PlayerName { get; set; }
 
         [Required]
-        [RegularExpression("#[0-9a-fA-F]{6}")]
+        //[RegularExpression("#[0-9a-fA-F]{6}")]
+        [RegularExpression("^(" + Player.ValidColorsPattern + ")$")]
         public string PlayerColor { get; set; }
     }
 }

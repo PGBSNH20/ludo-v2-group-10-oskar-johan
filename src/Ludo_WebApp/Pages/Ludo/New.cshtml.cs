@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Ludo_WebApp.Ludo_API;
 using Ludo_WebApp.Models;
@@ -39,12 +40,18 @@ namespace Ludo_WebApp.Pages.Ludo
             }
 
             // call API to create game
-            var response = await Fetch.PostNewGameAsync(NewPlayer);
+            var restResponse = await Fetch.PostNewGameAsync(NewPlayer);
 
-            // redirect to Ludo/{id}
-            //e.g. return RedirectToPage("./Index/{id}");
-            return RedirectToPage("./Index/", new { id = response });
-            return RedirectToPage("./Index/", new { id = response });
+            if (restResponse.StatusCode != HttpStatusCode.OK)
+            {
+                ModelState.AddModelError("CreateNewGameError", restResponse.Content);
+                return Page();
+
+                // redirect to Ludo/{id}
+                //e.g. return RedirectToPage("./Index/{id}");
+                //return RedirectToPage("./Index", new { id = response });
+            }
+            return RedirectToPage("./Index", new { id = restResponse.Data });
         }
     }
 }

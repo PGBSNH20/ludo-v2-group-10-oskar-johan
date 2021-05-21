@@ -32,7 +32,6 @@
 
   <ItemGroup>
     <Folder Include="API\" />
-    <Folder Include="Data\" />
   </ItemGroup>
 
 </Project>

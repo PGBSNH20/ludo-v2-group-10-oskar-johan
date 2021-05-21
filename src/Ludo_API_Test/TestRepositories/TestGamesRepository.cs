@@ -62,8 +62,8 @@ namespace Ludo_API_Test.TestRepositories
 
                 List<Player> players = new List<Player>
                 {
-                    new Player($"Oskar {i + 10}", Color.Yellow),
-                    new Player( $"Randa {i + 10}", Color.Red)
+                    new Player($"Oskar {i + 10}", "Yellow"),
+                    new Player( $"Randa {i + 10}", "Red")
                 };
 
                 //squares[players[i].StartPosition].Tenant?.Player = players[i];
@@ -174,7 +174,7 @@ namespace Ludo_API_Test.TestRepositories
             throw new NotImplementedException();
         }
 
-        public Task<bool> IsColorTaken(LudoContext context, int gameboardId, Color color)
+        public Task<bool> IsColorTaken(LudoContext context, int gameboardId, string color)
         {
             throw new NotImplementedException();
         }

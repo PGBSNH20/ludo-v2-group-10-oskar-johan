@@ -10,7 +10,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Ludo_WebApp.Pages.Ludo
 {
-    enum SquareTypes {
+    enum SquareTypes
+    {
         DiceThrowSource = -4, // Corner
         NestSquare = -3,
         None = -1
@@ -24,6 +25,8 @@ namespace Ludo_WebApp.Pages.Ludo
 
         //[BindProperty(SupportsGet = true)]
         public GameboardDTO Gameboard { get; set; }
+
+        public string ColorError { get; set; }
 
         //[BindProperty]
         //public GameboardDTO gameboard { get; set; }
@@ -74,6 +77,17 @@ namespace Ludo_WebApp.Pages.Ludo
             { ' ', ("blank", "#b9b9b9") },
         };
 
+        public Dictionary<string, (char squareTypeColorKey, string colorHex)> AllowedColorsData { get; set; } = new()
+        {
+            //{ 'y', ("yellow", "#ffd700") },
+            { "Yellow", ('y', "#cfae00") },
+            { "Red", ('r', "#f00") },
+            { "Blue", ('b', "#00f") },
+            { "Green", ('g', "#008000") },
+            { "Goal", ('x', "turquoise") },
+            { "Blank", ('b', "#b9b9b9") },
+        };
+
         // fixme: this is hacky
         public char[,] SquareColors { get; set; } = new char[11, 11]
         {
@@ -96,22 +110,25 @@ namespace Ludo_WebApp.Pages.Ludo
             if (id == null)
             {
                 // todo: do something
+                //return RedirectToPage("~/Index/");
                 return;
             }
 
             // Get Gameboard if one exists with this id.
             var restResponse = await Fetch.GetGame(id.Value);
-            var statusCode = restResponse.StatusCode;
 
             if (restResponse.StatusCode != HttpStatusCode.OK)
             {
-                // todo: do something
-                throw new Exception("Fixme");
-                return;
+                ModelState.AddModelError("ApiBadRequest", restResponse.Content);
+                //return Page();
+                //return Page();
+                //// todo: do something
+                //throw new Exception("Fixme");
+                //return;
             }
 
             Gameboard = restResponse.Data;
-
+            //return EmptyResult();
             // todo: update the html
         }
 
@@ -127,11 +144,22 @@ namespace Ludo_WebApp.Pages.Ludo
             newPlayer.GameId = id;
 
             // call API to the add player
-            var response = await Fetch.PostAddPlayerAsync(NewPlayer);
+            var restResponse = await Fetch.PostAddPlayerAsync(newPlayer);
+
+            if (restResponse.StatusCode != HttpStatusCode.OK)
+            {
+                ModelState.AddModelError("Color", restResponse.ErrorMessage);
+                return Page();
+                // todo: do something
+                //ColorError = restResponse.ErrorMessage;
+                //return new BadRequestResult();
+                //return Page();
+                //return RedirectToPage("./Index/", new { id = id });
+            }
 
             // redirect to Ludo/{id}
             //e.g. return RedirectToPage("./Index/{id}");
-            return RedirectToPage("./Index/", new { id = response.ID });
+            return RedirectToPage("./Index/", new { id = restResponse.Data.ID, successfullyJoined = 1 });
         }
 
         public async Task<IActionResult> OnPostStartGameAsync(GameboardDTO gameboard)

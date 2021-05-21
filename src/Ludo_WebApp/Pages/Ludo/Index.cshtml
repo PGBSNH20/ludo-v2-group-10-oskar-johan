@@ -10,6 +10,16 @@
     (string colorName, string colorHex) squareColor;
     var random = new Random();
 }
+@{
+    if (Model.Request.Query.TryGetValue("successfullyJoined", out var successfullyJoined))
+    {
+        if (successfullyJoined.ToString() == "1")
+        {
+            <p>You succesfully joined!</p>
+        }
+    }
+}
+@Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
 @{
     if (Model.Gameboard != null && Model.Gameboard.GameStartDate == null)
@@ -40,8 +50,13 @@
                     <div class="form-group">
                         @foreach (var color in Model.Colors)
                         {
-                            <input type="radio" asp-for="NewPlayer.PlayerColor" value="@color.Value" />
-                            <label asp-for="NewPlayer.PlayerColor" class="control-label" style="color:@color.Value">@color.Key</label> <!-- todo: fix clicking labels always selects first radio-input -->
+                            <input type="radio" asp-for="NewPlayer.PlayerColor" value="@color.Key"  id="color-radio-@color.Key" />
+                            <label asp-for="NewPlayer.PlayerColor" class="control-label" style="color:@color.Value" for="color-radio-@color.Key">@color.Key</label> <!-- todo: fix clicking labels always selects first radio-input -->
+                            <span asp-validation-for="NewPlayer.PlayerColor" class="text-danger"></span>
+                        }
+                        @if (Model.ColorError != null)
+                        {
+                            <span class="text-danger">@Model.ColorError</span>
                         }
                     </div>
                     <div class="form-group">

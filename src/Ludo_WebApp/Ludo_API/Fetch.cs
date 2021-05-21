@@ -48,7 +48,8 @@ namespace Ludo_WebApp.Ludo_API
         //    }
         //}
 
-        public static async Task<int> PostNewGameAsync(NewPlayerDTO newPlayerDTO)
+        public static async Task<IRestResponse<int>> PostNewGameAsync(NewPlayerDTO newPlayerDTO)
+        //public static async Task<IRestResponse<GameboardDTO>> PostNewGameAsync(NewPlayerDTO newPlayerDTO)
         {
             var client = new RestClient(_baseURL);
             var request = new RestRequest(RequestURLs.NewGame);
@@ -58,7 +59,8 @@ namespace Ludo_WebApp.Ludo_API
             try // todo: fix getting and returning the error msg from throw in SetTrack
             {
                 //await client.PostAsync<GameDTO>(request);
-                int response = await client.PostAsync<int>(request);
+                var response = await client.ExecuteAsync<int>(request);
+                //var response = await client.ExecuteAsync<GameboardDTO>(request);
                 //var response = await client.PostAsync<NewGameDTO>(request);
                 return response;
             }
@@ -70,17 +72,18 @@ namespace Ludo_WebApp.Ludo_API
             }
         }
 
-        public static async Task<GameboardDTO> PostAddPlayerAsync(NewPlayerDTO newPlayerDTO)
+        public static async Task<IRestResponse<GameboardDTO>> PostAddPlayerAsync(NewPlayerDTO newPlayerDTO)
         {
             var client = new RestClient(_baseURL);
-            var request = new RestRequest(RequestURLs.AddPlayer);
+            var request = new RestRequest(RequestURLs.AddPlayer, Method.POST);
             request.AddJsonBody(newPlayerDTO);
             //request.OnBeforeDeserialization = r => { r.ContentType = "application/json"; };
 
             try // todo: fix getting and returning the error msg from throw in SetTrack
             {
                 //await client.PostAsync<GameDTO>(request);
-                GameboardDTO response = await client.PostAsync<GameboardDTO>(request);
+                //GameboardDTO response = await client.PostAsync<GameboardDTO>(request);
+                var response = await client.ExecuteAsync<GameboardDTO>(request);
                 //var response = await client.PostAsync<NewGameDTO>(request);
                 return response;
             }

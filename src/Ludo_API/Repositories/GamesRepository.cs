@@ -23,17 +23,18 @@ namespace Ludo_API.Repositories
 
         public async Task<Gameboard> GetGame(LudoContext context, int id)
         {
-            return await context.Gameboards
+            var gameboard = await context.Gameboards
                 .Include(s => s.Squares)
                 .Include(p => p.Players)
                 .SingleOrDefaultAsync(g => g.ID == id);
+            return gameboard;
         }
 
         public async Task<Gameboard> CreateNewGame(LudoContext context, Gameboard gameboard)
         {
             context.Gameboards.Add(gameboard);
-            var saveOperation = await context.SaveChangesAsync();
-            return gameboard;
+            await context.SaveChangesAsync();
+            return await context.Gameboards.SingleOrDefaultAsync(g => g == gameboard);
         }
         //public void MoveToken(Player player, Square startSquare, Square endSquare)
         //{
@@ -113,11 +114,10 @@ namespace Ludo_API.Repositories
             return gameboard;
         }
 
-        public async Task<bool> IsColorTaken(LudoContext context, int gameboardId, Color color)
+        public async Task<bool> IsColorTaken(LudoContext context, int gameboardId, string color)
         {
-            //var context.Gameboards.Include(g => g.Players)?.AnyAsync(g.Color == player.Color);
-            var a = context.Gameboards.Include(g => g.Players);
-            return true;
+            var gameboards = context.Gameboards.Include(g => g.Players);
+            return await gameboards.AnyAsync(g => g.ID == gameboardId && g.Players.Any(p => p.Color == color));
         }
     }
 }
