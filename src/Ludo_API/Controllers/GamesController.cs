@@ -34,10 +34,12 @@ namespace Ludo_API.Controllers
         /// <returns>An IEnumerable of Gameboards.</returns>
         // GET: api/Games
         [HttpGet]
-        public async Task<IEnumerable<Gameboard>> GetAll()
+        public async Task<IEnumerable<GameboardDTO>> GetAll()
         {
             var gameboards = await _gameRepository.GetAllGames(_context);
-            return gameboards;
+
+            return gameboards.Select(g => new GameboardDTO(g));
+            //return gameboards;
         }
 
         // /// <summary>
@@ -53,7 +55,7 @@ namespace Ludo_API.Controllers
         //// POST api/Games/GetGamesForPlayer/{playerId}
         //[HttpPost("[action]/{id}")]
         //[ActionName("GetGamesForPlayer")]
-        //public async Task<ActionResult<IEnumerable<GameboardDTO>>> GetGameBoardForPlayer(
+        //public async Task<ActionResult<IEnumerable<GameboardDTO>>> GetGameboardForPlayer(
         //    [Required][FromBody] int playerId
         //    //[FromBody] bool includeNew = true,
         //    //[FromBody] bool includeActive = true,
@@ -92,6 +94,24 @@ namespace Ludo_API.Controllers
         }
 
         /// <summary>
+        /// Get Ludo data such gameboard layout, player colors and their gameboard track indices.
+        /// </summary>
+        /// <returns>A GameboardDTO object.</returns>
+        // GET api/Games/LudoData
+        [HttpGet("[action]")]
+        [ActionName("LudoData")]
+        public ActionResult<LudoData> GetLudoData()
+        {
+            if (LudoData.Instance == null)
+            {
+                // todo: logging?
+                return NotFound("Could not find the LudoData resources.");
+            }
+
+            return LudoData.Instance;
+        }
+
+        /// <summary>
         /// Create a new game.
         /// </summary>
         /// <param name="newPlayerDTO">A NewPlayerDTO object containing the name and chosen id of the player creating the game.</param>
@@ -100,31 +120,21 @@ namespace Ludo_API.Controllers
         [HttpPost("[action]")]
         [ActionName("New")]
         public async Task<ActionResult<int>> Post([FromBody] NewPlayerDTO newPlayerDTO)
-        //public async Task<ActionResult<GameboardDTO>> Post([FromBody] NewPlayerDTO newPlayerDTO)
-        //public async Task<ActionResult<gameboard>> Post([FromBody] NewPlayerDTO newPlayerDTO)
         {
             List<Player> newPlayers = new();
             Gameboard.CreateTracks();
-
-            //var color = ColorTranslator.FromHtml(newPlayerDTO.PlayerColor);
-            //newPlayers.Add(new(newPlayerDTO.PlayerName, newPlayerDTO.PlayerColor));
-            newPlayers.Add(new(newPlayerDTO));
+            newPlayers.Add(new Player(newPlayerDTO));
 
             try
             {
                 var gameboard = new Gameboard(newPlayers);
                 gameboard = await _gameRepository.CreateNewGame(_context, gameboard);
-                //gameboard.SetPlayerColors();
-                //var gameboardDTO = new GameboardDTO(gameboard);
-                return Ok(new SimpleResponse<int>(gameboard.ID));
-                //return Ok(gameboardDTO);
-                //return Ok(gameboard);
+                return Ok(gameboard.ID);
             }
             catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
-            //return Ok(1);
         }
 
         ///// <summary>
