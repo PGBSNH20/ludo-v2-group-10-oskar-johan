@@ -16,7 +16,32 @@
 <form>
 </form>
 
-<a asp-page="Ludo/Index" asp-route-id="5">Gameboard id: 5</a> <!-- temp, todo: remove -->
+@Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+@{
+    if (Model.Gameboards != null)
+    {
+        <table>
+            <tr>
+                <th>@Html.DisplayNameFor(m => m.Gameboards[0].ID)</th>
+                <th>@Html.DisplayNameFor(m => m.Gameboards[0].GameStartDate)</th>
+                <th># of @Html.DisplayNameFor(m => m.Gameboards[0].Players)</th>
+                <th># of @Html.DisplayNameFor(m => m.Gameboards[0].Squares)</th>
+                <th>@Html.DisplayNameFor(m => m.Gameboards[0].CurrentPlayer)</th>
+            </tr>
+            @foreach (var gameboard in Model.Gameboards)
+            {
+                <tr>
+                    <td><a asp-page="Ludo/Index" asp-route-id="@gameboard.ID">@gameboard.ID</a></td>
+                    <td>@gameboard.GameStartDate</td>
+                    <td>@gameboard.Players.Count</td>
+                    <td>@gameboard.Squares.Count</td>
+                    <td>(@gameboard.CurrentPlayer.ID), @gameboard.CurrentPlayer.Name, @gameboard.CurrentPlayer.Color</td>
+                </tr>
+            }
+        </table>
+    }
+}
 
 <div class="container">
     <div class="row">&nbsp;</div>
