@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Ludo_WebApp.Ludo_API;
 using Ludo_WebApp.Models;
+using Ludo_WebApp.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 

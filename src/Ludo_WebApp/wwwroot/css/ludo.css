@@ -1,24 +1,31 @@
-﻿body {
+﻿:root {
+    --repeat: repeat(11, clamp(25px, 8vw, 50px));
+}
+
+body {
 }
 * {
   box-sizing: border-box;
 }
 
 .gameboard {
-  background-color: #34495e;
-  border: 20px solid #2c3e50;
-  color: #000;
+    background-color: #34495e;
+    color: #000;
+    flex: 2 1 auto;
 }
 .squares {
-  display: grid;
-  grid-template: repeat(11, 1fr) / repeat(11, 1fr);
-  /*  width: min(720px, 100% - 40px);*/
-  /*  width: min(100vw, 720px);*/
-  /*  height: 720px;*/
-  height: min(720px, 100% - 40px);
-  margin: 0 auto;
-  border-radius: 6px;
-  padding: 20px;
+    display: grid;
+    grid-template: var(--repeat) / var(--repeat);
+    grid-gap: 5px;
+    /*  width: min(720px, 100% - 40px);*/
+    /*  width: min(100vw, 720px);*/
+    /*  height: 720px;*/
+    /*  height: min(720px, 100% - 40px);*/
+/*    width: min(550px, 100vw);*/
+    margin: 0 auto;
+    border-radius: 6px;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .square {
@@ -45,5 +52,120 @@
 /*  line-height: 1em;*/
 }
 [data-square-color="yellow"] { /* todo: remove this hacky temp solution for finding a good color for the yellow player */
-  border-color: #cfae00 !important;
+    border-color: #cfae00 !important;
+}
+
+[data-square-color="y"] { /* todo: remove this hacky temp solution for finding a good color for the yellow player */
+    border-color: rgba(255, 215, 0, .8);
+    background-color: rgba(255, 215, .2);
+}
+
+[data-square-color="r"] { /* todo: remove this hacky temp solution for finding a good color for the yellow player */
+    border-color: rgba(255, 55, 55, .2);
+    background-color: rgba(255, 0, 0, .2);
+}
+
+[data-square-color="g"] { /* todo: remove this hacky temp solution for finding a good color for the yellow player */
+    border-color: rgba(0, 255, 0, .8);
+    background-color: rgba(0, 255, 0, .2);
+}
+
+[data-square-color="b"] { /* todo: remove this hacky temp solution for finding a good color for the yellow player */
+    border-color: rgba(0, 0, 255, .8);
+    background-color: rgba(0, 0, 255, .2);
+}
+
+.container {
+    /*    width: -moz-fit-content;*/
+    /*    width: fit-content;*/
+    max-width: 100%;
+    margin: 0 auto;
+    display: inline-block;
+}
+
+.ludo-container {
+    display: flex;
+    background-color: #798b9c;
+    border: 20px solid #2c3e50;
+}
+
+.options-container {
+    flex: 1 1 auto;
+}
+:root {
+    --repeat: repeat(11, clamp(25px, 8vw, 50px));
+}
+
+
+
+.ludo-container {
+/*    background: black;*/
+/*    border: 5px solid black;*/
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: var(--repeat);
+    grid-template-rows: var(--repeat);
+    grid-gap: 5px;
+}
+
+.cell {
+    /* center the cell content */
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    font-family: Arial;
+    font-size: 0;
+    font-weight: bold;
+    background: white;
+    box-sizing: border-box;
+}
+
+.piece {
+    background-color: green;
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
+    border-radius: 50%;
+}
+.piece-red {
+    background-color: red;
+}
+.piece-green {
+    background-color: green;
+}
+.piece-blue {
+    background-color: blue;
+}
+.piece-yellow {
+    background-color: gold;
+}
+
+.piece-count-2 .piece {
+    display: block;
+    position: absolute;
+}
+
+.piece-count-2 {
+    position: relative;
+}
+.piece-count-2 .piece:first-child {
+    width: 50%;
+    height: 50%;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+}
+
+.piece-count-2 .piece:last-child {
+    width: 50%;
+    height: 50%;
+    border-radius: 50%;
+    bottom: 2px;
+    right: 2px;
+}
+
+th,
+td {
+    border: 1px solid black;
 }

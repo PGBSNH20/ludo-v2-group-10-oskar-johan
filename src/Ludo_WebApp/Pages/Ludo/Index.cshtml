@@ -10,6 +10,7 @@
     (string colorName, string colorHex) squareColor;
     var random = new Random();
 }
+
 @{
     if (Model.Request.Query.TryGetValue("successfullyJoined", out var successfullyJoined))
     {
@@ -19,6 +20,7 @@
         }
     }
 }
+
 @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
 @{
@@ -48,10 +50,10 @@
                         <span asp-validation-for="NewPlayer.PlayerName" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        @foreach (var color in Model.Colors)
+                        @foreach (var color in Model.LudoData.ColorTracks)
                         {
                             <input type="radio" asp-for="NewPlayer.PlayerColor" value="@color.Key" id="color-radio-@color.Key" />
-                            <label asp-for="NewPlayer.PlayerColor" class="control-label" style="color:@color.Value" for="color-radio-@color.Key">@color.Key</label> <!-- todo: fix clicking labels always selects first radio-input -->
+                            <label asp-for="NewPlayer.PlayerColor" class="control-label" style="color:@color.Value.ColorHex" for="color-radio-@color.Key">@color.Key</label> <!-- todo: fix clicking labels always selects first radio-input -->
                             <span asp-validation-for="NewPlayer.PlayerColor" class="text-danger"></span>
                         }
                         @if (Model.ColorError != null)
@@ -70,74 +72,292 @@
     // todo: reenable else for production code
     @*else*@
     {
-        <!-- todo: autogenerate squares? -->
-        <div class="gameboard row">
-            <div class="col-md-9">
-                <div class="squares">
-                    @for (int y = 0; y < Model.RowCount; y++)
-                    {
-                        @for (int x = 0; x < Model.ColumnCount; x++)
+        if (Model.LudoData != null)
+        {
+
+            <!-- todo: autogenerate squares? -->
+            @*<div class="row">*@
+            @*<div class="col-md-9">*@
+            <div class="ludo-container">
+                <div class="gameboard">
+                    <div class="squares">
+                        @for (int y = 0; y < Model.LudoData.GameboardRowCount; y++)
                         {
-                            int squareIndex = Model.SquareIndices[y, x];
-                            if (!Model.Colors2.TryGetValue(Model.SquareColors[y, x], out squareColor))
+                            @*char[] Model.LudoData.GameboardMapColors[y] = Model.LudoData.GameboardMapColors[y].Split(',', StringSplitOptions.TrimEntries).Select(sc =>
+                                {
+                                    switch (sc.Length)
+                                    {
+                                        case 0:
+                                            return ' ';
+                                        case 1:
+                                            return char.Parse(sc);
+                                        default:
+                                            throw new Exception("string longer than 1");
+                                    }
+                                }).ToArray(); // todo: fix this hacky code*@
+
+                            // <div class="square" style="border-color: #ff0000, color: turquoise" data-square-color="Red" data-square-id="-4" draggable="true"></div>
+                            // <div class="square" data-square-id="&quot;43&quot;" data-square-color="red" style="border-color: #f00; color: #cfae00" draggable="true">
+                            //●
+                            //</div>
+                            @for (int x = 0; x < Model.LudoData.GameboardColumnCount; x++)
                             {
-                                squareColor = ("error", "pink");
+                                @*var randomColor = Model.Colors2.ElementAt(random.Next(0, Model.Colors2.Count)); // temp, todo: remove*@
+                                var randomColor = Model.LudoData.ColorTracks.ElementAt(random.Next(0, Model.LudoData.ColorTracks.Count)); // temp, todo: remove
+
+                                int squareIndex = Model.LudoData.GameboardMapIndices[y][x];
+                                char squareColorKey = Model.LudoData.GameboardMapColors[y][x];
+                                string squareColorName = null;
+                                Model.LudoData.ColorKeyMap.TryGetValue(squareColorKey, out squareColorName);
+                                Model.LudoData.ColorTracks.TryGetValue(squareColorName ?? "", out var colorTrackData);
+                                string squareColorHex = colorTrackData?.ColorHex;
+                                string[] styles = new[]
+                                {
+                                $"border-color: {squareColorHex}",
+                                $"color: {(Model.LudoData.GameboardMapColors[y][x] == 'x' ? squareColorHex : randomColor.Value.ColorHex)}",
+                            };
+
+                                string classString = squareIndex != -1 ? "class=square" : "";
+                                @*string styleString = string.Join(' ', styles);*@
+                                string contents = Model.LudoData.GameboardMapColors[y][x] == 'x' ? "Goal" : (squareIndex != -1 && randomColor.Value.ColorMapKey != ' ' && randomColor.Value.ColorMapKey != 'x' ? "●" : "");
+
+                                @*<div @classString style="@string.Join("; ", styles.Where(s => !string.IsNullOrWhiteSpace(s)))" data-square-color="@squareColorName?.ToLower()" data-square-id="@squareIndex" draggable="true">@contents</div>*@
+                                <div @classString data-square-color="@squareColorKey" data-square-index="@squareIndex" draggable="true">@contents</div>
                             }
-
-                            @*<div class="square" data-square-id="@(y * columnCount + x)"></div> // This*@
-                            var randomColor = Model.Colors2.ElementAt(random.Next(0, Model.Colors2.Count));
-
-                            <div @Html.Raw(squareIndex != -1 ? "class=\"square\"" : "")
-                                 @(squareIndex is >= 0 or >= -4 and <= -3 ? $"data-square-id=\"{@Model.SquareIndices[y, x]}\"" : "")
-                                 data-square-color="@squareColor.colorName"
-                                 style="border-color: @squareColor.colorHex; color: @(Model.SquareColors[y, x] == 'x' ? squareColor.colorHex : randomColor.Value.colorHex)"
-                                 draggable="true">@(Model.SquareColors[y, x] == 'x' ? squareColor.colorName.ToUpper() : (squareIndex != -1 && randomColor.Key != ' ' && randomColor.Key != 'x' ? "●" : ""))</div>// This
                         }
-                    }
+
+                        @*
+                            @for (int y = 0; y < Model.RowCount; y++)
+                            {
+                                @for (int x = 0; x < Model.ColumnCount; x++)
+                                {
+                                    int squareIndex = Model.SquareIndices[y, x];
+                                    if (!Model.Colors2.TryGetValue(Model.SquareColors[y, x], out squareColor))
+                                    {
+                                        squareColor = ("error", "pink");
+                                    }
+
+                                    @*<div class="square" data-square-id="@(y * columnCount + x)"></div> // This*//@
+                                    var randomColor = Model.Colors2.ElementAt(random.Next(0, Model.Colors2.Count));
+
+                                    <div @Html.Raw(squareIndex != -1 ? "class=\"square\"" : "")
+                                         @(squareIndex is >= 0 or (>= -4 and <= -3) ? $"data-square-id=\"{@Model.SquareIndices[y, x]}\"" : "")
+                                         data-square-color="@squareColor.colorName"
+                                         style="border-color: @squareColor.colorHex; color: @(Model.SquareColors[y, x] == 'x' ? squareColor.colorHex : randomColor.Value.colorHex)"
+                                         draggable="true">
+                                        @(Model.SquareColors[y, x] == 'x' ? squareColor.colorName.ToUpper() : (squareIndex != -1 && randomColor.Key != ' ' && randomColor.Key != 'x' ? "●" : ""))
+                                    </div>// This
+                                }
+                            }
+                        *@
+
+                        @*
+                            @for (int y = 0; y < Model.LudoData.GameboardRowCount; y++)
+                            {
+                                @for (int x = 0; x < Model.LudoData.GameboardColumnCount; x++)
+                                {
+                                    int squareIndex = Model.LudoData.GameboardMapIndices[y][x];
+                                    if (!Model.Colors2.TryGetValue(char.Parse(Model.LudoData.GameboardMapColors[y].Split(',', StringSplitOptions.TrimEntries)[x]), out squareColor)) // todo: fix this hacky code
+                                    {
+                                        squareColor = ("error", "pink");
+                                    }
+
+                                    <!--<div class="square" data-square-id="@(y * columnCount + x)"></div> // This-->
+                                    var randomColor = Model.Colors2.ElementAt(random.Next(0, Model.Colors2.Count));
+
+                                    <div @Html.Raw(squareIndex != -1 ? "class=\"square\"" : "")
+                                         @(squareIndex is >= 0 or >= -4 and <= -3 ? $"data-square-id=\"{@Model.LudoData.GameboardMapIndices[y][x]}\"" : "")
+                                         data-square-color="@squareColor.colorName"
+                                         style="border-color: @squareColor.colorHex; color: @(Model.SquareColors[y, x] == 'x' ? squareColor.colorHex : randomColor.Value.colorHex)"
+                                         draggable="true">@(Model.LudoData.GameboardMapColors[y][x] == 'x' ? squareColor.colorName.ToUpper() : (squareIndex != -1 && randomColor.Key != ' ' && randomColor.Key != 'x' ? "●" : ""))</div>// This
+                                }
+                            }
+                        *@
+                    </div>
+                </div>
+                <div class="options-container">
+                    <div class="col-md-3">
+                        <div class="row">
+                            <form method="post">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label @* asp-for="" *@ class="control-label" for="TEMPATTRIBUTE_select_piece" style="display: block; color: #fff">Move piece on square:</label>
+                                        <!--<input--> @* asp-for="" *@ <!--class="form-control" />-->
+                                        <span @* asp-validation-for="" *@ class="text-danger" name="TEMPATTRIBUTE_select_piece"></span>
+                                    </div>
+                                    <div class="row">
+                                        <select size="4">
+                                            <option data-square-move-from-id="0">Add new piece to square 0</option>
+                                            <option data-square-move-from-id="10">Square 10</option>
+                                            <option data-square-move-from-id="29">Square 29</option>
+                                            <option data-square-move-from-id="44">Square 44</option>
+                                        </select>
+                                    </div>
+                                    <div class="row">
+                                        <label @* asp-for="" *@ class="control-label" for="TEMPATTRIBUTE_select_piece" style="display: block; color: #fff">Move piece to: square:</label>
+                                        <!--<input--> @* asp-for="" *@ <!--class="form-control" />-->
+                                        <span @* asp-validation-for="" *@ class="text-danger" name="TEMPATTRIBUTE_select_piece"></span>
+                                    </div>
+                                    <div class="row">
+                                        <select size="3">
+                                            <option data-square-move-to-id="14">Square 14</option>
+                                            <option data-square-move-to-id="33">Square 33</option>
+                                            <option data-square-move-to-id="47">Square 47</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="col-md-3">
-                <div class="row">
-                    <form method="post">
-                        <div class="form-group">
-                            <div class="row">
-                                <label @* asp-for="" *@ class="control-label" for="TEMPATTRIBUTE_select_piece" style="display: block; color: #fff">Move piece on square:</label>
-                                <!--<input--> @* asp-for="" *@ <!--class="form-control" />-->
-                                <span @* asp-validation-for="" *@ class="text-danger" name="TEMPATTRIBUTE_select_piece"></span>
-                            </div>
-                            <div class="row">
-                                <select size="4">
-                                    <option data-square-move-from-id="0">Add new piece to square 0</option>
-                                    <option data-square-move-from-id="10">Square 10</option>
-                                    <option data-square-move-from-id="29">Square 29</option>
-                                    <option data-square-move-from-id="44">Square 44</option>
-                                </select>
-                            </div>
-                            <div class="row">
-                                <label @* asp-for="" *@ class="control-label" for="TEMPATTRIBUTE_select_piece" style="display: block; color: #fff">Move piece to: square:</label>
-                                <!--<input--> @* asp-for="" *@ <!--class="form-control" />-->
-                                <span @* asp-validation-for="" *@ class="text-danger" name="TEMPATTRIBUTE_select_piece"></span>
-                            </div>
-                            <div class="row">
-                                <select size="3">
-                                    <option data-square-move-to-id="14">Square 14</option>
-                                    <option data-square-move-to-id="33">Square 33</option>
-                                    <option data-square-move-to-id="47">Square 47</option>
-                                </select>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+            @*</div>*@
+        }
     }
 }
+
+<div class="ludo-container">
+    <div class="grid">
+        <div class="cell" id="1">
+            <div class="piece"></div>
+        </div>
+        <div class="cell piece-count-2" id="2">
+            <div class="piece"></div>
+            <div class="piece"></div>
+
+        </div>
+        <div class="cell" id="3">3</div>
+        <div class="cell" id="4">4</div>
+        <div class="cell" id="5">5</div>
+        <div class="cell" id="6">6</div>
+        <div class="cell" id="7">7</div>
+        <div class="cell" id="8">8</div>
+        <div class="cell" id="9">9</div>
+        <div class="cell" id="8">10</div>
+        <div class="cell" id="9">11</div>
+        <div class="cell" id="1">1</div>
+        <div class="cell" id="2">2</div>
+        <div class="cell" id="3">3</div>
+        <div class="cell" id="4">4</div>
+        <div class="cell" id="5">5</div>
+        <div class="cell" id="6">6</div>
+        <div class="cell" id="7">7</div>
+        <div class="cell" id="8">8</div>
+        <div class="cell" id="9">9</div>
+        <div class="cell" id="8">10</div>
+        <div class="cell" id="9">11</div>
+        <div class="cell" id="1">1</div>
+        <div class="cell" id="2">2</div>
+        <div class="cell" id="3">3</div>
+        <div class="cell" id="4">4</div>
+        <div class="cell" id="5">5</div>
+        <div class="cell" id="6">6</div>
+        <div class="cell" id="7">7</div>
+        <div class="cell" id="8">8</div>
+        <div class="cell" id="9">9</div>
+        <div class="cell" id="8">10</div>
+        <div class="cell" id="9">11</div>
+        <div class="cell" id="1">1</div>
+        <div class="cell" id="2">2</div>
+        <div class="cell" id="3">3</div>
+        <div class="cell" id="4">4</div>
+        <div class="cell" id="5">5</div>
+        <div class="cell" id="6">6</div>
+        <div class="cell" id="7">7</div>
+        <div class="cell" id="8">8</div>
+        <div class="cell" id="9">9</div>
+        <div class="cell" id="8">10</div>
+        <div class="cell" id="9">11</div>
+        <div class="cell" id="1">1</div>
+        <div class="cell" id="2">2</div>
+        <div class="cell" id="3">3</div>
+        <div class="cell" id="4">4</div>
+        <div class="cell" id="5">5</div>
+        <div class="cell" id="6">6</div>
+        <div class="cell" id="7">7</div>
+        <div class="cell" id="8">8</div>
+        <div class="cell" id="9">9</div>
+        <div class="cell" id="8">10</div>
+        <div class="cell" id="9">11</div>
+        <div class="cell" id="1">1</div>
+        <div class="cell" id="2">2</div>
+        <div class="cell" id="3">3</div>
+        <div class="cell" id="4">4</div>
+        <div class="cell" id="5">5</div>
+        <div class="cell" id="6">6</div>
+        <div class="cell" id="7">7</div>
+        <div class="cell" id="8">8</div>
+        <div class="cell" id="9">9</div>
+        <div class="cell" id="8">10</div>
+        <div class="cell" id="9">11</div>
+        <div class="cell" id="1">1</div>
+        <div class="cell" id="2">2</div>
+        <div class="cell" id="3">3</div>
+        <div class="cell" id="4">4</div>
+        <div class="cell" id="5">5</div>
+        <div class="cell" id="6">6</div>
+        <div class="cell" id="7">7</div>
+        <div class="cell" id="8">8</div>
+        <div class="cell" id="9">9</div>
+        <div class="cell" id="8">10</div>
+        <div class="cell" id="9">11</div>
+        <div class="cell" id="1">1</div>
+        <div class="cell" id="2">2</div>
+        <div class="cell" id="3">3</div>
+        <div class="cell" id="4">4</div>
+        <div class="cell" id="5">5</div>
+        <div class="cell" id="6">6</div>
+        <div class="cell" id="7">7</div>
+        <div class="cell" id="8">8</div>
+        <div class="cell" id="9">9</div>
+        <div class="cell" id="8">10</div>
+        <div class="cell" id="9">11</div>
+        <div class="cell" id="1">1</div>
+        <div class="cell" id="2">2</div>
+        <div class="cell" id="3">3</div>
+        <div class="cell" id="4">4</div>
+        <div class="cell" id="5">5</div>
+        <div class="cell" id="6">6</div>
+        <div class="cell" id="7">7</div>
+        <div class="cell" id="8">8</div>
+        <div class="cell" id="9">9</div>
+        <div class="cell" id="8">10</div>
+        <div class="cell" id="9">11</div>
+        <div class="cell" id="1">1</div>
+        <div class="cell" id="2">2</div>
+        <div class="cell" id="3">3</div>
+        <div class="cell" id="4">4</div>
+        <div class="cell" id="5">5</div>
+        <div class="cell" id="6">6</div>
+        <div class="cell" id="7">7</div>
+        <div class="cell" id="8">8</div>
+        <div class="cell" id="9">9</div>
+        <div class="cell" id="8">10</div>
+        <div class="cell" id="9">11</div>
+        <div class="cell" id="1">1</div>
+        <div class="cell" id="2">2</div>
+        <div class="cell" id="3">3</div>
+        <div class="cell" id="4">4</div>
+        <div class="cell" id="5">5</div>
+        <div class="cell" id="6">6</div>
+        <div class="cell" id="7">7</div>
+        <div class="cell" id="8">8</div>
+        <div class="cell" id="9">9</div>
+        <div class="cell" id="8">10</div>
+        <div class="cell" id="9">11</div>
+    </div>
+</div>
 
 <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/ludo.js"></script>
 @*
-    @if Model.Gameboard.
+        @if Model.Gameboard.
+        <script type="text/javascript">
+            $(function () {
+                setInterval
+            })
+        </script>
     <script type="text/javascript">
         $(function () {
             setInterval
