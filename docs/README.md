@@ -468,3 +468,4 @@
 ---
 
 ## Credits & Sources
+- Lazy loading **singleton** https://csharpindepth.com/Articles/Singleton#performance
