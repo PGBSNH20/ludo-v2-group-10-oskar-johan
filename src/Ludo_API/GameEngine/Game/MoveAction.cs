@@ -31,6 +31,10 @@ namespace Ludo_API.GameEngine.Game
         [DataMember] // unnecessary?
         public string OptionText { get; init; }
 
+        [Required]
+        [DataMember] // unnecessary?
+        public string Message { get; init; }
+
         [Range(1, 6, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
         [DataMember] // unnecessary?
         public int DiceRoll { get; init; }
