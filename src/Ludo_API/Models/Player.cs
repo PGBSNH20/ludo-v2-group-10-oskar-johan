@@ -12,9 +12,8 @@ namespace Ludo_API.Models
 {
     public class Player
     {
-        public const string ValidColorsPattern = "Yellow|Red|Blue|Green";
-
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
 
         [Required]
@@ -22,18 +21,18 @@ namespace Ludo_API.Models
         public string Name { get; set; }
 
         [Required]
-        //[RegularExpression("^(Yellow | Red | Green | Blue)")]
         [RegularExpression("^(" + ValidColorsPattern + ")$")]
         public string Color { get; set; }
 
-        #region static methods
-        public static List<string> GetValidColors()
-        {
-            return ValidColorsPattern.Split("|").ToList();
-        }
-        #endregion static methods
+        //[Required]
+        //public Gameboard Gameboard { get; set; }
 
         #region Non-Mapped Properties
+        #region static, readonly and const Properties
+        [NotMapped]
+        public const string ValidColorsPattern = "Yellow|Red|Blue|Green";
+        #endregion
+
         //[Required]
         //[NotMapped]
         //public Color Color { get; set; }
@@ -51,14 +50,11 @@ namespace Ludo_API.Models
 
         [NotMapped]
         public List<int> Track { get; set; }
-
         #endregion
 
         #region Constructors
         public Player()
         {
-            // todo: test if this is called before or after EF Core initializes the object
-            //SetTrack();
         }
 
         //public Player(string name, Color color)
@@ -79,6 +75,11 @@ namespace Ludo_API.Models
             SetTrack();
         }
         #endregion
+
+        public static List<string> GetValidColors()
+        {
+            return ValidColorsPattern.Split("|").ToList();
+        }
 
         public bool SetTrack()
         {

@@ -12,7 +12,7 @@ namespace Ludo_API.GameEngine.Game
     {
         //private readonly IGamesRepository _gameRepository;
         public Gameboard Gameboard { get; }
-        public List<Square> Squares { get; }
+        public ICollection<Square> Squares { get; }
 
         public Game(IGamesRepository gameRepository, Gameboard gameboard)
         {
@@ -54,7 +54,7 @@ namespace Ludo_API.GameEngine.Game
 
         public bool CanMoveToSquare(Player player, Square startSquare, int diceRoll, out Square endSquare)
         {
-            Square initialSquare = Squares[startSquare.ID];
+            Square initialSquare = Squares.ElementAt(startSquare.ID);
             int startIndex = player.Track.FindIndex(x => x == startSquare.ID);
             int currentPlayerTrackIndex = startIndex;
             bool moveBackwards = false;
@@ -64,7 +64,7 @@ namespace Ludo_API.GameEngine.Game
                 // todo: fix (square vs playerTrack index) naming
                 currentPlayerTrackIndex += moveBackwards ? -1 : 1;
                 int currentSquareIndex = player.Track[currentPlayerTrackIndex];
-                endSquare = Squares[currentSquareIndex];
+                endSquare = Squares.ElementAt(currentSquareIndex);
 
                 // If the Piece is on the "goal"-Square this iteration.
                 if (currentSquareIndex == player.GoalIndex)
@@ -76,7 +76,7 @@ namespace Ludo_API.GameEngine.Game
                     moveBackwards = true;
                 }
 
-                bool canInsertToken = CanInsertTokenAt(Squares[currentSquareIndex], player);
+                bool canInsertToken = CanInsertTokenAt(Squares.ElementAt(currentSquareIndex), player);
 
                 if (!canInsertToken)
                 {

@@ -10,6 +10,7 @@ namespace Ludo_API.Models
     public class Gameboard
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
         //[Key]
         // https://stackoverflow.com/a/40917033
@@ -19,14 +20,18 @@ namespace Ludo_API.Models
         // https://stackoverflow.com/a/40917033
         public string GameId { get; set; }
 
+        //[ForeignKey("LastPlayerId")]
         public Player LastPlayer { get; set; }
+        //[ForeignKey("CurrentPlayerId")]
         public Player CurrentPlayer { get; set; }
+        //[ForeignKey("GameCreatorId")]
+        public Player GameCreator { get; set; }
 
         [Required]
         public List<Square> Squares { get; set; }
 
         [Required]
-        public List<Player> Players { get; set; }
+        public ICollection<Player> Players { get; set; }
 
         public DateTime? GameDate { get; set; } // todo: rename to something like "lastturndate"
         public DateTime? GameStartDate { get; set; }
