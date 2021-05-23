@@ -1,26 +1,20 @@
-﻿using Ludo_API.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Runtime.Serialization;
 
-namespace Ludo_API
+namespace Ludo_API.Models
 {
     public record SquareTenant
     {
         [Key]
-        //public int ID { get; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
 
         [ForeignKey("Square")]
-        //public int SquareIndex { get; }
         public int SquareIndex { get; set; }
 
-        //[ForeignKey("Player")]
-        //public Player Player { get; }
         public Player Player { get; set; }
 
         [Range(0, 2, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
-        //public int PieceCount { get; }
         public int PieceCount { get; set; }
 
         public SquareTenant()

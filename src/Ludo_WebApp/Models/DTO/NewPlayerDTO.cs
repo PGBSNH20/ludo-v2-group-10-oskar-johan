@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Ludo_WebApp.Models
+namespace Ludo_WebApp.Models.DTO
 {
     public class NewPlayerDTO
     {

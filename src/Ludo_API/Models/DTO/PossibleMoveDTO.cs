@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Ludo_API.Models.DTO
+﻿namespace Ludo_API.Models.DTO
 {
     public record PossibleMoveDTO
     {

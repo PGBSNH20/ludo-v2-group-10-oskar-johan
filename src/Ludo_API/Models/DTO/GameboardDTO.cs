@@ -9,10 +9,11 @@ namespace Ludo_API.Models.DTO
     {
         public int ID { get; set; }
         public Player CurrentPlayer { get; set; }
-        public List<Square> Squares { get; set; }
-        public List<Player> Players { get; set; }
+        public ICollection<Square> Squares { get; set; }
+        public ICollection<PlayerDTO> Players { get; set; }
         public DateTime? GameDate  { get; set; } // todo: rename to something like "lastturndate"
         public DateTime? GameStartDate { get; set; }
+        public PlayerDTO GameCreator { get; set; }
         //GameboardData GameboardData { get; set; } // Add ColorOrder?
 
         public GameboardDTO(Gameboard gameboard)
@@ -20,7 +21,7 @@ namespace Ludo_API.Models.DTO
             ID = gameboard.ID;
             CurrentPlayer = gameboard.CurrentPlayer;
             Squares = gameboard.Squares;
-            Players = gameboard.Players;
+            Players = gameboard.Players.Select(p => new PlayerDTO(p)).ToList();
             GameDate = gameboard.GameDate;
             GameStartDate = gameboard.GameStartDate;
         }
