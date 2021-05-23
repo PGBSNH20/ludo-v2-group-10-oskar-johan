@@ -21,7 +21,7 @@ namespace Ludo_API.Models.DTO
             ID = gameboard.ID;
             CurrentPlayer = gameboard.CurrentPlayer;
             Squares = gameboard.Squares;
-            Players = gameboard.Players.Select(p => new PlayerDTO(p)).ToList();
+            Players = gameboard.Players?.Select(p => new PlayerDTO(p)).ToList();
             GameDate = gameboard.GameDate;
             GameStartDate = gameboard.GameStartDate;
         }
