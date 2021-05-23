@@ -29,30 +29,31 @@ namespace Ludo_API.GameEngine.Game
 
         // todo: remove or pick one of these?
         #region todo: remove or pick one of these?
-        public enum MoveMessagesEnum
-        {
-            [Description("You can't pass or stop on a square you occupy")]
-            CantPassYourOwn,
-            [Description("You've knocked your opponent's piece(s) out.")]
-            KnockOutOpponent,
-            [Description("You've moved a piece to the goal square.")]
-            PieceEnteredGoal,
-        };
-        public struct MoveMessagesStruct
-        {
-            public const string CantPassYourOwn = "You can't pass or stop on a square you occupy";
-            public const string KnockOutOpponent = "You've knocked your opponent's piece(s) out.";
-            public const string PieceEnteredGoal = "You've moved a piece to the goal square.";
-        }
+        //public enum MoveMessagesEnum
+        //{
+        //    [Description("You can't pass or stop on a square you occupy")]
+        //    CantPassYourOwn,
+        //    [Description("You've knocked your opponent's piece(s) out.")]
+        //    KnockOutOpponent,
+        //    [Description("You've moved a piece to the goal square.")]
+        //    PieceEnteredGoal,
+        //};
+        //public struct MoveMessagesStruct
+        //{
+        //    public const string CantPassYourOwn = "You can't pass or stop on a square you occupy";
+        //    public const string KnockOutOpponent = "You've knocked your opponent's piece(s) out.";
+        //    public const string PieceEnteredGoal = "You've moved a piece to the goal square.";
+        //}
         static public class MoveMessagesClass
         {
+            public const string MoveSuccessful = "Move successful";
             public const string CantPassYourOwn = "You can't pass or stop on a square you occupy";
             public const string KnockOutOpponent = "You've knocked your opponent's piece(s) out.";
             public const string PieceEnteredGoal = "You've moved a piece to the goal square.";
         }
         #endregion
 
-        public bool CanMoveToSquare(Player player, Square startSquare, int diceRoll, out Square endSquare)
+        public (bool valid, string message) CanMoveToSquare(Player player, Square startSquare, int diceRoll, out Square endSquare)
         {
             Square initialSquare = Squares.ElementAt(startSquare.ID);
             int startIndex = player.Track.FindIndex(x => x == startSquare.ID);
@@ -70,7 +71,7 @@ namespace Ludo_API.GameEngine.Game
                 if (currentSquareIndex == player.GoalIndex)
                 {
                     // If the Piece is in the "goal"-Square and has finished.
-                    if (i == diceRoll) { return true; }
+                    if (i == diceRoll) { return (true, MoveMessagesClass.PieceEnteredGoal); }
 
                     // The Piece has to continue moving, it should move backwards the following iterations.
                     moveBackwards = true;
@@ -80,19 +81,20 @@ namespace Ludo_API.GameEngine.Game
 
                 if (!canInsertToken)
                 {
-                    return false;
+                    return (false, MoveMessagesClass.CantPassYourOwn);
                 }
 
                 // If it's the last Square, return true since the Piece can move to the current Square.
                 if (i == diceRoll)
                 {
-                    return true; // todo: combine this with line 47?
+                    return (true, MoveMessagesClass.MoveSuccessful); // todo: combine this with line 47?
                 }
 
                 // The Piece can be moved to the current square, continue to next square.
                 continue;
             }
 
+            // Unexpected?
             //return true; // note: is true correct?
             throw new Exception(""); // is it correct to throw? the loop should handle all cases where we want to return a bool.
         }
@@ -126,7 +128,7 @@ namespace Ludo_API.GameEngine.Game
             #region "Insert New Piece(s)" actions:
             foreach (Square square in playerOwnedSquares)
             {
-                bool validMove = CanMoveToSquare(player, square, diceNumber, out Square destinationSquare);
+                var (validMove, message) = CanMoveToSquare(player, square, diceNumber, out Square destinationSquare);
 
                 if (square.Tenant.PieceCount == 1)
                 {
@@ -136,6 +138,7 @@ namespace Ludo_API.GameEngine.Game
                         ValidMove = validMove,
                         DiceRoll = diceNumber,
                         OptionText = $"Move your piece from {square.ID} to {destinationSquare.ID}",
+                        Message = message,
                         StartSquare = new SquareTenant(square.ID, null, 0),
                         DestinationSquare = new SquareTenant(destinationSquare.ID, player, 1),
                     });
@@ -148,6 +151,7 @@ namespace Ludo_API.GameEngine.Game
                         ValidMove = validMove,
                         DiceRoll = diceNumber,
                         OptionText = $"Move one of your pieces from {square.ID} to {destinationSquare.ID}",
+                        Message = message,
                         StartSquare = new SquareTenant(square.ID, player, 1),
                         DestinationSquare = new SquareTenant(destinationSquare.ID, player, 2),
                     });
@@ -161,14 +165,18 @@ namespace Ludo_API.GameEngine.Game
 
             #region "Insert New Piece(s)" actions:
             if (piecesOnBoardCount <= 2 && CanInsertTokenAt(Gameboard.GetSquare(player.StartPosition), player) && diceNumber == 6)
-            {
+                {
+                var destinationSquare = new SquareTenant(player.StartPosition, player, 2);
+
                 moveActions.Add(new()
                 {
+
                     PlayerId = player.ID,
                     ValidMove = true,
                     DiceRoll = diceNumber,
                     OptionText = $"Insert two new <b>pieces<b> to <b>square {player.StartPosition}</b>.",
-                    DestinationSquare = new SquareTenant(player.StartPosition, player, 2)
+                    Message = destinationSquare.Player != null ? MoveMessagesClass.KnockOutOpponent : MoveMessagesClass.MoveSuccessful,
+                    DestinationSquare = destinationSquare,
                 });
             }
 
@@ -176,24 +184,30 @@ namespace Ludo_API.GameEngine.Game
             {
                 if (CanInsertTokenAt(Gameboard.GetSquare(player.StartPosition), player) && diceNumber == 1)
                 {
+                    var destinationSquare = new SquareTenant(player.StartPosition, player, 1);
+
                     moveActions.Add(new()
                     {
                         PlayerId = player.ID,
                         ValidMove = true,
                         DiceRoll = diceNumber,
                         OptionText = $"Insert a new <b>piece<b> to <b>square {player.StartPosition}</b>.",
-                        DestinationSquare = new SquareTenant(player.StartPosition, player, 1)
+                        Message = destinationSquare.Player != null ? MoveMessagesClass.KnockOutOpponent : MoveMessagesClass.MoveSuccessful,
+                        DestinationSquare = destinationSquare,
                     });
                 }
                 else if (CanInsertTokenAt(Gameboard.GetSquare(player.StartPosition + 5), player) && diceNumber == 6)
                 {
+                    var destinationSquare = new SquareTenant(player.StartPosition + 5, player, 1);
+
                     moveActions.Add(new()
                     {
                         PlayerId = player.ID,
                         ValidMove = true,
                         DiceRoll = diceNumber,
                         OptionText = $"Insert a new <b>piece<b> to <b>square {player.StartPosition + 5}</b>.",
-                        DestinationSquare = new SquareTenant(player.StartPosition + 5, player, 1)
+                        Message = destinationSquare.Player != null ? MoveMessagesClass.KnockOutOpponent : MoveMessagesClass.MoveSuccessful,
+                        DestinationSquare = destinationSquare,
                     });
                 }
             }
