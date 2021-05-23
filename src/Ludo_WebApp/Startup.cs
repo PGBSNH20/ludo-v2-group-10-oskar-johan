@@ -34,6 +34,7 @@ namespace Ludo_WebApp
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
             }
             else
             {
@@ -47,6 +48,7 @@ namespace Ludo_WebApp
 
             app.UseRouting();
 
+            app.UseAuthorization();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
