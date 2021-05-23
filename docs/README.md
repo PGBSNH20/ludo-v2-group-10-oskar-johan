@@ -469,3 +469,5 @@
 
 ## Credits & Sources
 - Lazy loading **singleton** https://csharpindepth.com/Articles/Singleton#performance
+- https://github.com/microsoft/referencesource/blob/5697c29004a34d80acdaf5742d7e699022c64ecd/System.Web/Routing/RouteValueDictionary.cs#L61
+  - Used this to figure out how to convert an anonymous object (of query-parameters) to a dictionary. This is used in the method GetAsync<T> in [Fetch.cs](../src/Ludo_WebApp/Ludo_API/Fetch.cs) (in the WebApp-project).
