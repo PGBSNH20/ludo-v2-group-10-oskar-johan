@@ -94,7 +94,7 @@ namespace Ludo_API.Controllers
         }
 
         /// <summary>
-        /// Get Ludo data such gameboard layout, player colors and their gameboard track indices.
+        /// Get Ludo data such as gameboard layout, player colors and their gameboard track indices.
         /// </summary>
         /// <returns>A GameboardDTO object.</returns>
         // GET api/Games/LudoData

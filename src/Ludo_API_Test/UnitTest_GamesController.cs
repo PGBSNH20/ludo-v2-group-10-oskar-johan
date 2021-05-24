@@ -98,6 +98,32 @@ namespace Ludo_API_Test
             //Assert.Equal(2, actualGameValue.ID); todo:uncommment this
         }
 
+        [Fact]
+        public async Task On_POST_New_Game__Expect_Success()
+        {
+            // Arrange
+
+            //List<Player> newPlayers = new();
+
+            //newPlayers.Add(new Player(newPlayerDTO));
+
+            //var gameboard = new Gameboard(newPlayers);
+
+
+            //IGamesRepository gameRepo = new TestGamesRepository
+            //{
+            //    Gameboards = gameboards,
+            //};
+
+            //GamesController gamesController = new(null, gameRepo);
+
+            // Act
+
+
+            // Assert
+        }
+
+
 
         [Theory]
         [InlineData(1)]
