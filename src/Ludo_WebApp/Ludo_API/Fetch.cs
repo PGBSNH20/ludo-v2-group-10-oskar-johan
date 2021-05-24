@@ -49,7 +49,7 @@ namespace Ludo_WebApp.Ludo_API
             }
         }
 
-        public static async Task<IRestResponse<GameboardDTO>> PostAddPlayerAsync(NewPlayerDTO newPlayerDTO)
+        public static async Task<IRestResponse<NewPlayerDTO>> PostAddPlayerAsync(NewPlayerDTO newPlayerDTO)
         {
             var client = new RestClient(_baseURL);
             var request = new RestRequest(RequestURLs.GamesAddPlayer, Method.POST);
@@ -58,11 +58,7 @@ namespace Ludo_WebApp.Ludo_API
 
             try // todo: fix getting and returning the error msg from throw in SetTrack
             {
-                //await client.PostAsync<GameDTO>(request);
-                //GameboardDTO response = await client.PostAsync<GameboardDTO>(request);
-                var response = await client.ExecuteAsync<GameboardDTO>(request);
-                //var response = await client.PostAsync<NewGameDTO>(request);
-                return response;
+                return await client.ExecuteAsync<NewPlayerDTO>(request);
             }
             catch (Exception)
             {

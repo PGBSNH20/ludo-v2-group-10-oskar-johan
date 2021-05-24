@@ -12,6 +12,8 @@ namespace Ludo_API.Models.DTO
         //[Range(1, 4)]
         //public int PlayerCount { get; set; }
 
+        public int? ID { get; set; }
+
         public int? GameId { get; set; }
 
         [Required]

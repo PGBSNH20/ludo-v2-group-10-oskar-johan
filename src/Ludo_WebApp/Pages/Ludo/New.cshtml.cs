@@ -1,14 +1,12 @@
-using System;
+using Ludo_WebApp.Ludo_API;
+using Ludo_WebApp.Models.DTO;
+using Ludo_WebApp.Utils;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Ludo_WebApp.Ludo_API;
-using Ludo_WebApp.Models;
-using Ludo_WebApp.Models.DTO;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Ludo_WebApp.Pages.Ludo
 {
@@ -54,13 +52,9 @@ namespace Ludo_WebApp.Pages.Ludo
                 //return RedirectToPage("./Index", new { id = response });
             }
 
-            CookieOptions option = new CookieOptions();
-
-            option.Expires = DateTime.Now.AddYears(1);
-
             string playerId = restResponse.Data.Players.FirstOrDefault().ID.ToString();
 
-            Response.Cookies.Append("PlayerID", playerId, option);
+            CookieMonster.SetCookie(Response.Cookies, "PlayerID", playerId);
 
             //return RedirectToPage("./Index", new { id = restResponse.Data });
             return RedirectToPage("./Index", new { id = restResponse.Data.ID });

@@ -178,7 +178,7 @@ namespace Ludo_API.Controllers
         /// <returns>Returns a Gameboard object.</returns>
         [HttpPost("[action]")]
         [ActionName("AddPlayer")]
-        public async Task<ActionResult<GameboardDTO>> PostAddPlayer([FromBody] NewPlayerDTO newPlayerDTO)
+        public async Task<ActionResult<NewPlayerDTO>> PostAddPlayer([FromBody] NewPlayerDTO newPlayerDTO)
         {
             if (newPlayerDTO.GameId == null)
             {
@@ -201,7 +201,10 @@ namespace Ludo_API.Controllers
                 Player player = new(newPlayerDTO);
                 gameboard = await _gameRepository.AddPlayerAsync(_context, gameboard, player);
 
-                return Ok(new GameboardDTO(gameboard));
+                newPlayerDTO.ID = player.ID;
+
+                //return Ok(new GameboardDTO(gameboard));
+                return Ok(newPlayerDTO);
             }
             catch (Exception e)
             {

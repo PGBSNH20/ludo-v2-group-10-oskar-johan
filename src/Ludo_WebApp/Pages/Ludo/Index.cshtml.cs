@@ -1,14 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 using Ludo_WebApp.Ludo_API;
 using Ludo_WebApp.Ludo_API.Models;
-using Ludo_WebApp.Models;
 using Ludo_WebApp.Models.DTO;
+using Ludo_WebApp.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace Ludo_WebApp.Pages.Ludo
 {
@@ -83,7 +80,9 @@ namespace Ludo_WebApp.Pages.Ludo
                 // todo: logging?
             }
 
-            return RedirectToPage("./Index/", new { id = restResponse.Data.ID, successfullyJoined = 1 });
+            CookieMonster.SetCookie(Response.Cookies, "PlayerID", restResponse.Data.ID.ToString());
+
+            return RedirectToPage("./Index/", new { id = restResponse.Data.GameId, successfullyJoined = 1 });
         }
 
         public async Task<IActionResult> OnPostStartGameAsync(GameboardDTO gameboard)

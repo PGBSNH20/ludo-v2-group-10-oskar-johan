@@ -28,14 +28,16 @@
     {
         string cookieValue = Request.Cookies["PlayerID"];
 
-        if (Int32.Parse(Request.Cookies["PlayerID"]) == Model.Gameboard.GameCreator.ID)
+        //if (Int32.Parse() == Model.Gameboard.GameCreator.ID)
+
+        if (Int32.TryParse(Request.Cookies["PlayerID"], out int n1) && n1 == Model.Gameboard.GameCreator.ID)
         {
             @* todo: only show this to the player who created the game. *@
             <form method="post" asp-page-handler="StartGame">
                 <input type="submit" value="Start Game" class="btn btn-primary" />
             </form>
         }
-        else
+        else if (!(Int32.TryParse(Request.Cookies["PlayerID"], out int n2) && Model.Gameboard.Players.Any(p => p.ID == n2)))
         {
             @* todo: don't show the "join game" section for the player who created the game. *@
             <h1>Join Game</h1>
