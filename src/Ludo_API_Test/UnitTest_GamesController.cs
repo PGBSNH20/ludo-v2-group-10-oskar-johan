@@ -98,6 +98,30 @@ namespace Ludo_API_Test
             //Assert.Equal(2, actualGameValue.ID); todo:uncommment this
         }
 
+        [Fact]
+        public async Task On_POST_New_Game__Expect_Success()
+        {
+            //TestRepo:
+            //* skapa lista av spel
+            //* lägga till CreateNewGame och gör så metoden lägger till nytt spel i listan istället för kontexten
+
+            //kontroller - testet:
+            //* skapa upp instans av testrepo
+            //* skapa upp kontroller med testrepo
+            //* skapa upp player dto
+            //* anropa post - metod på kontroller med player dto
+
+
+            // Arrange
+
+
+            // Act
+
+
+            // Assert
+        }
+
+
 
         [Theory]
         [InlineData(1)]
