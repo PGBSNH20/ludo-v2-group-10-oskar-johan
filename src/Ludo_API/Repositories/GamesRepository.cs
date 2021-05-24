@@ -106,7 +106,8 @@ namespace Ludo_API.Repositories
         }
 
         public async Task<Gameboard> AddPlayerAsync(LudoContext context, Gameboard gameboard, Player player)
-        {gameboard.Players.Add(player);
+        {
+            gameboard.Players.Add(player);
             //context.Players.Add(player);
             //context.Gameboards.Add(gameboard);
             await context.SaveChangesAsync();
@@ -118,6 +119,14 @@ namespace Ludo_API.Repositories
         {
             var gameboards = context.Gameboards.Include(g => g.Players);
             return await gameboards.AnyAsync(g => g.ID == gameboardId && g.Players.Any(p => p.Color == color));
+        }
+
+        public async Task SetCreator(LudoContext context, Gameboard gameboard, Player newPlayer)
+        {
+            gameboard.GameCreator = newPlayer;
+            //context.Players.Add(player);
+            //context.Gameboards.Add(gameboard);
+            await context.SaveChangesAsync();
         }
     }
 }

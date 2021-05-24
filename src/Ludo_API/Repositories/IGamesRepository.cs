@@ -23,5 +23,6 @@ namespace Ludo_API.Repositories
         Task<bool> ExecuteMoveAction(LudoContext context, MoveAction moveAction);
         Task<Gameboard> AddPlayerAsync(LudoContext context, Gameboard gameboard, Player player);
         Task<bool> IsColorTaken(LudoContext context, int gameboardId, string color);
+        Task SetCreator(LudoContext context, Gameboard gameboard, Player newPlayer);
     }
 }

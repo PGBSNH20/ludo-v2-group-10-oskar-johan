@@ -67,7 +67,6 @@ namespace Ludo_API.Models
             GameId = Guid.NewGuid().ToString();
             Players = players;
             Squares = new List<Square>();
-            GameCreator = players[0];
 
             for (int i = 0; i < 60; i++)
             {

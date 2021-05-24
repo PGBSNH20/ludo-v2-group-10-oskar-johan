@@ -121,14 +121,20 @@ namespace Ludo_API.Controllers
         [ActionName("New")]
         public async Task<ActionResult<int>> Post([FromBody] NewPlayerDTO newPlayerDTO)
         {
-            List<Player> newPlayers = new();
-            Gameboard.CreateTracks();
-            newPlayers.Add(new Player(newPlayerDTO));
-
             try
             {
+                Gameboard.CreateTracks();
+
+                var newPlayer = new Player(newPlayerDTO);
+                List<Player> newPlayers = new() {
+                    newPlayer
+                };
+
+                // Save the gameboard.
                 var gameboard = new Gameboard(newPlayers);
                 gameboard = await _gameRepository.CreateNewGame(_context, gameboard);
+                await _gameRepository.SetCreator(_context, gameboard, newPlayer);
+
                 return Ok(gameboard.ID);
             }
             catch (Exception e)
