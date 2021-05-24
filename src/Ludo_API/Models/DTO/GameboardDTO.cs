@@ -24,6 +24,7 @@ namespace Ludo_API.Models.DTO
             Players = gameboard.Players?.Select(p => new PlayerDTO(p)).ToList();
             GameDate = gameboard.GameDate;
             GameStartDate = gameboard.GameStartDate;
+            GameCreator = new PlayerDTO(gameboard.GameCreator);
         }
     }
 }
