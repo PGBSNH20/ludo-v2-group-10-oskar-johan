@@ -25,8 +25,8 @@ namespace Ludo_WebApp.Ludo_API
             internal static string GamesStartGame = "/Games/StartGame/";
         }
 
-        public static async Task<IRestResponse<int>> PostNewGameAsync(NewPlayerDTO newPlayerDTO)
-        //public static async Task<IRestResponse<GameboardDTO>> PostNewGameAsync(NewPlayerDTO newPlayerDTO)
+        //public static async Task<IRestResponse<int>> PostNewGameAsync(NewPlayerDTO newPlayerDTO)
+        public static async Task<IRestResponse<GameboardDTO>> PostNewGameAsync(NewPlayerDTO newPlayerDTO)
         {
             var client = new RestClient(_baseURL);
             var request = new RestRequest(RequestURLs.GamesNew, Method.POST);
@@ -36,9 +36,9 @@ namespace Ludo_WebApp.Ludo_API
             try // todo: fix getting and returning the error msg from throw in SetTrack
             {
                 //await client.PostAsync<GameDTO>(request);
-                var response = await client.ExecuteAsync<int>(request);
-                //var response = await client.ExecuteAsync<GameboardDTO>(request);
-                //var response = await client.PostAsync<NewGameDTO>(request);
+                //var response = await client.ExecuteAsync<int>(request);
+                var response = await client.ExecuteAsync<GameboardDTO>(request);
+
                 return response;
             }
             catch (Exception)

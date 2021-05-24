@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Ludo_WebApp.Ludo_API;
 using Ludo_WebApp.Models;
 using Ludo_WebApp.Models.DTO;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -52,7 +53,17 @@ namespace Ludo_WebApp.Pages.Ludo
                 //e.g. return RedirectToPage("./Index/{id}");
                 //return RedirectToPage("./Index", new { id = response });
             }
-            return RedirectToPage("./Index", new { id = restResponse.Data });
+
+            CookieOptions option = new CookieOptions();
+
+            option.Expires = DateTime.Now.AddYears(1);
+
+            string playerId = restResponse.Data.Players.FirstOrDefault().ID.ToString();
+
+            Response.Cookies.Append("PlayerID", playerId, option);
+
+            //return RedirectToPage("./Index", new { id = restResponse.Data });
+            return RedirectToPage("./Index", new { id = restResponse.Data.ID });
         }
     }
 }
