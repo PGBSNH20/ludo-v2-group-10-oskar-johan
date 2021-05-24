@@ -26,47 +26,54 @@
 @{
     if (Model.Gameboard != null && Model.Gameboard.GameStartDate == null)
     {
-        @* todo: only show this to the player who created the game. *@
-        <form method="post" asp-page-handler="StartGame">
-            <input type="submit" value="Start Game" class="btn btn-primary" />
-        </form>
+        string cookieValue = Request.Cookies["PlayerID"];
 
-        @* todo: don't show the "join game" section for the player who created the game. *@
-        <h1>Join Game</h1>
+        if (Int32.Parse(Request.Cookies["PlayerID"]) == Model.Gameboard.GameCreator.ID)
+        {
+            @* todo: only show this to the player who created the game. *@
+            <form method="post" asp-page-handler="StartGame">
+                <input type="submit" value="Start Game" class="btn btn-primary" />
+            </form>
+        }
+        else
+        {
+            @* todo: don't show the "join game" section for the player who created the game. *@
+            <h1>Join Game</h1>
 
-        <div class="row">
-            <div class="col-md-4">
-                <form asp-page-handler="AddPlayer" method="post">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <!--<div class="form-group">
-                    <label asp-for="NewGame.PlayerCount" class="control-label"></label>
-                    <input asp-for="NewGame.PlayerCount" class="form-control" />-->
-                    <!-- todo: switch to type="range"? -->
-                    <!--<span asp-validation-for="NewGame.PlayerCount" class="text-danger"></span>
-                    </div>-->
-                    <div class="form-group">
-                        <label asp-for="NewPlayer.PlayerName" class="control-label"></label>
-                        <input asp-for="NewPlayer.PlayerName" class="form-control" />
-                        <span asp-validation-for="NewPlayer.PlayerName" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        @foreach (var color in Model.LudoData.ColorTracks)
-                        {
-                            <input type="radio" asp-for="NewPlayer.PlayerColor" value="@color.Key" id="color-radio-@color.Key" />
-                            <label asp-for="NewPlayer.PlayerColor" class="control-label" style="color:@color.Value.ColorHex" for="color-radio-@color.Key">@color.Key</label> <!-- todo: fix clicking labels always selects first radio-input -->
-                            <span asp-validation-for="NewPlayer.PlayerColor" class="text-danger"></span>
-                        }
-                        @if (Model.ColorError != null)
-                        {
-                            <span class="text-danger">@Model.ColorError</span>
-                        }
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" value="Join" class="btn btn-primary" />
-                    </div>
-                </form>
+            <div class="row">
+                <div class="col-md-4">
+                    <form asp-page-handler="AddPlayer" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <!--<div class="form-group">
+                        <label asp-for="NewGame.PlayerCount" class="control-label"></label>
+                        <input asp-for="NewGame.PlayerCount" class="form-control" />-->
+                        <!-- todo: switch to type="range"? -->
+                        <!--<span asp-validation-for="NewGame.PlayerCount" class="text-danger"></span>
+                        </div>-->
+                        <div class="form-group">
+                            <label asp-for="NewPlayer.PlayerName" class="control-label"></label>
+                            <input asp-for="NewPlayer.PlayerName" class="form-control" />
+                            <span asp-validation-for="NewPlayer.PlayerName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            @foreach (var color in Model.LudoData.ColorTracks)
+                            {
+                                <input type="radio" asp-for="NewPlayer.PlayerColor" value="@color.Key" id="color-radio-@color.Key" />
+                                <label asp-for="NewPlayer.PlayerColor" class="control-label" style="color:@color.Value.ColorHex" for="color-radio-@color.Key">@color.Key</label> <!-- todo: fix clicking labels always selects first radio-input -->
+                                <span asp-validation-for="NewPlayer.PlayerColor" class="text-danger"></span>
+                            }
+                            @if (Model.ColorError != null)
+                            {
+                                <span class="text-danger">@Model.ColorError</span>
+                            }
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Join" class="btn btn-primary" />
+                        </div>
+                    </form>
+                </div>
             </div>
-        </div>
+        }
     }
     // note: else is disabled for development purposes
     // todo: reenable else for production code

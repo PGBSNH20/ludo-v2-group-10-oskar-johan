@@ -119,7 +119,8 @@ namespace Ludo_API.Controllers
         // POST api/Games/New
         [HttpPost("[action]")]
         [ActionName("New")]
-        public async Task<ActionResult<int>> Post([FromBody] NewPlayerDTO newPlayerDTO)
+        //public async Task<ActionResult<int>> Post([FromBody] NewPlayerDTO newPlayerDTO)
+        public async Task<ActionResult<GameboardDTO>> Post([FromBody] NewPlayerDTO newPlayerDTO)
         {
             try
             {
@@ -135,7 +136,8 @@ namespace Ludo_API.Controllers
                 gameboard = await _gameRepository.CreateNewGame(_context, gameboard);
                 await _gameRepository.SetCreator(_context, gameboard, newPlayer);
 
-                return Ok(gameboard.ID);
+                //return Ok(gameboard.ID);
+                return Ok(new GameboardDTO(gameboard));
             }
             catch (Exception e)
             {
