@@ -1,11 +1,9 @@
 ﻿using Ludo_API.Database;
 using Ludo_API.GameEngine.Game;
 using Ludo_API.Models;
-using Ludo_API.Models.DTO;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -124,6 +122,18 @@ namespace Ludo_API.Repositories
         public async Task SetCreator(LudoContext context, Gameboard gameboard, Player newPlayer)
         {
             gameboard.GameCreator = newPlayer;
+            await context.SaveChangesAsync();
+        }
+
+        public async Task SetCurrentPlayer(LudoContext context, Gameboard gameboard, Player player)
+        {
+            if (gameboard == null)
+            {
+                throw new ArgumentNullException(nameof(gameboard), "Gameboard is null");
+            }
+
+            gameboard.CurrentPlayer = player ?? throw new ArgumentNullException(nameof(player), "Player is null");
+
             await context.SaveChangesAsync();
         }
     }

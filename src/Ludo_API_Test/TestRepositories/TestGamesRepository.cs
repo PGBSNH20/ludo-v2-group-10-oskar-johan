@@ -184,5 +184,17 @@ namespace Ludo_API_Test.TestRepositories
             gameboard.GameCreator = newPlayer;
             return Task.CompletedTask;
         }
+
+        public Task SetCurrentPlayer(LudoContext context, Gameboard gameboard, Player player)
+        {
+            if (gameboard == null)
+            {
+                throw new ArgumentNullException(nameof(gameboard), "Gameboard is null");
+            }
+
+            gameboard.CurrentPlayer = player ?? throw new ArgumentNullException(nameof(player), "Player is null");
+
+            return Task.CompletedTask;
+        }
     }
 }
