@@ -24,6 +24,13 @@ namespace Ludo_WebApp.Pages.Ludo
         //[BindProperty]
         //public GameboardDTO gameboard { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="gameboard"></param>
+        /// <param name="ludoData"></param>
+        /// <returns></returns>
         public async Task OnGet(int? id, GameboardDTO gameboard, LudoData ludoData)
         {
             if (id == null)
@@ -58,6 +65,12 @@ namespace Ludo_WebApp.Pages.Ludo
             // todo: update the html
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="newPlayer"></param>
+        /// <returns></returns>
         //[NonHandler]
         public async Task<IActionResult> OnPostAddPlayerAsync(int id, NewPlayerDTO newPlayer)
         {
@@ -74,7 +87,18 @@ namespace Ludo_WebApp.Pages.Ludo
 
             if (restResponse.StatusCode != HttpStatusCode.OK)
             {
-                ModelState.AddModelError("Color", restResponse.ErrorMessage);
+                ModelState.AddModelError("AddPlayer", restResponse.ErrorMessage);
+
+                if (restResponse.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    ModelState.AddModelError("AddPlayerBadRequest", restResponse.Content);
+                }
+
+                if (restResponse.StatusCode == HttpStatusCode.NotFound)
+                {
+                    ModelState.AddModelError("AddPlayerNotFound", restResponse.Content);
+                }
+
                 return Page();
                 // todo: redirect to error-page?
                 // todo: logging?
@@ -85,6 +109,11 @@ namespace Ludo_WebApp.Pages.Ludo
             return RedirectToPage("./Index/", new { id = restResponse.Data.GameId, successfullyJoined = 1 });
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="gameboard"></param>
+        /// <returns></returns>
         public async Task<IActionResult> OnPostStartGameAsync(GameboardDTO gameboard)
         {
             if (!ModelState.IsValid)
