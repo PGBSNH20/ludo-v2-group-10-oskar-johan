@@ -97,7 +97,7 @@
             }
         }
         // If the game has started:
-        else
+        else if (couldParsePlayerId && Model.Gameboard.Players.Any(p => p.ID == playerId))
         {
             @*
                 todo:
@@ -105,9 +105,10 @@
                 3. Draw pieces on gameboard.
             *@
 
-            <h2>It is @(Model.Gameboard?.CurrentPlayer?.Name)'s turn.</h2>
+            <h2>It is @(Model.Gameboard.CurrentPlayer?.Name)'s turn.</h2>
 
-            if (couldParsePlayerId && Model.Gameboard.Players.Any(p => p.ID == playerId))
+
+            if (playerId == Model.Gameboard.CurrentPlayer.ID)
             {
                 @*
                     4x. If dice has not been thrown: Draw button to throw the die.
@@ -125,6 +126,11 @@
                         4b. (Javascript) allow form POST to execute.
                     4x. If MoveActions has been chosen:
                 *@
+                <form method="post" asp-page-handler="RollDie">
+                    @Html.HiddenFor(m => m.Gameboard.ID);
+                    @Html.HiddenFor(m => m.Gameboard.CurrentPlayer.ID);
+                    <input type="submit" value="Throw dice" class="btn btn-primary" />
+                </form>
             }
             else
             {
@@ -136,6 +142,10 @@
                         1. Listen for signalR message when it's the next player's turn / same player but new turn (when player rolls a 6).
                 *@
             }
+        }
+        else
+        {
+            // todo: redirect to start?
         }
     }
     // note: else is disabled for development purposes
