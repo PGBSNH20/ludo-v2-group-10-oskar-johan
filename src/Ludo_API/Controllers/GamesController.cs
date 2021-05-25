@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.ComponentModel.DataAnnotations;
+using Ludo_API.GameEngine.Game;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,11 +22,13 @@ namespace Ludo_API.Controllers
     {
         private readonly LudoContext _context;
         private readonly IGamesRepository _gameRepository;
+        private readonly ITurnManager _turnManager;
 
-        public GamesController(LudoContext context, IGamesRepository gameRepository)
+        public GamesController(LudoContext context, IGamesRepository gameRepository, ITurnManager turnManager)
         {
             _context = context;
             _gameRepository = gameRepository;
+            _turnManager = turnManager;
         }
 
         /// <summary>
@@ -237,7 +240,7 @@ namespace Ludo_API.Controllers
                     return NotFound($"There is no game with the id {gameId}.");
                 }
 
-                await _gameRepository.StartGameAsync(_context, gameboard);
+                await _turnManager.StartGameAsync(gameboard);
                 return Ok(new GameboardDTO(gameboard));
             }
             catch (Exception)

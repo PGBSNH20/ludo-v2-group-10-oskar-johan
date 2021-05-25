@@ -1,4 +1,5 @@
-﻿using Ludo_API.Models;
+﻿using Ludo_API.Database;
+using Ludo_API.Models;
 using Ludo_API.Repositories;
 using System;
 using System.Collections.Generic;
@@ -11,26 +12,30 @@ namespace Ludo_API.GameEngine.Game
     public class TurnManager : ITurnManager
     //internal class TurnManager
     {
+        private readonly LudoContext _context;
         private readonly IGamesRepository _gameRepository;
         private readonly Random _die;
         private readonly Game _game;
 
-        public TurnManager()
+        public TurnManager(LudoContext context, IGamesRepository gamesRepository)
         {
+            _context = context;
+            _gameRepository = gamesRepository;
         }
 
-        public TurnManager(Game game)
-        {
-            _game = game;
-            _die = new Random();
-        }
+        //public TurnManager(Game game)
+        //{
+        //    _game = game;
+        //    _die = new Random();
+        //}
 
-        #region ITurnBased
-        public Player DecideWhoStarts(List<Player> players)
+        #region ITurnManager
+        //public Player DecideWhoStarts(List<Player> players)
+        public Player DecideWhoStarts(Gameboard gameboard)
         {
             var startnumber = new Random();
-            var start = startnumber.Next(0, players.Count);
-            return players[start];
+            var start = startnumber.Next(0, gameboard.Players.Count);
+            return gameboard.Players.ElementAt(start);
         }
 
         //public Player GetNextPlayer(Player player)
@@ -75,6 +80,13 @@ namespace Ludo_API.GameEngine.Game
         public int RollDice()
         {
             return _die.Next(1, 7);
+        }
+
+        public async Task StartGameAsync(Gameboard gameboard)
+        {
+            var player = DecideWhoStarts(gameboard);
+            await _gameRepository.StartGameAsync(_context, gameboard);
+            await _gameRepository.SetCurrentPlayer(_context, gameboard, player);
         }
 
         //public void EndTurn()
