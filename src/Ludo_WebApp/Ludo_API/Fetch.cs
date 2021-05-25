@@ -18,11 +18,14 @@ namespace Ludo_WebApp.Ludo_API
 
         internal struct RequestURLs
         {
+            // Games endpoint/controller:
             internal static string Games = "/Games/";
             internal static string GamesLudoData = "/Games/LudoData/";
             internal static string GamesNew = "/Games/New/";
             internal static string GamesAddPlayer = "/Games/AddPlayer/";
             internal static string GamesStartGame = "/Games/StartGame/";
+            // Gameplay endpoint/controller:
+            internal static string GameplayRollDie = "/Gameplay/RollDie/";
         }
 
         //public static async Task<IRestResponse<int>> PostNewGameAsync(NewPlayerDTO newPlayerDTO)
@@ -65,37 +68,6 @@ namespace Ludo_WebApp.Ludo_API
                 // log the error?
                 // do error handling stuff?
                 throw; // remove?
-            }
-        }
-
-        internal static async Task<IRestResponse<T>> GetAsync<T>(string requestURL, object queryParameters = null)
-        {
-            // The source code for RouteValueDictionary as used by the RedirectToPage class like so: 'RedirectToPage("./Index/", new { id = 5 }),
-            // was used to figured out how to convert an object of keys and values to a dictionary<string, string> of keys and values.
-            var dict = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-
-            if (queryParameters != null)
-            {
-                PropertyDescriptorCollection @params = TypeDescriptor.GetProperties(queryParameters);
-                foreach (PropertyDescriptor param in @params)
-                {
-                    dict.Add(param.Name, param.GetValue(queryParameters));
-                }
-            }
-
-            string queryString = dict?.Count > 0 ? "?" + string.Join("&", dict.Select(param => param.Key + "=" + param.Value)) : "";
-
-            var client = new RestClient(_baseURL);
-            var request = new RestRequest(RequestURLs.Games + queryString, Method.GET);
-
-            try
-            {
-                return await client.ExecuteAsync<T>(request);
-            }
-            catch (Exception)
-            {
-                // log the error?
-                return null;
             }
         }
 
@@ -175,5 +147,60 @@ namespace Ludo_WebApp.Ludo_API
 
         //internal static async Task<IRestResponse<T> PostAsync<T1, T2>(T1 object) {
         //    }
+
+
+
+        /* -----------------------------------------------------------------------------*/
+        /* New generic methods                                                          */
+        /* -----------------------------------------------------------------------------*/
+
+        internal static async Task<IRestResponse<T>> GetAsync<T>(string requestURL, object queryParameters = null)
+        {
+            // The source code for RouteValueDictionary as used by the RedirectToPage class like so: 'RedirectToPage("./Index/", new { id = 5 }),
+            // was used to figured out how to convert an object of keys and values to a dictionary<string, string> of keys and values.
+            var dict = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+
+            if (queryParameters != null)
+            {
+                PropertyDescriptorCollection @params = TypeDescriptor.GetProperties(queryParameters);
+                foreach (PropertyDescriptor param in @params)
+                {
+                    dict.Add(param.Name, param.GetValue(queryParameters));
+                }
+            }
+
+            string queryString = dict?.Count > 0 ? "?" + string.Join("&", dict.Select(param => param.Key + "=" + param.Value)) : "";
+
+            var client = new RestClient(_baseURL);
+            var request = new RestRequest(requestURL + queryString, Method.GET);
+
+            try
+            {
+                return await client.ExecuteAsync<T>(request);
+            }
+            catch (Exception)
+            {
+                // log the error?
+                return null;
+            }
+        }
+
+        //internal static async Task<IRestResponse<T1>> PostAsync<T1, T2>(string requestURL, T2 body)
+        internal static async Task<IRestResponse<T1>> PostAsync<T1>(string requestURL, object body)
+        {
+            var client = new RestClient(_baseURL);
+            var request = new RestRequest(requestURL, Method.POST);
+            request.AddJsonBody(body);
+
+            try
+            {
+                return await client.ExecuteAsync<T1>(request);
+            }
+            catch (Exception)
+            {
+                // log the error?
+                return null;
+            }
+        }
     }
 }
