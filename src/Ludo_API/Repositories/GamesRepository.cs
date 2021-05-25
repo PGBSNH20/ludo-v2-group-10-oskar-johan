@@ -124,8 +124,6 @@ namespace Ludo_API.Repositories
         public async Task SetCreator(LudoContext context, Gameboard gameboard, Player newPlayer)
         {
             gameboard.GameCreator = newPlayer;
-            //context.Players.Add(player);
-            //context.Gameboards.Add(gameboard);
             await context.SaveChangesAsync();
         }
     }
