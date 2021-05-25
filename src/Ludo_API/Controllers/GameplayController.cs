@@ -1,6 +1,7 @@
 ﻿using Ludo_API.Database;
 using Ludo_API.GameEngine;
 using Ludo_API.GameEngine.Game;
+using Ludo_API.Models;
 using Ludo_API.Models.DTO;
 using Ludo_API.Repositories;
 using Microsoft.AspNetCore.Http;

@@ -8,7 +8,7 @@ using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Ludo_API.GameEngine.Game
+namespace Ludo_API.Models
 {
     // https://docs.microsoft.com/en-us/aspnet/web-api/overview/formats-and-model-binding/json-and-xml-serialization#what-gets-serialized
     [DataContract] // note: does this work for json?

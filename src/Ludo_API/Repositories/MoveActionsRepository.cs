@@ -1,5 +1,6 @@
 ﻿using Ludo_API.Database;
 using Ludo_API.GameEngine.Game;
+using Ludo_API.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
