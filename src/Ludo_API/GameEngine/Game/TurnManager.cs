@@ -17,15 +17,17 @@ namespace Ludo_API.GameEngine.Game
         private readonly Random _die;
         private readonly Game _game;
 
-        public TurnManager(LudoContext context, IGamesRepository gamesRepository)
+        public TurnManager(LudoContext context, IGamesRepository gamesRepository, Game game)
         {
             _context = context;
             _gameRepository = gamesRepository;
+            _game = game;
+
+            _die = new Random();
         }
 
         //public TurnManager(Game game)
         //{
-        //    _game = game;
         //    _die = new Random();
         //}
 
@@ -71,10 +73,10 @@ namespace Ludo_API.GameEngine.Game
             throw new NotImplementedException();
         }
 
-        public List<MoveAction> HandleTurn(Player player)
+        public List<MoveAction> HandleTurn(Gameboard gameboard, Player player)
         {
             int diceNumber = RollDice();
-            return _game.GetPossibleMoves(player, diceNumber);
+            return _game.GetPossibleMoves(gameboard, player, diceNumber);
         }
 
         public int RollDice()

@@ -11,14 +11,15 @@ namespace Ludo_API.GameEngine.Game
     public class Game
     {
         //private readonly IGamesRepository _gameRepository;
-        public Gameboard Gameboard { get; }
-        public ICollection<Square> Squares { get; }
+        public Gameboard Gameboard { get; set; }
+        public ICollection<Square> Squares { get; set; }
 
-        public Game(IGamesRepository gameRepository, Gameboard gameboard)
+        //public Game(IGamesRepository gamesRepository, Gameboard gameboard)
+        public Game()
         {
-            //_gameRepository = gameRepository;
-            Gameboard = gameboard;
-            Squares = gameboard.Squares;
+            //_gameRepository = gamesRepository;
+            //Gameboard = gameboard;
+            //Squares = gameboard.Squares;
         }
 
         public bool CanInsertTokenAt(Square squareToCheck, Player player)
@@ -107,8 +108,11 @@ namespace Ludo_API.GameEngine.Game
         /// <param name="player"></param>
         /// <param name="diceNumber"></param>
         /// <returns></returns>
-        public List<MoveAction> GetPossibleMoves(Player player, int diceNumber)
+        public List<MoveAction> GetPossibleMoves(Gameboard gameboard, Player player, int diceNumber)
         {
+            Gameboard = gameboard;
+            Squares = gameboard.Squares;
+
             if (player == null || diceNumber is < 1 or > 6)
             {
                 throw new Exception("Player is null or diceNumber outside the valid range.");

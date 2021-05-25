@@ -21,7 +21,7 @@ namespace Ludo_WebApp.Pages.Ludo
         public GameboardDTO Gameboard { get; set; }
 
         //[BindProperty]
-        public ICollection<MoveAction> MoveAction { get; set; }
+        public List<MoveAction> MoveActions { get; set; }
 
         public string ColorError { get; set; }
 
@@ -161,7 +161,7 @@ namespace Ludo_WebApp.Pages.Ludo
                 return Page();
             }
 
-            var restResponse = await Fetch.PostAsync<ICollection<MoveAction>>(Fetch.RequestURLs.GameplayRollDie, new PostRollDieDTO(Gameboard));
+            var restResponse = await Fetch.PostAsync<List<MoveAction>>(Fetch.RequestURLs.GameplayRollDie, new PostRollDieDTO(Gameboard));
 
             if (restResponse.StatusCode != HttpStatusCode.OK)
             {
@@ -169,7 +169,7 @@ namespace Ludo_WebApp.Pages.Ludo
                 return new BadRequestResult();
             }
 
-            MoveAction = restResponse.Data;
+            MoveActions = restResponse.Data;
             //return RedirectToRoute(Request.Path.Value, new { id = gameboard.ID });
             return RedirectToPage("./Index/", new { id = Gameboard.ID, gameSuccessfullyStarted = 1 });
         }

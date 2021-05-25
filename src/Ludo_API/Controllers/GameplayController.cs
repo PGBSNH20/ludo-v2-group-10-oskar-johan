@@ -20,19 +20,19 @@ namespace Ludo_API.Controllers
     {
         private readonly LudoContext _context;
         private readonly IGamesRepository _gamesRepository;
-        private readonly IMoveActionsRepository _moveActionRepository;
+        private readonly IMoveActionsRepository _moveActionsRepository;
         private readonly ITurnManager _turnManager;
 
         public GameplayController(
             LudoContext context,
             IGamesRepository gameRepository,
-            IMoveActionsRepository moveActionRepository,
+            IMoveActionsRepository moveActionsRepository,
             ITurnManager turnManager
             )
         {
             _context = context;
             _gamesRepository = gameRepository;
-            _moveActionRepository = moveActionRepository;
+            _moveActionsRepository = moveActionsRepository;
             _turnManager = turnManager;
         }
 
@@ -68,9 +68,10 @@ namespace Ludo_API.Controllers
                 return NotFound($"Can't find player with the id {postRollDieDTO.PlayerId}");
             }
 
-            var moveActions = _turnManager.HandleTurn(player);
+            // Call ITurnManager.HandleTurn which rolls the die and builds a list of MoveActions
+            var moveActions = _turnManager.HandleTurn(game, player);
 
-            return Ok(await _moveActionRepository.AddMoveActions(_context, moveActions));
+            return Ok(await _moveActionsRepository.AddMoveActions(_context, moveActions));
         }
 
         // POST api/Gameplay/ChoseAction
@@ -81,7 +82,7 @@ namespace Ludo_API.Controllers
             //[Required][FromBody] int playerId // fixme: only one [FromBody], use DTO model?
             )
         {
-            var moveAction = await _moveActionRepository.GetMoveAction(_context, moveActionId);
+            var moveAction = await _moveActionsRepository.GetMoveAction(_context, moveActionId);
 
             if (moveAction == null)
             {
@@ -92,7 +93,7 @@ namespace Ludo_API.Controllers
 
             bool success = await _gamesRepository.ExecuteMoveAction(_context, moveAction);
 
-            await _moveActionRepository.DeleteMoveActions(_context, moveAction.GameId);
+            await _moveActionsRepository.DeleteMoveActions(_context, moveAction.GameId);
 
             if (success)
             {

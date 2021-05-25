@@ -62,12 +62,13 @@ namespace Ludo_API.Tests
             await playerRepository.AddPlayers(null, players);
             await gameRepository.CreateNewGame(null, gameboard);
 
-            var game = new Game(gameRepository, gameboard);
+            //var game = new Game(gameRepository, gameboard);
+            var game = new Game();
             //var turnManager = new TurnManager(game);
 
             // Act
             //var moveActions = turnManager.HandleTurn(players[0]);
-            var moveActions = game.GetPossibleMoves(players[0], diceRoll);
+            var moveActions = game.GetPossibleMoves(gameboard, players[0], diceRoll);
             bool moveSuccessfulActual = await gameRepository.ExecuteMoveAction(null, moveActions[0]);
 
             // Assert
