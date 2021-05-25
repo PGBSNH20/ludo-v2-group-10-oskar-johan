@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Ludo_API.GameEngine.Game
 {
-    public interface ITurnBased
+    public interface ITurnManager
     {
         Player DecideWhoStarts(List<Player> players);
         //void NextTurn();

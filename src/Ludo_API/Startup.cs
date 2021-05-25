@@ -40,7 +40,7 @@ namespace Ludo_API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Ludo_API", Version = "v1" });
             });
             services.AddScoped<IGamesRepository, GamesRepository>();
-            services.AddTransient<ITurnBased, TurnManager>();
+            services.AddTransient<ITurnManager, TurnManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

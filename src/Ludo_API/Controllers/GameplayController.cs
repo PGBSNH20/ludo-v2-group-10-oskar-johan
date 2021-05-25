@@ -20,13 +20,13 @@ namespace Ludo_API.Controllers
         private readonly LudoContext _context;
         private readonly IGamesRepository _gamesRepository;
         private readonly IMoveActionsRepository _moveActionRepository;
-        private readonly ITurnBased _turnManager;
+        private readonly ITurnManager _turnManager;
 
         public GameplayController(
             LudoContext context,
             IGamesRepository gameRepository,
             IMoveActionsRepository moveActionRepository,
-            ITurnBased turnManager
+            ITurnManager turnManager
             )
         {
             _context = context;
