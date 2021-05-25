@@ -51,6 +51,8 @@ namespace Ludo_API.Models
 
         [NotMapped]
         public List<int> Track { get; set; }
+
+        [NotMapped]
         public ColorTrackData TrackNew { get; private set; }
         #endregion
 
