@@ -33,7 +33,7 @@ namespace Ludo_API_Test
             };
             //var expectedGames = gameboards.Select(gb => new GameboardDTO(gb)); // todo: remove if `//Assert.Equal(expectedGames, actualGames);` below is removed
 
-            GamesController gamesController = new(null, gameRepo);
+            GamesController gamesController = new(null, gameRepo, null);
 
             // Act
             var actualGames = (await gamesController.GetAll()).ToList();
@@ -56,7 +56,7 @@ namespace Ludo_API_Test
                 Gameboards = gameboards,
             };
 
-            GamesController gamesController = new(null, gameRepo);
+            GamesController gamesController = new(null, gameRepo, null);
 
             // Act
             var actualGames = gamesController.GetAll().Result;
@@ -81,7 +81,7 @@ namespace Ludo_API_Test
                 Gameboards = gameboards,
             };
 
-            GamesController gamesController = new(null, gameRepo);
+            GamesController gamesController = new(null, gameRepo, null);
 
             //// Act
             //var actualGame = await gamesController.Get(2).Result.Value;
@@ -104,7 +104,7 @@ namespace Ludo_API_Test
             //Arrange
             IGamesRepository gameRepo = new TestGamesRepository();
 
-            GamesController gamesController = new(null, gameRepo);
+            GamesController gamesController = new(null, gameRepo, null);
 
             var newGame = await gamesController.Post(
             new NewPlayerDTO
@@ -143,7 +143,7 @@ namespace Ludo_API_Test
             {
                 Gameboards = gameboards,
             };
-            GamesController gamesController = new(null, gameRepo);
+            GamesController gamesController = new(null, gameRepo, null);
 
             // Act
             bool success = await gamesController.Delete(id);
@@ -169,7 +169,7 @@ namespace Ludo_API_Test
             {
                 Gameboards = gameboards,
             };
-            GamesController gamesController = new(null, gameRepo);
+            GamesController gamesController = new(null, gameRepo, null);
 
             // Act
             bool success = await gamesController.Delete(5);
