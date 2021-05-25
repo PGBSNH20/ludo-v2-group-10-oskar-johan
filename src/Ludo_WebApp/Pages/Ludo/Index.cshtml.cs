@@ -87,7 +87,7 @@ namespace Ludo_WebApp.Pages.Ludo
 
             if (restResponse.StatusCode != HttpStatusCode.OK)
             {
-                ModelState.AddModelError("AddPlayer", restResponse.ErrorMessage);
+                //ModelState.AddModelError("AddPlayer", restResponse.ErrorMessage);
 
                 if (restResponse.StatusCode == HttpStatusCode.BadRequest)
                 {
@@ -99,7 +99,8 @@ namespace Ludo_WebApp.Pages.Ludo
                     ModelState.AddModelError("AddPlayerNotFound", restResponse.Content);
                 }
 
-                return Page();
+                //return Page();
+                return Redirect(Request.Path);
                 // todo: redirect to error-page?
                 // todo: logging?
             }
