@@ -4,6 +4,7 @@ using Ludo_WebApp.Models.DTO;
 using Ludo_WebApp.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -16,8 +17,11 @@ namespace Ludo_WebApp.Pages.Ludo
         //[BindProperty(SupportsGet = true)]
         public NewPlayerDTO NewPlayer { get; set; }
 
-        //[BindProperty(SupportsGet = true)]
+        [BindProperty(SupportsGet = true)]
         public GameboardDTO Gameboard { get; set; }
+
+        //[BindProperty]
+        public ICollection<MoveAction> MoveAction { get; set; }
 
         public string ColorError { get; set; }
 
@@ -135,6 +139,39 @@ namespace Ludo_WebApp.Pages.Ludo
             Gameboard = restResponse.Data;
             //return RedirectToRoute(Request.Path.Value, new { id = gameboard.ID });
             return RedirectToPage("./Index/", new { id = restResponse.Data.ID, gameSuccessfullyStarted = 1 });
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="gameboard"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> OnPostRollDieAsync(GameboardDTO gameboard)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "ModelState invalid");
+                return Page();
+            }
+
+            if (Gameboard.CurrentPlayer == null)
+            {
+                //todo: error handling
+                ModelState.AddModelError("PostRollDie_GameboardCurrentPlayer", "Gameboard.CurrentPlayer is null");
+                return Page();
+            }
+
+            var restResponse = await Fetch.PostAsync<ICollection<MoveAction>>(Fetch.RequestURLs.GameplayRollDie, new PostRollDieDTO(Gameboard));
+
+            if (restResponse.StatusCode != HttpStatusCode.OK)
+            {
+                // todo: do something
+                return new BadRequestResult();
+            }
+
+            MoveAction = restResponse.Data;
+            //return RedirectToRoute(Request.Path.Value, new { id = gameboard.ID });
+            return RedirectToPage("./Index/", new { id = Gameboard.ID, gameSuccessfullyStarted = 1 });
         }
     }
 }
