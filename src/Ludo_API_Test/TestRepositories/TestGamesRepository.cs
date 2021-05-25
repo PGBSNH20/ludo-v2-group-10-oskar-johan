@@ -178,5 +178,11 @@ namespace Ludo_API_Test.TestRepositories
         {
             throw new NotImplementedException();
         }
+
+        public Task SetCreator(LudoContext context, Gameboard gameboard, Player newPlayer)
+        {
+            gameboard.GameCreator = newPlayer;
+            return Task.CompletedTask;
+        }
     }
 }

@@ -91,36 +91,36 @@ namespace Ludo_API_Test
 
             // Act
             var actualGame = await gamesController.Get(2);
-            var actualGameResult = actualGame.Result;
-            //var actualGameValue = actualGameResult.Value; // todo:uncommment this
+            var actualGameResult = (OkObjectResult)actualGame.Result;
+            var actualGameValue = (GameboardDTO)actualGameResult.Value;
 
             // Assert
-            //Assert.Equal(2, actualGameValue.ID); todo:uncommment this
+            Assert.Equal(2, actualGameValue.ID);
         }
 
         [Fact]
         public async Task On_POST_New_Game__Expect_Success()
         {
-            // Arrange
+            //Arrange
+            IGamesRepository gameRepo = new TestGamesRepository();
 
-            //List<Player> newPlayers = new();
+            GamesController gamesController = new(null, gameRepo);
 
-            //newPlayers.Add(new Player(newPlayerDTO));
+            var newGame = await gamesController.Post(
+            new NewPlayerDTO
+            {
+                PlayerName = "Player1",
+                PlayerColor = "Red"
+            });
 
-            //var gameboard = new Gameboard(newPlayers);
+            //var newGameValue = newGame.Value;
+            var newGameObjectResult = (OkObjectResult)newGame.Result;
+            var newGameValue = (GameboardDTO)newGameObjectResult.Value;
 
+            //Assert
+            Assert.Equal("Player1", newGameValue.Players.FirstOrDefault().Name);
+            Assert.Equal("Red", newGameValue.Players.FirstOrDefault().Color);
 
-            //IGamesRepository gameRepo = new TestGamesRepository
-            //{
-            //    Gameboards = gameboards,
-            //};
-
-            //GamesController gamesController = new(null, gameRepo);
-
-            // Act
-
-
-            // Assert
         }
 
 
