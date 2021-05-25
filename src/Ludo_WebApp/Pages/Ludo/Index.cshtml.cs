@@ -31,7 +31,8 @@ namespace Ludo_WebApp.Pages.Ludo
         /// <param name="gameboard"></param>
         /// <param name="ludoData"></param>
         /// <returns></returns>
-        public async Task OnGet(int? id, GameboardDTO gameboard, LudoData ludoData)
+        //public async Task OnGet(int? id, GameboardDTO gameboard, LudoData ludoData)
+        public async Task OnGet(int? id)
         {
             if (id == null)
             {
@@ -133,7 +134,7 @@ namespace Ludo_WebApp.Pages.Ludo
 
             Gameboard = restResponse.Data;
             //return RedirectToRoute(Request.Path.Value, new { id = gameboard.ID });
-            return RedirectToRoute(Request.Path);
+            return RedirectToPage("./Index/", new { id = restResponse.Data.ID, gameSuccessfullyStarted = 1 });
         }
     }
 }
