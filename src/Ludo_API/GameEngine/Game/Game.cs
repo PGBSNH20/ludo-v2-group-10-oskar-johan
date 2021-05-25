@@ -57,6 +57,7 @@ namespace Ludo_API.GameEngine.Game
         {
             Square initialSquare = Squares.ElementAt(startSquare.ID);
             int startIndex = player.Track.FindIndex(x => x == startSquare.ID);
+            //int startIndex = player.TrackNew.TrackIndices.FindIndex(x => x == startSquare.ID);
             int currentPlayerTrackIndex = startIndex;
             bool moveBackwards = false;
 
@@ -65,6 +66,7 @@ namespace Ludo_API.GameEngine.Game
                 // todo: fix (square vs playerTrack index) naming
                 currentPlayerTrackIndex += moveBackwards ? -1 : 1;
                 int currentSquareIndex = player.Track[currentPlayerTrackIndex];
+                //int currentSquareIndex = player.TrackNew[currentPlayerTrackIndex];
                 endSquare = Squares.ElementAt(currentSquareIndex);
 
                 // If the Piece is on the "goal"-Square this iteration.
@@ -165,7 +167,7 @@ namespace Ludo_API.GameEngine.Game
 
             #region "Insert New Piece(s)" actions:
             if (piecesOnBoardCount <= 2 && CanInsertTokenAt(Gameboard.GetSquare(player.StartPosition), player) && diceNumber == 6)
-                {
+            {
                 var destinationSquare = new SquareTenant(player.StartPosition, player, 2);
 
                 moveActions.Add(new()

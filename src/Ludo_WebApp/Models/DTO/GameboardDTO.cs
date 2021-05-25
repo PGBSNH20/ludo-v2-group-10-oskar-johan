@@ -17,6 +17,7 @@ namespace Ludo_WebApp.Models.DTO
         public DateTime? GameDate { get; set; } // todo: rename to something like "lastturndate"
         [DisplayName("Game Start Date")]
         public DateTime? GameStartDate { get; set; }
+        [DisplayName("Game Creator")]
         public PlayerDTO GameCreator { get; set; }
         //GameboardData GameboardData { get; set; } // Add ColorOrder?
 

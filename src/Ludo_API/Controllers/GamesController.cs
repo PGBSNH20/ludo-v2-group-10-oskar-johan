@@ -188,6 +188,12 @@ namespace Ludo_API.Controllers
             try
             {
                 var gameboard = await _gameRepository.GetGame(_context, newPlayerDTO.GameId.Value);
+
+                if (gameboard == null)
+                {
+                    return NotFound($"Could not find a game with the id: {newPlayerDTO.GameId}");
+                }
+
                 Gameboard.CreateTracks();
 
                 if (await _gameRepository.IsColorTaken(_context, gameboard.ID, newPlayerDTO.PlayerColor))

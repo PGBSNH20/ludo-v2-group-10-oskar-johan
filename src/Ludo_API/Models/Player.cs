@@ -1,4 +1,5 @@
-﻿using Ludo_API.GameEngine.Game;
+﻿using Ludo_API.Data;
+using Ludo_API.GameEngine.Game;
 using Ludo_API.Models.DTO;
 using System;
 using System.Collections.Generic;
@@ -50,6 +51,9 @@ namespace Ludo_API.Models
 
         [NotMapped]
         public List<int> Track { get; set; }
+
+        [NotMapped]
+        public ColorTrackData TrackNew { get; private set; }
         #endregion
 
         #region Constructors
@@ -83,6 +87,15 @@ namespace Ludo_API.Models
 
         public bool SetTrack()
         {
+            try
+            {
+                TrackNew = LudoData.Instance.ColorTracks[Color];
+            }
+            catch (Exception)
+            {
+
+            }
+
             if (Color == "Yellow")
             {
                 Track = Gameboard.YellowTrack;

@@ -34,7 +34,7 @@
             {
                 <tr>
                     <td><a asp-page="Ludo/Index" asp-route-id="@gameboard.ID">@gameboard.ID</a></td>
-                    <td>@gameboard.GameCreator</td>
+                    <td>(@gameboard.GameCreator?.ID) @gameboard.GameCreator?.Name (@gameboard.GameCreator?.Color)</td>
                     <td>@gameboard.GameStartDate</td>
                     <td>@gameboard.Players.Count</td>
                     <td>@gameboard.Squares.Count</td>
