@@ -33,7 +33,7 @@ namespace Ludo_API_Test
             };
             //var expectedGames = gameboards.Select(gb => new GameboardDTO(gb)); // todo: remove if `//Assert.Equal(expectedGames, actualGames);` below is removed
 
-            GamesController gamesController = new(null, gameRepo);
+            GamesController gamesController = new(null, gameRepo, null);
 
             // Act
             var actualGames = (await gamesController.GetAll()).ToList();
@@ -56,7 +56,7 @@ namespace Ludo_API_Test
                 Gameboards = gameboards,
             };
 
-            GamesController gamesController = new(null, gameRepo);
+            GamesController gamesController = new(null, gameRepo, null);
 
             // Act
             var actualGames = gamesController.GetAll().Result;
@@ -81,7 +81,7 @@ namespace Ludo_API_Test
                 Gameboards = gameboards,
             };
 
-            GamesController gamesController = new(null, gameRepo);
+            GamesController gamesController = new(null, gameRepo, null);
 
             //// Act
             //var actualGame = await gamesController.Get(2).Result.Value;
@@ -104,8 +104,9 @@ namespace Ludo_API_Test
             //Arrange
             IGamesRepository gameRepo = new TestGamesRepository();
 
-            GamesController gamesController = new(null, gameRepo);
+            GamesController gamesController = new(null, gameRepo, null);
 
+            // Act
             var newGame = await gamesController.Post(
             new NewPlayerDTO
             {
@@ -113,7 +114,6 @@ namespace Ludo_API_Test
                 PlayerColor = "Red"
             });
 
-            //var newGameValue = newGame.Value;
             var newGameObjectResult = (OkObjectResult)newGame.Result;
             var newGameValue = (GameboardDTO)newGameObjectResult.Value;
 
@@ -122,8 +122,6 @@ namespace Ludo_API_Test
             Assert.Equal("Red", newGameValue.Players.FirstOrDefault().Color);
 
         }
-
-
 
         [Theory]
         [InlineData(1)]
@@ -143,7 +141,7 @@ namespace Ludo_API_Test
             {
                 Gameboards = gameboards,
             };
-            GamesController gamesController = new(null, gameRepo);
+            GamesController gamesController = new(null, gameRepo, null);
 
             // Act
             bool success = await gamesController.Delete(id);
@@ -169,7 +167,7 @@ namespace Ludo_API_Test
             {
                 Gameboards = gameboards,
             };
-            GamesController gamesController = new(null, gameRepo);
+            GamesController gamesController = new(null, gameRepo, null);
 
             // Act
             bool success = await gamesController.Delete(5);
@@ -179,6 +177,37 @@ namespace Ludo_API_Test
             Assert.Equal(3, gameboards.Count);
         }
 
+        [Fact]
+        public async Task On_POST_AddPlayer__Expect_Success()
+        {
+            // Arrange
+            List<Gameboard> gameboards = new()
+            {
+                new() { ID = 1 }
+            };
+
+            IGamesRepository gameRepo = new TestGamesRepository
+            {
+                Gameboards = gameboards,
+            };
+
+            GamesController gamesController = new(null, gameRepo);
+
+            // Act
+            var newPlayerDto = await gamesController.PostAddPlayer(
+            new NewPlayerDTO
+            {
+                GameId = 1,
+                PlayerName = "Player1",
+                PlayerColor = "Red"
+            });
+
+
+            //Assert
+
+
+
+        }
 
 
 
