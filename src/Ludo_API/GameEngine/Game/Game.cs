@@ -176,12 +176,11 @@ namespace Ludo_API.GameEngine.Game
 
                 moveActions.Add(new()
                 {
-
                     PlayerId = player.ID,
                     ValidMove = true,
                     DiceRoll = diceNumber,
                     OptionText = $"Insert two new <b>pieces<b> to <b>square {player.StartPosition}</b>.",
-                    Message = destinationSquare.Player != null ? MoveMessagesClass.KnockOutOpponent : MoveMessagesClass.MoveSuccessful,
+                    Message = Gameboard.GetSquare(destinationSquare.SquareIndex).Tenant != null ? MoveMessagesClass.KnockOutOpponent : MoveMessagesClass.MoveSuccessful,
                     DestinationSquare = destinationSquare,
                 });
             }
@@ -198,7 +197,7 @@ namespace Ludo_API.GameEngine.Game
                         ValidMove = true,
                         DiceRoll = diceNumber,
                         OptionText = $"Insert a new <b>piece<b> to <b>square {player.StartPosition}</b>.",
-                        Message = destinationSquare.Player != null ? MoveMessagesClass.KnockOutOpponent : MoveMessagesClass.MoveSuccessful,
+                        Message = Gameboard.GetSquare(destinationSquare.SquareIndex).Tenant != null ? MoveMessagesClass.KnockOutOpponent : MoveMessagesClass.MoveSuccessful,
                         DestinationSquare = destinationSquare,
                     });
                 }
@@ -212,7 +211,7 @@ namespace Ludo_API.GameEngine.Game
                         ValidMove = true,
                         DiceRoll = diceNumber,
                         OptionText = $"Insert a new <b>piece<b> to <b>square {player.StartPosition + 5}</b>.",
-                        Message = destinationSquare.Player != null ? MoveMessagesClass.KnockOutOpponent : MoveMessagesClass.MoveSuccessful,
+                        Message = Gameboard.GetSquare(destinationSquare.SquareIndex).Tenant != null ? MoveMessagesClass.KnockOutOpponent : MoveMessagesClass.MoveSuccessful,
                         DestinationSquare = destinationSquare,
                     });
                 }
