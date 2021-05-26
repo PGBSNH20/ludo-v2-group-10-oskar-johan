@@ -178,7 +178,7 @@ namespace Ludo_API_Test
         }
 
         [Fact]
-        public async Task On_POST_AddPlayer__Expect_Success()
+        public async Task On_POST_AddPlayer_When_No_Other_Players_Expect_Success()
         {
             // Arrange
             List<Gameboard> gameboards = new()
@@ -207,6 +207,47 @@ namespace Ludo_API_Test
             //Assert
             Assert.Equal("Player1", gameboards[0].Players.ElementAt(0).Name);
             Assert.Equal("Yellow", gameboards[0].Players.ElementAt(0).Color);
+        }
+
+        [Fact]
+        public async Task On_POST_AddPlayer_When_Color_Is_Taken_Expect_No_Player_Added()
+        {
+            List<Player> players = new()
+            {
+                new Player
+                {
+                    Name = "Player1",
+                    Color = "Yellow"
+                }
+            };
+
+            // Arrange
+            List<Gameboard> gameboards = new()
+            {
+                new(players)
+            };
+
+            gameboards[0].ID = 1;
+
+            IGamesRepository gameRepo = new TestGamesRepository
+            {
+                Gameboards = gameboards,
+            };
+
+            GamesController gamesController = new(null, gameRepo, null);
+
+            // Act
+            var newPlayerDto = await gamesController.PostAddPlayer(
+            new NewPlayerDTO
+            {
+                GameId = 1,
+                PlayerName = "Player2",
+                PlayerColor = "Yellow"
+            });
+
+            //Assert
+            Assert.Single(gameboards[0].Players);
+            Assert.Equal("Player1", gameboards[0].Players.ElementAt(0).Name);
         }
 
         //[Fact]
