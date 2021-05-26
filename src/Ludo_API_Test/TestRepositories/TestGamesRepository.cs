@@ -161,7 +161,8 @@ namespace Ludo_API_Test.TestRepositories
 
         public Task<Gameboard> AddPlayerAsync(LudoContext context, Gameboard gameboard, Player player)
         {
-            throw new NotImplementedException();
+            gameboard.Players.Add(player);
+            return Task.FromResult(gameboard);
         }
 
         public Task<int> StartGameAsync(LudoContext context, Gameboard gameboard)
@@ -176,7 +177,8 @@ namespace Ludo_API_Test.TestRepositories
 
         public Task<bool> IsColorTaken(LudoContext context, int gameboardId, string color)
         {
-            throw new NotImplementedException();
+            var gameboards = Gameboards;
+            return Task.FromResult(gameboards.Any(g => g.ID == gameboardId && g.Players.Any(p => p.Color == color)));
         }
 
         public Task SetCreator(LudoContext context, Gameboard gameboard, Player newPlayer)

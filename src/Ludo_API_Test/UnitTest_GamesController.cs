@@ -183,15 +183,17 @@ namespace Ludo_API_Test
             // Arrange
             List<Gameboard> gameboards = new()
             {
-                new() { ID = 1 }
+                new (new List<Player>())
             };
+
+            gameboards[0].ID = 1;
 
             IGamesRepository gameRepo = new TestGamesRepository
             {
                 Gameboards = gameboards,
             };
 
-            GamesController gamesController = new(null, gameRepo);
+            GamesController gamesController = new(null, gameRepo, null);
 
             // Act
             var newPlayerDto = await gamesController.PostAddPlayer(
@@ -199,15 +201,53 @@ namespace Ludo_API_Test
             {
                 GameId = 1,
                 PlayerName = "Player1",
-                PlayerColor = "Red"
+                PlayerColor = "Yellow"
             });
 
-
             //Assert
-
-
-
+            Assert.Equal("Player1", gameboards[0].Players.ElementAt(0).Name);
+            Assert.Equal("Yellow", gameboards[0].Players.ElementAt(0).Color);
         }
+
+        //[Fact]
+        //public async Task On_POST_AddPlayer__Expect_Success()
+        //{
+        //    List<Player> players = new()
+        //    {
+        //        new()
+        //        {
+        //            Name = "Player1",
+        //            Color = "Red"
+        //        }
+        //    };
+
+        //    // Arrange
+        //    List<Gameboard> gameboards = new()
+        //    {
+        //        new Gameboard(players)
+        //    };
+
+        //    gameboards[0].ID = 1;
+
+        //    IGamesRepository gameRepo = new TestGamesRepository
+        //    {
+        //        Gameboards = gameboards,
+        //    };
+
+        //    GamesController gamesController = new(null, gameRepo, null);
+
+        //    // Act
+        //    var newPlayerDto = await gamesController.PostAddPlayer(
+        //    new NewPlayerDTO
+        //    {
+        //        GameId = 1,
+        //        PlayerName = "Player2",
+        //        PlayerColor = "Yellow"
+        //    });
+
+        //    //Assert
+        //    Assert.Equal("Player2", gameboards[0].Players.ElementAt(1).Name);
+        //}
 
 
 
