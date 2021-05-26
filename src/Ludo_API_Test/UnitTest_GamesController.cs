@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Xunit;
 using System.Drawing;
 using Microsoft.AspNetCore.Mvc;
+using Ludo_API.GameEngine.Game;
 
 namespace Ludo_API_Test
 {
@@ -127,7 +128,7 @@ namespace Ludo_API_Test
         [InlineData(1)]
         [InlineData(2)]
         [InlineData(3)]
-        public async void On_DELETE_When_GameExists_Expect_GameDeletedSuccess(int id)
+        public async void On_DELETE__When_GameExists__Expect_GameDeletedSuccess(int id)
         {
             // Arrange
             List<Gameboard> gameboards = new()
@@ -153,7 +154,7 @@ namespace Ludo_API_Test
         }
 
         [Fact]
-        public async void On_DELETE_When_GameDoesntExists_Expect_GameDeletedFail()
+        public async void On_DELETE__When_GameDoesntExists__Expect_GameDeletedFail()
         {
             // Arrange
             List<Gameboard> gameboards = new()
@@ -178,7 +179,7 @@ namespace Ludo_API_Test
         }
 
         [Fact]
-        public async Task On_POST_AddPlayer_When_No_Other_Players_Expect_Success()
+        public async Task On_POST_AddPlayer__When_No_Other_Players__Expect_Success()
         {
             // Arrange
             List<Gameboard> gameboards = new()
@@ -210,7 +211,7 @@ namespace Ludo_API_Test
         }
 
         [Fact]
-        public async Task On_POST_AddPlayer_When_Color_Is_Taken_Expect_No_Player_Added()
+        public async Task On_POST_AddPlayer__When_Color_Is_Taken__Expect_No_Player_Added()
         {
             List<Player> players = new()
             {
@@ -250,45 +251,46 @@ namespace Ludo_API_Test
             Assert.Equal("Player1", gameboards[0].Players.ElementAt(0).Name);
         }
 
-        //[Fact]
-        //public async Task On_POST_AddPlayer__Expect_Success()
-        //{
-        //    List<Player> players = new()
-        //    {
-        //        new()
-        //        {
-        //            Name = "Player1",
-        //            Color = "Red"
-        //        }
-        //    };
+        [Fact]
+        public async Task On_POST_StartGame__When_Game_Exists__Expect_Success()
+        {
+            // Arrange
+            List<Player> players = new()
+            {
+                new Player
+                {
+                    Name = "Player1",
+                    Color = "Yellow"
+                },
+                new Player
+                {
+                    Name = "Player2",
+                    Color = "Red"
+                }
+            };
 
-        //    // Arrange
-        //    List<Gameboard> gameboards = new()
-        //    {
-        //        new Gameboard(players)
-        //    };
+            List<Gameboard> gameboards = new()
+            {
+                new(players)
+            };
 
-        //    gameboards[0].ID = 1;
+            gameboards[0].ID = 1;
 
-        //    IGamesRepository gameRepo = new TestGamesRepository
-        //    {
-        //        Gameboards = gameboards,
-        //    };
+            IGamesRepository gameRepo = new TestGamesRepository
+            {
+                Gameboards = gameboards,
+            };
 
-        //    GamesController gamesController = new(null, gameRepo, null);
+            ITurnManager turnManager = new TurnManager(null, gameRepo, )
 
-        //    // Act
-        //    var newPlayerDto = await gamesController.PostAddPlayer(
-        //    new NewPlayerDTO
-        //    {
-        //        GameId = 1,
-        //        PlayerName = "Player2",
-        //        PlayerColor = "Yellow"
-        //    });
+            GamesController gamesController = new(null, gameRepo, null);
 
-        //    //Assert
-        //    Assert.Equal("Player2", gameboards[0].Players.ElementAt(1).Name);
-        //}
+            // Act
+            var gameBoardDto = gamesController.PostStartGame(1);
+
+            //Assert
+            Assert.Equal("Player1", gameboards[0].Players.ElementAt(0).Name);
+        }
 
 
 
