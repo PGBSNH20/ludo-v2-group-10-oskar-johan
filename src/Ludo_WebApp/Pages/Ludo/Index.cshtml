@@ -164,24 +164,28 @@
                                     // Get square tenant:
                                     var tenant = Model.Gameboard.Squares?[squareIndex]?.Tenant;
 
-                                    <div id="@id" class="@string.Join(' ', classes)">
-                                        @if (tenant?.PieceCount > 0)
-                                        {
-                                            classes.Add($"piece-count-{tenant.PieceCount}");
+                                    @if (tenant?.PieceCount > 0)
+                                    {
+                                        classes.Add($"piece-count-{tenant.PieceCount}");
+                                        string pieceColor = tenant.Player.Color.ToLower();
 
+                                        <div id="@id" class="@string.Join(' ', classes)">
 
                                             @if (tenant.PieceCount == 1)
                                             {
-                                                <div class="@Html.Raw($"piece piece-color-{tenant.Player.Color}")"></div>
+                                                <div class="@Html.Raw($"piece piece-color-{pieceColor}")"></div>
                                             }
                                             else if (tenant.PieceCount == 2)
                                             {
-                                                <div class="@Html.Raw($"piece piece-color-{tenant.Player.Color}")"></div>
-                                                <div class="@Html.Raw($"piece piece-color-{tenant.Player.Color}")"></div>
+                                                <div class="@Html.Raw($"piece piece-color-{pieceColor}")"></div>
+                                                <div class="@Html.Raw($"piece piece-color-{pieceColor}")"></div>
                                             }
-
-                                        }
-                                    </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div id="@id" class="@string.Join(' ', classes)"></div>
+                                    }
                                 }
                             }
                         }

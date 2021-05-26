@@ -127,7 +127,6 @@ body {
 }
 
 .piece {
-    background-color: green;
     width: calc(100% - 4px);
     height: calc(100% - 4px);
     border-radius: 50%;
@@ -142,7 +141,7 @@ body {
     background-color: blue;
 }
 .piece-color-yellow {
-    background-color: gold;
+    background-color: darkgoldenrod;
 }
 
 .piece-count-2 .piece {

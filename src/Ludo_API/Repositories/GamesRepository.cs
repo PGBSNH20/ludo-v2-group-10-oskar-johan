@@ -15,6 +15,7 @@ namespace Ludo_API.Repositories
         {
             return await context.Gameboards
                 .Include(s => s.Squares)
+                .ThenInclude(t => t.Tenant)
                 .Include(p => p.Players)
                 .ToListAsync();
         }
@@ -23,6 +24,7 @@ namespace Ludo_API.Repositories
         {
             var gameboard = await context.Gameboards
                 .Include(s => s.Squares)
+                .ThenInclude(t => t.Tenant)
                 .Include(p => p.Players)
                 .SingleOrDefaultAsync(g => g.ID == id);
             return gameboard;
