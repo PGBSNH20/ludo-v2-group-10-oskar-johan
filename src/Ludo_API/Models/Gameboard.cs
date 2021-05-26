@@ -31,7 +31,7 @@ namespace Ludo_API.Models
         public List<Square> Squares { get; set; }
 
         [Required]
-        public ICollection<Player> Players { get; set; }
+        public List<Player> Players { get; set; }
 
         public DateTime? GameDate { get; set; } // todo: rename to something like "lastturndate"
         public DateTime? GameStartDate { get; set; }
@@ -84,19 +84,31 @@ namespace Ludo_API.Models
 
         public static void CreateTracks()
         {
-            YellowTrack.AddRange(Enumerable.Range(0, 45));
+            lock (YellowTrack)
+            {
+                YellowTrack.AddRange(Enumerable.Range(0, 45));
+            }
 
-            RedTrack.AddRange(Enumerable.Range(10, 30));
-            RedTrack.AddRange(Enumerable.Range(0, 10));
-            RedTrack.AddRange(Enumerable.Range(45, 5));
+            lock (RedTrack)
+            {
+                RedTrack.AddRange(Enumerable.Range(10, 30));
+                RedTrack.AddRange(Enumerable.Range(0, 10));
+                RedTrack.AddRange(Enumerable.Range(45, 5));
+            }
 
-            BlueTrack.AddRange(Enumerable.Range(20, 20));
-            BlueTrack.AddRange(Enumerable.Range(0, 20));
-            BlueTrack.AddRange(Enumerable.Range(50, 5));
+            lock (BlueTrack)
+            {
+                BlueTrack.AddRange(Enumerable.Range(20, 20));
+                BlueTrack.AddRange(Enumerable.Range(0, 20));
+                BlueTrack.AddRange(Enumerable.Range(50, 5));
+            }
 
-            GreenTrack.AddRange(Enumerable.Range(30, 10));
-            GreenTrack.AddRange(Enumerable.Range(0, 30));
-            GreenTrack.AddRange(Enumerable.Range(55, 5));
+            lock (GreenTrack)
+            {
+                GreenTrack.AddRange(Enumerable.Range(30, 10));
+                GreenTrack.AddRange(Enumerable.Range(0, 30));
+                GreenTrack.AddRange(Enumerable.Range(55, 5));
+            }
         }
 
         /// <summary>

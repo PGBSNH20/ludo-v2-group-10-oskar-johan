@@ -8,7 +8,7 @@ namespace Ludo_API_Test
 {
     public class TestMoveActionsRepository : IMoveActionsRepository
     {
-        List<MoveAction> MoveActions = new();
+        List<MoveAction> MoveActions { get; set; } = new();
 
         public Task<List<MoveAction>> AddMoveActions(LudoContext context, List<MoveAction> moveActions)
         {
