@@ -4,7 +4,7 @@ using Ludo_API.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Ludo_API
+namespace Ludo_API.Repositories
 {
     public interface IMoveActionsRepository
     {
