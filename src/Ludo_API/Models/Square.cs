@@ -11,6 +11,7 @@ namespace Ludo_API.Models
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ID { get; set; } // todo: rename this to Index? or add new "Index" column?
 
+        [Required]
         public SquareTenant Tenant { get; set; }
 
         //public Player OccupiedBy { get; set; }
