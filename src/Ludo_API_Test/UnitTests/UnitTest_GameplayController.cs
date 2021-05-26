@@ -91,18 +91,18 @@ namespace Ludo_API_Test.UnitTests
         /// <returns></returns>
         //[Fact]
         [Theory]
-        [InlineData(2, 6, 0, 8)]
-        [InlineData(3, 6, 0, 9)]
-        [InlineData(4, 6, 0, 10)]
-        [InlineData(5, 6, 0, 11)]
-        [InlineData(2, 6, 1, 8)]
-        [InlineData(3, 6, 1, 9)]
-        [InlineData(4, 6, 1, 45)]
-        [InlineData(5, 6, 1, 46)]
-        public async Task On_PostCastDie__When_Roll_2_3_4_5_And_And_Pieces_On_Gameboard__Expect_Actions(
+        [InlineData(2, 0, 6, 8)]
+        [InlineData(3, 0, 6, 9)]
+        [InlineData(4, 0, 6, 10)]
+        [InlineData(5, 0, 6, 11)]
+        [InlineData(2, 1, 6, 8)]
+        [InlineData(3, 1, 6, 9)]
+        [InlineData(4, 1, 6, 45)]
+        [InlineData(5, 1, 6, 46)]
+        public async Task On_PostCastDie__When_Roll_2_3_4_OR_5_And_And_1_Owned_Piece_On_Gameboard__Expect_One_Action(
             int dieRoll,
-            int startSquareIndex,
             int playerId,
+            int startSquareIndex,
             int expectedDestSquareIndex
         )
         {
@@ -168,6 +168,79 @@ namespace Ludo_API_Test.UnitTests
 
             // Assert
             Assert.Collection(moveActions, item => Assert.Equal(expectedDestSquareIndex, item.DestinationSquare.SquareIndex) );
+        }
+
+        //[Fact]
+        [Theory]
+        [InlineData(1, 0, 6, 7, 0)]
+        [InlineData(1, 1, 9, 45, 10)]
+        public async Task On_PostCastDie__When_Roll_1_And_And_1_Owned_Piece_On_Gameboard__Expect_Two_Actions(
+            int dieRoll,
+            int playerId,
+            int startSquareIndexForPieceInPlay,
+            int expectedDestSquareIndexForPieceInPlay,
+            int expectedDestSquareIndexForNewPiece
+        )
+        {
+            // Arrange
+            //// Arrange repositories and mocks and "mock" data:
+            Gameboard.CreateTracks();
+
+            int gameboardId = 1;
+
+            var players = new List<Player>
+            {
+                new Player { ID = 1, Color = "Yellow" },
+                new Player { ID = 2, Color = "Red" },
+            };
+            players.ForEach(p => p.SetTrack());
+
+            var gameboards = new List<Gameboard>
+            {
+                new Gameboard(players),
+            };
+            gameboards[0].ID = gameboardId;
+
+            var squareTentant = new SquareTenant
+            {
+                ID = 1,
+                Player = players[playerId],
+                PieceCount = 1,
+                SquareIndex = startSquareIndexForPieceInPlay,
+            };
+            gameboards[0].Squares[startSquareIndexForPieceInPlay].Tenant = squareTentant;
+
+            IGamesRepository gamesRepo = new TestGamesRepository
+            {
+                Gameboards = gameboards,
+            };
+            IMoveActionsRepository moveActionsRepo = new TestMoveActionsRepository();
+
+            var dieMock = new Mock<IDie>();
+            dieMock.Setup(d => d.RollDie()).Returns(dieRoll);
+
+            //// Arrange real classes:
+            Game game = new();
+            ITurnManager turnManager = new TurnManager(null, gamesRepo, game, dieMock.Object);
+            GameplayController gameplayController = new(null, gamesRepo, moveActionsRepo, turnManager);
+
+            //// Arrange the data we act upon:
+            var postRollDieDTO = new PostRollDieDTO
+            {
+                GameId = gameboardId,
+                PlayerId = gameboards[0].Players[playerId].ID,
+            };
+
+            // Act
+            var moveActions_ActionResult = await gameplayController.PostRollDie(postRollDieDTO);
+            var moveActions_OkObjectResult = (OkObjectResult)(moveActions_ActionResult).Result;
+            var moveActions = (List<MoveAction>)moveActions_OkObjectResult.Value;
+
+            // Assert
+            Assert.Collection(moveActions,
+                item => Assert.Equal(expectedDestSquareIndexForPieceInPlay, item.DestinationSquare.SquareIndex),
+                item => Assert.Equal(expectedDestSquareIndexForNewPiece, item.DestinationSquare.SquareIndex)
+            );
         }
     }
 }
