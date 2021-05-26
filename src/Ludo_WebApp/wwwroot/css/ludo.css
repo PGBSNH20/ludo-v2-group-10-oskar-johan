@@ -55,22 +55,26 @@ body {
     border-color: #cfae00 !important;
 }
 
-[data-square-color="y"] { /* todo: remove this hacky temp solution for finding a good color for the yellow player */
+[data-square-color="y"],
+.yellow-square { /* todo: remove this hacky temp solution for finding a good color for the yellow player */
     border-color: rgba(255, 215, 0, .8);
-    background-color: rgba(255, 215, .2);
+    background-color: rgba(255, 215, 0, .2);
 }
 
-[data-square-color="r"] { /* todo: remove this hacky temp solution for finding a good color for the yellow player */
+[data-square-color="r"],
+.red-square { /* todo: remove this hacky temp solution for finding a good color for the yellow player */
     border-color: rgba(255, 55, 55, .2);
     background-color: rgba(255, 0, 0, .2);
 }
 
-[data-square-color="g"] { /* todo: remove this hacky temp solution for finding a good color for the yellow player */
+[data-square-color="g"],
+.green-square { /* todo: remove this hacky temp solution for finding a good color for the yellow player */
     border-color: rgba(0, 255, 0, .8);
     background-color: rgba(0, 255, 0, .2);
 }
 
-[data-square-color="b"] { /* todo: remove this hacky temp solution for finding a good color for the yellow player */
+[data-square-color="b"],
+.blue-square { /* todo: remove this hacky temp solution for finding a good color for the yellow player */
     border-color: rgba(0, 0, 255, .8);
     background-color: rgba(0, 0, 255, .2);
 }
@@ -118,7 +122,7 @@ body {
     font-family: Arial;
     font-size: 0;
     font-weight: bold;
-    background: white;
+/*    background: white;*/
     box-sizing: border-box;
 }
 

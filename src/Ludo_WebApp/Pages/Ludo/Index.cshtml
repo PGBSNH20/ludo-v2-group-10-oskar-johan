@@ -12,6 +12,9 @@
 }
 
 @{
+    /*-------------------------------------------------------------------------------------------------------------------*/
+    /*--- [Start] DEBUG output ------------------------------------------------------------------------------------------*/
+
     if (Model.Request.Query.TryGetValue("successfullyJoined", out var successfullyJoined))
     {
         if (successfullyJoined.ToString() == "1")
@@ -27,9 +30,13 @@
             <p>The game has started!</p>
         }
     }
+
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+    /*--- [End] DEBUG output --------------------------------------------------------------------------------------------*/
+    /*-------------------------------------------------------------------------------------------------------------------*/
 }
 
-@Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
 @{
     if (Model.Gameboard == null)
@@ -99,38 +106,133 @@
         // If the game has started:
         else if (couldParsePlayerId && Model.Gameboard.Players.Any(p => p.ID == playerId))
         {
-            @*
-                todo:
-                2. Draw gameboard.
-                3. Draw pieces on gameboard.
-            *@
-
             <h2>It is @(Model.Gameboard.CurrentPlayer?.Name)'s turn.</h2>
 
+            // 2. Draw gameboard.
+            @*
+                todo: 3. Draw pieces on gameboard.
+            *@
+            @*<div class="ludo-container col-md-9">*@
+<div class="ludo-container">
+    <div class="gameboard-container">
+        <div class="grid">
+            @for (int y = 0; y < Model.LudoData.GameboardMapIndices.Count; y++)
+            {
+                var rowOfIndices = Model.LudoData.GameboardMapIndices[y];
 
+                @for (int x = 0; x < rowOfIndices.Count; x++)
+                {
+                    int squareIndex = rowOfIndices[x];
+
+                    if (squareIndex == -1) // not a square
+                    {
+                        <div class="cell"></div>
+                    }
+                    else if (squareIndex == -2) // "goal" square
+                    {
+                        <div class="cell square nest-square"></div>
+                    }
+                    else if (squareIndex == -3) // "nest" square
+                    {
+                        <div class="cell square nest-square"></div>
+                    }
+                    else if (squareIndex >= 0) // gameboard square
+                    {
+                        char cellColorKey = Model.LudoData.GameboardMapColors[y][x];
+                        string cellColor;
+                        if (!Model.LudoData.ColorKeyMap.TryGetValue(cellColorKey, out cellColor))
+                        {
+                            // todo: error-handling
+                        }
+
+                        string id = $"square-{squareIndex}";
+                        List<string> classes = new() { "cell", "square" };
+
+                        if (cellColorKey == ' ') // shared square
+                        {
+                            id = "square-" + squareIndex;
+                        }
+                        else // goal-stretch square
+                        {
+                            if (!string.IsNullOrWhiteSpace(cellColor))
+                            {
+                                classes.Add($"{cellColor.ToLower()}-square");
+                            }
+
+                        }
+
+                        <div id="@id" class="@string.Join(' ', classes)"></div>
+                    }
+                }
+            }
+        </div>
+        </div>
+
+        @{
             if (playerId == Model.Gameboard.CurrentPlayer.ID)
             {
-                @*
-                    4x. If dice has not been thrown: Draw button to throw the die.
-                    4x. If dice been throw: Draw draw menu of MoveActions (and form with submit button).
-                        4a. (Javascript) check if MoveAction is valid and alert if it isn't and stop form POST submit.
-                            use something like the following to stop the data from being submitted:
-                            ```javascript
-                            form.onSubmit = e => {
-                                if (invalid MoveAction) {
-                                    e.preventDefault();
-                                    return false;
+                @*<div class="options-container col-md-3">*@
+                <div class="options-container">
+                    @*// 4x. If dice has not been thrown: Draw button to throw the die.*@
+                    <form method="post" asp-page-handler="RollDie">
+                        @Html.HiddenFor(m => m.Gameboard.ID)
+                        @Html.HiddenFor(m => m.Gameboard.CurrentPlayer.ID)
+                        <input type="submit" value="Roll die" class="btn btn-primary" />
+                    </form>
+
+                    @*
+                        todo:
+                        4x. If dice been throw: Draw draw menu of MoveActions (and form with submit button).
+                            4a. (Javascript) check if MoveAction is valid and alert if it isn't and stop form POST submit.
+                                use something like the following to stop the data from being submitted:
+                                ```javascript
+                                form.onSubmit = e => {
+                                    if (invalid MoveAction) {
+                                        e.preventDefault();
+                                        return false;
+                                    }
                                 }
-                            }
-                            ```
-                        4b. (Javascript) allow form POST to execute.
-                    4x. If MoveActions has been chosen:
+                                ```
+                            4b. (Javascript) allow form POST to execute.
+                    *@
+                    <div>
+                        @*<div class="row">*@
+                        <form method="post">
+                            <div class="form-group">
+                                @*<div class="row">*@
+                                <label @* asp-for="" *@ class="control-label" for="TEMPATTRIBUTE_select_piece" style="display: block; color: #fff">Move piece on square:</label>
+                                <!--<input--> @* asp-for="" *@ <!--class="form-control" />-->
+                                <span @* asp-validation-for="" *@ class="text-danger" name="TEMPATTRIBUTE_select_piece"></span>
+                                @*</div>
+                                    <div class="row">*@
+                                <select size="4">
+                                    <option data-square-move-from-id="0">Add new piece to square 0</option>
+                                    <option data-square-move-from-id="10">Square 10</option>
+                                    <option data-square-move-from-id="29">Square 29</option>
+                                    <option data-square-move-from-id="44">Square 44</option>
+                                </select>
+                                @*</div>
+                                    <div class="row">*@
+                                <label @* asp-for="" *@ class="control-label" for="TEMPATTRIBUTE_select_piece" style="display: block; color: #fff">Move piece to: square:</label>
+                                <!--<input--> @* asp-for="" *@ <!--class="form-control" />-->
+                                <span @* asp-validation-for="" *@ class="text-danger" name="TEMPATTRIBUTE_select_piece"></span>
+                                @*</div>*@
+                                @*<div class="row">*@
+                                <select size="3">
+                                    <option data-square-move-to-id="14">Square 14</option>
+                                    <option data-square-move-to-id="33">Square 33</option>
+                                    <option data-square-move-to-id="47">Square 47</option>
+                                </select>
+                                @*</div>*@
+                            </div>
+                        </form>
+                        @*</div>*@
+                    </div>
+                </div>
+
+                @*
+                    todo: 4x.If MoveActions has been chosen:
                 *@
-                <form method="post" asp-page-handler="RollDie">
-                    @Html.HiddenFor(m => m.Gameboard.ID);
-                    @Html.HiddenFor(m => m.Gameboard.CurrentPlayer.ID);
-                    <input type="submit" value="Throw dice" class="btn btn-primary" />
-                </form>
             }
             else
             {
@@ -143,304 +245,27 @@
                 *@
             }
         }
-        else
-        {
-            // todo: redirect to start?
-        }
-    }
-    // note: else is disabled for development purposes
-    // todo: reenable else for production code
-    @*else*@
-    {
-        if (Model.LudoData != null)
-        {
-
-            <!-- todo: autogenerate squares? -->
-            @*<div class="row">*@
-            @*<div class="col-md-9">*@
-            <div class="ludo-container">
-                <div class="gameboard">
-                    <div class="squares">
-                        @for (int y = 0; y < Model.LudoData.GameboardRowCount; y++)
-                        {
-                            @*char[] Model.LudoData.GameboardMapColors[y] = Model.LudoData.GameboardMapColors[y].Split(',', StringSplitOptions.TrimEntries).Select(sc =>
-                                {
-                                    switch (sc.Length)
-                                    {
-                                        case 0:
-                                            return ' ';
-                                        case 1:
-                                            return char.Parse(sc);
-                                        default:
-                                            throw new Exception("string longer than 1");
-                                    }
-                                }).ToArray(); // todo: fix this hacky code*@
-
-                            // <div class="square" style="border-color: #ff0000, color: turquoise" data-square-color="Red" data-square-id="-4" draggable="true"></div>
-                            // <div class="square" data-square-id="&quot;43&quot;" data-square-color="red" style="border-color: #f00; color: #cfae00" draggable="true">
-                            //●
-                            //</div>
-                            @for (int x = 0; x < Model.LudoData.GameboardColumnCount; x++)
-                            {
-                                @*var randomColor = Model.Colors2.ElementAt(random.Next(0, Model.Colors2.Count)); // temp, todo: remove*@
-                                var randomColor = Model.LudoData.ColorTracks.ElementAt(random.Next(0, Model.LudoData.ColorTracks.Count)); // temp, todo: remove
-
-                                int squareIndex = Model.LudoData.GameboardMapIndices[y][x];
-                                char squareColorKey = Model.LudoData.GameboardMapColors[y][x];
-                                string squareColorName = null;
-                                Model.LudoData.ColorKeyMap.TryGetValue(squareColorKey, out squareColorName);
-                                Model.LudoData.ColorTracks.TryGetValue(squareColorName ?? "", out var colorTrackData);
-                                string squareColorHex = colorTrackData?.ColorHex;
-                                string[] styles = new[]
-                                {
-                                $"border-color: {squareColorHex}",
-                                $"color: {(Model.LudoData.GameboardMapColors[y][x] == 'x' ? squareColorHex : randomColor.Value.ColorHex)}",
-                            };
-
-                                string classString = squareIndex != -1 ? "class=square" : "";
-                                @*string styleString = string.Join(' ', styles);*@
-                                string contents = Model.LudoData.GameboardMapColors[y][x] == 'x' ? "Goal" : (squareIndex != -1 && randomColor.Value.ColorMapKey != ' ' && randomColor.Value.ColorMapKey != 'x' ? "●" : "");
-
-                                @*<div @classString style="@string.Join("; ", styles.Where(s => !string.IsNullOrWhiteSpace(s)))" data-square-color="@squareColorName?.ToLower()" data-square-id="@squareIndex" draggable="true">@contents</div>*@
-                                <div @classString data-square-color="@squareColorKey" data-square-index="@squareIndex" draggable="true">@contents</div>
-                            }
-                        }
-
-                        @*
-                            @for (int y = 0; y < Model.RowCount; y++)
-                            {
-                                @for (int x = 0; x < Model.ColumnCount; x++)
-                                {
-                                    int squareIndex = Model.SquareIndices[y, x];
-                                    if (!Model.Colors2.TryGetValue(Model.SquareColors[y, x], out squareColor))
-                                    {
-                                        squareColor = ("error", "pink");
-                                    }
-
-                                    @*<div class="square" data-square-id="@(y * columnCount + x)"></div> // This*//@
-                                    var randomColor = Model.Colors2.ElementAt(random.Next(0, Model.Colors2.Count));
-
-                                    <div @Html.Raw(squareIndex != -1 ? "class=\"square\"" : "")
-                                         @(squareIndex is >= 0 or (>= -4 and <= -3) ? $"data-square-id=\"{@Model.SquareIndices[y, x]}\"" : "")
-                                         data-square-color="@squareColor.colorName"
-                                         style="border-color: @squareColor.colorHex; color: @(Model.SquareColors[y, x] == 'x' ? squareColor.colorHex : randomColor.Value.colorHex)"
-                                         draggable="true">
-                                        @(Model.SquareColors[y, x] == 'x' ? squareColor.colorName.ToUpper() : (squareIndex != -1 && randomColor.Key != ' ' && randomColor.Key != 'x' ? "●" : ""))
-                                    </div>// This
-                                }
-                            }
-                        *@
-
-                        @*
-                            @for (int y = 0; y < Model.LudoData.GameboardRowCount; y++)
-                            {
-                                @for (int x = 0; x < Model.LudoData.GameboardColumnCount; x++)
-                                {
-                                    int squareIndex = Model.LudoData.GameboardMapIndices[y][x];
-                                    if (!Model.Colors2.TryGetValue(char.Parse(Model.LudoData.GameboardMapColors[y].Split(',', StringSplitOptions.TrimEntries)[x]), out squareColor)) // todo: fix this hacky code
-                                    {
-                                        squareColor = ("error", "pink");
-                                    }
-
-                                    <!--<div class="square" data-square-id="@(y * columnCount + x)"></div> // This-->
-                                    var randomColor = Model.Colors2.ElementAt(random.Next(0, Model.Colors2.Count));
-
-                                    <div @Html.Raw(squareIndex != -1 ? "class=\"square\"" : "")
-                                         @(squareIndex is >= 0 or >= -4 and <= -3 ? $"data-square-id=\"{@Model.LudoData.GameboardMapIndices[y][x]}\"" : "")
-                                         data-square-color="@squareColor.colorName"
-                                         style="border-color: @squareColor.colorHex; color: @(Model.SquareColors[y, x] == 'x' ? squareColor.colorHex : randomColor.Value.colorHex)"
-                                         draggable="true">@(Model.LudoData.GameboardMapColors[y][x] == 'x' ? squareColor.colorName.ToUpper() : (squareIndex != -1 && randomColor.Key != ' ' && randomColor.Key != 'x' ? "●" : ""))</div>// This
-                                }
-                            }
-                        *@
-                    </div>
-                </div>
-                <div class="options-container">
-                    <div class="col-md-3">
-                        <div class="row">
-                            <form method="post">
-                                <div class="form-group">
-                                    <div class="row">
-                                        <label @* asp-for="" *@ class="control-label" for="TEMPATTRIBUTE_select_piece" style="display: block; color: #fff">Move piece on square:</label>
-                                        <!--<input--> @* asp-for="" *@ <!--class="form-control" />-->
-                                        <span @* asp-validation-for="" *@ class="text-danger" name="TEMPATTRIBUTE_select_piece"></span>
-                                    </div>
-                                    <div class="row">
-                                        <select size="4">
-                                            <option data-square-move-from-id="0">Add new piece to square 0</option>
-                                            <option data-square-move-from-id="10">Square 10</option>
-                                            <option data-square-move-from-id="29">Square 29</option>
-                                            <option data-square-move-from-id="44">Square 44</option>
-                                        </select>
-                                    </div>
-                                    <div class="row">
-                                        <label @* asp-for="" *@ class="control-label" for="TEMPATTRIBUTE_select_piece" style="display: block; color: #fff">Move piece to: square:</label>
-                                        <!--<input--> @* asp-for="" *@ <!--class="form-control" />-->
-                                        <span @* asp-validation-for="" *@ class="text-danger" name="TEMPATTRIBUTE_select_piece"></span>
-                                    </div>
-                                    <div class="row">
-                                        <select size="3">
-                                            <option data-square-move-to-id="14">Square 14</option>
-                                            <option data-square-move-to-id="33">Square 33</option>
-                                            <option data-square-move-to-id="47">Square 47</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            @*</div>*@
-        }
-    }
-}
-
-<div class="ludo-container">
-    <div class="grid">
-        <div class="cell" id="1">
-            <div class="piece"></div>
-        </div>
-        <div class="cell piece-count-2" id="2">
-            <div class="piece"></div>
-            <div class="piece"></div>
-
-        </div>
-        <div class="cell" id="3">3</div>
-        <div class="cell" id="4">4</div>
-        <div class="cell" id="5">5</div>
-        <div class="cell" id="6">6</div>
-        <div class="cell" id="7">7</div>
-        <div class="cell" id="8">8</div>
-        <div class="cell" id="9">9</div>
-        <div class="cell" id="8">10</div>
-        <div class="cell" id="9">11</div>
-        <div class="cell" id="1">1</div>
-        <div class="cell" id="2">2</div>
-        <div class="cell" id="3">3</div>
-        <div class="cell" id="4">4</div>
-        <div class="cell" id="5">5</div>
-        <div class="cell" id="6">6</div>
-        <div class="cell" id="7">7</div>
-        <div class="cell" id="8">8</div>
-        <div class="cell" id="9">9</div>
-        <div class="cell" id="8">10</div>
-        <div class="cell" id="9">11</div>
-        <div class="cell" id="1">1</div>
-        <div class="cell" id="2">2</div>
-        <div class="cell" id="3">3</div>
-        <div class="cell" id="4">4</div>
-        <div class="cell" id="5">5</div>
-        <div class="cell" id="6">6</div>
-        <div class="cell" id="7">7</div>
-        <div class="cell" id="8">8</div>
-        <div class="cell" id="9">9</div>
-        <div class="cell" id="8">10</div>
-        <div class="cell" id="9">11</div>
-        <div class="cell" id="1">1</div>
-        <div class="cell" id="2">2</div>
-        <div class="cell" id="3">3</div>
-        <div class="cell" id="4">4</div>
-        <div class="cell" id="5">5</div>
-        <div class="cell" id="6">6</div>
-        <div class="cell" id="7">7</div>
-        <div class="cell" id="8">8</div>
-        <div class="cell" id="9">9</div>
-        <div class="cell" id="8">10</div>
-        <div class="cell" id="9">11</div>
-        <div class="cell" id="1">1</div>
-        <div class="cell" id="2">2</div>
-        <div class="cell" id="3">3</div>
-        <div class="cell" id="4">4</div>
-        <div class="cell" id="5">5</div>
-        <div class="cell" id="6">6</div>
-        <div class="cell" id="7">7</div>
-        <div class="cell" id="8">8</div>
-        <div class="cell" id="9">9</div>
-        <div class="cell" id="8">10</div>
-        <div class="cell" id="9">11</div>
-        <div class="cell" id="1">1</div>
-        <div class="cell" id="2">2</div>
-        <div class="cell" id="3">3</div>
-        <div class="cell" id="4">4</div>
-        <div class="cell" id="5">5</div>
-        <div class="cell" id="6">6</div>
-        <div class="cell" id="7">7</div>
-        <div class="cell" id="8">8</div>
-        <div class="cell" id="9">9</div>
-        <div class="cell" id="8">10</div>
-        <div class="cell" id="9">11</div>
-        <div class="cell" id="1">1</div>
-        <div class="cell" id="2">2</div>
-        <div class="cell" id="3">3</div>
-        <div class="cell" id="4">4</div>
-        <div class="cell" id="5">5</div>
-        <div class="cell" id="6">6</div>
-        <div class="cell" id="7">7</div>
-        <div class="cell" id="8">8</div>
-        <div class="cell" id="9">9</div>
-        <div class="cell" id="8">10</div>
-        <div class="cell" id="9">11</div>
-        <div class="cell" id="1">1</div>
-        <div class="cell" id="2">2</div>
-        <div class="cell" id="3">3</div>
-        <div class="cell" id="4">4</div>
-        <div class="cell" id="5">5</div>
-        <div class="cell" id="6">6</div>
-        <div class="cell" id="7">7</div>
-        <div class="cell" id="8">8</div>
-        <div class="cell" id="9">9</div>
-        <div class="cell" id="8">10</div>
-        <div class="cell" id="9">11</div>
-        <div class="cell" id="1">1</div>
-        <div class="cell" id="2">2</div>
-        <div class="cell" id="3">3</div>
-        <div class="cell" id="4">4</div>
-        <div class="cell" id="5">5</div>
-        <div class="cell" id="6">6</div>
-        <div class="cell" id="7">7</div>
-        <div class="cell" id="8">8</div>
-        <div class="cell" id="9">9</div>
-        <div class="cell" id="8">10</div>
-        <div class="cell" id="9">11</div>
-        <div class="cell" id="1">1</div>
-        <div class="cell" id="2">2</div>
-        <div class="cell" id="3">3</div>
-        <div class="cell" id="4">4</div>
-        <div class="cell" id="5">5</div>
-        <div class="cell" id="6">6</div>
-        <div class="cell" id="7">7</div>
-        <div class="cell" id="8">8</div>
-        <div class="cell" id="9">9</div>
-        <div class="cell" id="8">10</div>
-        <div class="cell" id="9">11</div>
-        <div class="cell" id="1">1</div>
-        <div class="cell" id="2">2</div>
-        <div class="cell" id="3">3</div>
-        <div class="cell" id="4">4</div>
-        <div class="cell" id="5">5</div>
-        <div class="cell" id="6">6</div>
-        <div class="cell" id="7">7</div>
-        <div class="cell" id="8">8</div>
-        <div class="cell" id="9">9</div>
-        <div class="cell" id="8">10</div>
-        <div class="cell" id="9">11</div>
     </div>
-</div>
+    }
+    else // The person is not one of the players attached to the game.
+    {
+    // todo: redirect to start?
+    }
+    }
+    }
 
-<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
-<script src="~/js/ludo.js"></script>
-@*
-        @if Model.Gameboard.
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/ludo.js"></script>
+    @*
+            @if Model.Gameboard.
+            <script type="text/javascript">
+                $(function () {
+                    setInterval
+                })
+            </script>
         <script type="text/javascript">
             $(function () {
                 setInterval
             })
         </script>
-    <script type="text/javascript">
-        $(function () {
-            setInterval
-        })
-    </script>
-*@
+    *@
