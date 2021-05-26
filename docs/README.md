@@ -18,6 +18,15 @@
 
 ## Process
 
+### Problems we encountered and how we solved them
+We found that some tests would fail randomly when all tests in the test projects are run simultaneously with the "Run All Tests in View" button.
+
+!["Run All Tests in View" button](Visual-Studio-Test-Explorer-Run-All-button.png)
+
+The fix for this was to lock the static properties "{Color}Track" (where {Color} is Yellow, Red, Green or Blue) while they were being populated.
+
+![set](Bug-fix-Lock-static-properties.png)
+
 ## Database
 
 ---
