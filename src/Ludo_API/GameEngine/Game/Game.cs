@@ -1,4 +1,5 @@
-﻿using Ludo_API.Models;
+﻿using Ludo_API.Data;
+using Ludo_API.Models;
 using Ludo_API.Repositories;
 using System;
 using System.Collections.Generic;
@@ -57,7 +58,7 @@ namespace Ludo_API.GameEngine.Game
         public (bool valid, string message) CanMoveToSquare(Player player, Square startSquare, int diceRoll, out Square endSquare)
         {
             Square initialSquare = Squares.ElementAt(startSquare.ID);
-            int startIndex = player.Track.FindIndex(x => x == startSquare.ID);
+            int startIndex = LudoData.Instance.ColorTracks[player.Color].TrackIndices.ToList().FindIndex(x => x == startSquare.ID);
             //int startIndex = player.TrackNew.TrackIndices.FindIndex(x => x == startSquare.ID);
             int currentPlayerTrackIndex = startIndex;
             bool moveBackwards = false;
@@ -66,7 +67,7 @@ namespace Ludo_API.GameEngine.Game
             {
                 // todo: fix (square vs playerTrack index) naming
                 currentPlayerTrackIndex += moveBackwards ? -1 : 1;
-                int currentSquareIndex = player.Track[currentPlayerTrackIndex];
+                int currentSquareIndex = LudoData.Instance.ColorTracks[player.Color].TrackIndices[currentPlayerTrackIndex];
                 //int currentSquareIndex = player.TrackNew[currentPlayerTrackIndex];
                 endSquare = Squares.ElementAt(currentSquareIndex);
 
@@ -127,7 +128,7 @@ namespace Ludo_API.GameEngine.Game
                 //bool hasTokenOnSquare = s..Tenant?.Player == player && s.Tenant?.PieceCount > 0 && s.ID != player.Track[^1];
                 //bool hasTokenOnSquare = s.Tenant.Player == player && s.Tenant?.PieceCount > 0 && s.ID != player.Track[^1];
                 piecesOnBoardCount += s.Tenant?.PieceCount ?? 0;
-                return s.Tenant?.Player == player && s.ID != player.Track[^1];
+                return s.Tenant?.Player == player && s.ID != LudoData.Instance.ColorTracks[player.Color].TrackIndices[^1];
             });
 
             // "Move piece" actions:
@@ -140,6 +141,7 @@ namespace Ludo_API.GameEngine.Game
                 {
                     moveActions.Add(new()
                     {
+                        GameId = Gameboard.ID,
                         PlayerId = player.ID,
                         ValidMove = validMove,
                         DiceRoll = diceNumber,
@@ -153,6 +155,7 @@ namespace Ludo_API.GameEngine.Game
                 {
                     moveActions.Add(new()
                     {
+                        GameId = Gameboard.ID,
                         PlayerId = player.ID,
                         ValidMove = validMove,
                         DiceRoll = diceNumber,
@@ -176,6 +179,7 @@ namespace Ludo_API.GameEngine.Game
 
                 moveActions.Add(new()
                 {
+                    GameId = Gameboard.ID,
                     PlayerId = player.ID,
                     ValidMove = true,
                     DiceRoll = diceNumber,
@@ -193,6 +197,7 @@ namespace Ludo_API.GameEngine.Game
 
                     moveActions.Add(new()
                     {
+                        GameId = Gameboard.ID,
                         PlayerId = player.ID,
                         ValidMove = true,
                         DiceRoll = diceNumber,
@@ -207,6 +212,7 @@ namespace Ludo_API.GameEngine.Game
 
                     moveActions.Add(new()
                     {
+                        GameId = Gameboard.ID,
                         PlayerId = player.ID,
                         ValidMove = true,
                         DiceRoll = diceNumber,
