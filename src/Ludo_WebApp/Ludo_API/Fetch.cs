@@ -26,6 +26,7 @@ namespace Ludo_WebApp.Ludo_API
             internal static string GamesStartGame = "/Games/StartGame/";
             // Gameplay endpoint/controller:
             internal static string GameplayRollDie = "/Gameplay/RollDie/";
+            internal static string GameplayGetMoveActions = "/Gameplay/GetMoveActions/";
         }
 
         //public static async Task<IRestResponse<int>> PostNewGameAsync(NewPlayerDTO newPlayerDTO)

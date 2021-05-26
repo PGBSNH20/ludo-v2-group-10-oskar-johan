@@ -77,10 +77,7 @@ namespace Ludo_API.Controllers
         // POST api/Gameplay/ChoseAction
         [HttpPost("[action]")]
         [ActionName("ChooseAction")]
-        public async Task<ActionResult<string>> PostChooseAction(
-            [Required][FromBody] int moveActionId // fixme: only one [FromBody],  use DTO model?
-            //[Required][FromBody] int playerId // fixme: only one [FromBody], use DTO model?
-            )
+        public async Task<ActionResult<string>> PostChooseAction([Required][FromBody] int moveActionId)
         {
             var moveAction = await _moveActionsRepository.GetMoveAction(_context, moveActionId);
 
@@ -103,6 +100,21 @@ namespace Ludo_API.Controllers
             // todo: maybe replace NotFound with another error
             // e.g. StatusCode(HttpStatusCode.InternalServerError, "error message");
             return BadRequest("Move was unsuccessful.");
+        }
+
+        // POST api/Gameplay/GetMoveActions
+        [HttpGet("[action]")]
+        [ActionName("GetMoveActions")]
+        public async Task<ActionResult<List<MoveAction>>> GetMoveActions([Required][FromQuery] PostRollDieDTO postRollDieDTO)
+        {
+            var moveActions = await _moveActionsRepository.GetMoveActions(_context, postRollDieDTO.GameId, postRollDieDTO.PlayerId);
+
+            if (moveActions == null)
+            {
+                return NotFound($"Can't find a move action for game with id: {postRollDieDTO.GameId} and playerId {postRollDieDTO.PlayerId}");
+            }
+
+            return Ok(moveActions);
         }
     }
 }
