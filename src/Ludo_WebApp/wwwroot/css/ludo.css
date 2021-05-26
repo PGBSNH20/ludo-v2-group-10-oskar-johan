@@ -120,10 +120,14 @@ body {
     align-items: center;
     display: flex;
     font-family: Arial;
-    font-size: 0;
+    font-size: 14px;
     font-weight: bold;
 /*    background: white;*/
     box-sizing: border-box;
+}
+
+.cell > .square-index-text {
+
 }
 
 .piece {

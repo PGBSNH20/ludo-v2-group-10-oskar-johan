@@ -170,7 +170,6 @@
                                         string pieceColor = tenant.Player.Color.ToLower();
 
                                         <div id="@id" class="@string.Join(' ', classes)">
-
                                             @if (tenant.PieceCount == 1)
                                             {
                                                 <div class="@Html.Raw($"piece piece-color-{pieceColor}")"></div>
@@ -184,7 +183,9 @@
                                     }
                                     else
                                     {
-                                        <div id="@id" class="@string.Join(' ', classes)"></div>
+                                        <div id="@id" class="@string.Join(' ', classes)">
+                                            <span class="square-index-text">@squareIndex</span>
+                                        </div>
                                     }
                                 }
                             }
