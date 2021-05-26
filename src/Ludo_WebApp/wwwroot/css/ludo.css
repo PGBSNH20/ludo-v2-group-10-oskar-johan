@@ -132,16 +132,16 @@ body {
     height: calc(100% - 4px);
     border-radius: 50%;
 }
-.piece-red {
+.piece-color-red {
     background-color: red;
 }
-.piece-green {
+.piece-color-green {
     background-color: green;
 }
-.piece-blue {
+.piece-color-blue {
     background-color: blue;
 }
-.piece-yellow {
+.piece-color-yellow {
     background-color: gold;
 }
 
