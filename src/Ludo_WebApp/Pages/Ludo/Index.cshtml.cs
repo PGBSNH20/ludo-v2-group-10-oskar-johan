@@ -171,7 +171,7 @@ namespace Ludo_WebApp.Pages.Ludo
 
             MoveActions = restResponse.Data;
             //return RedirectToRoute(Request.Path.Value, new { id = gameboard.ID });
-            return RedirectToPage("./Index/", new { id = Gameboard.ID, gameSuccessfullyStarted = 1 });
+            return RedirectToPage("./Index/", new { id = Gameboard.ID });
         }
     }
 }
