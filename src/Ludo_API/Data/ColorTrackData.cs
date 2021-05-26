@@ -2,11 +2,11 @@
 {
     public class ColorTrackData
     {
-        public int[] TrackIndices { get; set; }
-        public int StartIndex { get; set; }
-        public int GoalIndex { get; set; }
-        public string ColorHex { get; set; }
-        public char ColorMapKey { get; set; }
+        public int[] TrackIndices { get; }
+        public int StartIndex { get; }
+        public int GoalIndex { get; }
+        public string ColorHex { get; }
+        public char ColorMapKey { get; }
 
         public ColorTrackData(int[] trackIndices, string colorHex, char colorMapKey)
         {
@@ -21,7 +21,7 @@
         public int this[int index]
         {
             get => TrackIndices[index];
-            set => TrackIndices[index] = value;
+            //set => TrackIndices[index] = value;
         }
     }
 }

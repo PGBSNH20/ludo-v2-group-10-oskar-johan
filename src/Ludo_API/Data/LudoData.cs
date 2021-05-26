@@ -12,12 +12,12 @@ namespace Ludo_API.Data
         #endregion
 
         #region Data
-        public int GameboardRowCount { get; set; } = 11;
-        public int GameboardColumnCount { get; set; } = 11;
+        public int GameboardRowCount { get; } = 11;
+        public int GameboardColumnCount { get; } = 11;
 
         //// disable code formatting: https://github.com/dotnet/roslyn/issues/36930#issuecomment-530441099
         //#pragma warning disable format
-        public int[,] GameboardMapIndices { get; set; } = new[,] {
+        public int[,] GameboardMapIndices { get; } = new[,] {
             {-1,-1,-1,-1,18,19,20,-1,-1,-1,-1,},
             {-1,-3,-3,-1,17,45,21,-1,-3,-3,-1,},
             {-1,-3,-3,-1,16,46,22,-1,-3,-3,-1,},
@@ -31,7 +31,7 @@ namespace Ludo_API.Data
             {-1,-1,-1,-1, 0,39,38,-1,-1,-1,-1 },
         };
 
-        public char[,] GameboardMapColors { get; set; } = new[,] {
+        public char[,] GameboardMapColors { get; } = new[,] {
            { ' ',' ',' ',' ',' ',' ','b',' ',' ',' ',' ' },
            { ' ','r','r',' ',' ','b',' ',' ','b','b',' ' },
            { ' ','r','r',' ',' ','b',' ',' ','b','b',' ' },
@@ -46,7 +46,7 @@ namespace Ludo_API.Data
         };
         //#pragma warning restore format
 
-        public Dictionary<char, string> ColorKeyMap { get; set; } = new()
+        public Dictionary<char, string> ColorKeyMap { get; } = new()
         {
             { 'y', "Yellow" },
             { 'r', "Red" },
@@ -54,7 +54,7 @@ namespace Ludo_API.Data
             { 'g', "Green" },
         };
 
-        public Dictionary<string, ColorTrackData> ColorTracks { get; set; } = new()
+        public Dictionary<string, ColorTrackData> ColorTracks { get; } = new()
         {
             { "Yellow", null },
             { "Red", null },
