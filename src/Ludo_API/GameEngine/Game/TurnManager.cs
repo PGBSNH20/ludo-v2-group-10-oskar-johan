@@ -14,16 +14,18 @@ namespace Ludo_API.GameEngine.Game
     {
         private readonly LudoContext _context;
         private readonly IGamesRepository _gameRepository;
-        private readonly Random _die;
+        //private readonly Random _die;
+        private readonly IDie _die;
         private readonly Game _game;
 
-        public TurnManager(LudoContext context, IGamesRepository gamesRepository, Game game)
+        public TurnManager(LudoContext context, IGamesRepository gamesRepository, Game game, IDie die)
         {
             _context = context;
             _gameRepository = gamesRepository;
             _game = game;
 
-            _die = new Random();
+            //_die = new Random();
+            _die = die;
         }
 
         //public TurnManager(Game game)
@@ -81,7 +83,8 @@ namespace Ludo_API.GameEngine.Game
 
         public int RollDice()
         {
-            return _die.Next(1, 7);
+            //return _die.Next(1, 7);
+            return _die.RollDie();
         }
 
         public async Task StartGameAsync(Gameboard gameboard)

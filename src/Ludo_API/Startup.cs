@@ -43,6 +43,7 @@ namespace Ludo_API
             services.AddTransient<ITurnManager, TurnManager>();
             services.AddTransient<IMoveActionsRepository, MoveActionsRepository>();
             services.AddTransient<Game, Game>(); // todo: create an interface for Game
+            services.AddTransient<IDie, DieD6>(); // todo: create an interface for Game
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
