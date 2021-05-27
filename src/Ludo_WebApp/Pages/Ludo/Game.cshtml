@@ -1,0 +1,28 @@
+﻿@page "{id:int?}"
+@model Ludo_WebApp.Pages.Ludo.GameModel
+@{
+}
+
+@* --- Error Messages ------------------------------- *@
+
+@Html.ValidationMessageFor(m => m.ModelState["Error.Lobby.OnGetAsync.GetGameboardDTO"])
+@Html.ValidationMessageFor(m => m.ModelState["Error.Lobby.OnGetAsync.GetLudoData"])
+@Html.ValidationMessageFor(m => m.ModelState["Error.Lobby.OnGetAsync.GetLudoData"])
+@Html.ValidationMessageFor(m => m.ModelState["Error.Lobby.OnPost.NewGame.Debug"])
+
+@Html.ValidationMessageFor(m => m.ModelState["Error.Lobby.OnGetAsync.GetGameboardDTO.Debug"])
+@Html.ValidationMessageFor(m => m.ModelState["Error.Lobby.OnGetAsync.GetLudoData.Debug"])
+@Html.ValidationMessageFor(m => m.ModelState["Error.Lobby.OnGetAsync.GetLudoData.Debug"])
+@Html.ValidationMessageFor(m => m.ModelState["Error.Lobby.OnPost.NewGame.Debug.Debug"])
+
+
+@* --- Draw Gameboard and Game controls ------------- *@
+
+
+
+
+@* --- Scripts -------------------------------------- *@
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
