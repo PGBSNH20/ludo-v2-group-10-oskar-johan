@@ -49,16 +49,7 @@ namespace Ludo_WebApp.Pages.Ludo
                 return Page();
             }
 
-            // Check if this is already stored in a cookie/local storage
-            // Read cookie on server and automatically send if not set?
-            var restResponseLudoData = await Fetch.GetLudoData();
-            if (restResponseLudoData.StatusCode != HttpStatusCode.OK)
-            {
-                // redirect to error page?
-                ModelState.AddModelError("ApiErrorLudoData", "Could not get Ludo data");
-            }
-
-            LudoData = restResponseLudoData.Data;
+            /* -------------------------------------------------- */
 
             // Get Gameboard if one exists with this id.
             var restResponse = await Fetch.GetGame(id.Value);
@@ -71,12 +62,32 @@ namespace Ludo_WebApp.Pages.Ludo
             }
 
             Gameboard = restResponse.Data;
+
+            // If the game has not started, redirect to the lobby.
+            if (Gameboard.GameStartDate == null)
+            {
+                return RedirectToPage("./Lobby/", new { id = Gameboard.ID });
+            }
+
             //return EmptyResult();
             // todo: update the html
 
+            /* -------------------------------------------------- */
 
-            // Get Gameboard if one exists with this id.
+            // Check if this is already stored in a cookie/local storage
+            // Read cookie on server and automatically send if not set?
+            var restResponseLudoData = await Fetch.GetLudoData();
+            if (restResponseLudoData.StatusCode != HttpStatusCode.OK)
+            {
+                // redirect to error page?
+                ModelState.AddModelError("ApiErrorLudoData", "Could not get Ludo data");
+            }
 
+            LudoData = restResponseLudoData.Data;
+
+            /* -------------------------------------------------- */
+
+            // Get possible MoveActions
             var restResponseMoveActions = await Fetch.GetAsync<List<MoveAction>>(Fetch.RequestURLs.GameplayGetMoveActions, new PostRollDieDTO(Gameboard));
 
             if (restResponseMoveActions.StatusCode != HttpStatusCode.OK)
@@ -200,6 +211,8 @@ namespace Ludo_WebApp.Pages.Ludo
         public async Task<IActionResult> OnPostChooseMoveActionAsync()
         {
             int? chosenId = ChosenMoveActionId;
+
+            var restResponse = await Fetch.PostAsync<List<MoveAction>>(Fetch.RequestURLs.GameplayChoseAction, chosenId);
 
             return RedirectToPage("./Index/", new { id = Gameboard.ID });
         }
