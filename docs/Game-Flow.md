@@ -26,20 +26,20 @@
 1. [x] Ludo_API responds with a `gameId`, and Ludo_WebApp redirects to `Ludo/{gameId}`.
 1. [x] Player shares/sends invite link `Ludo/{gameId}`.
 1. [x] New players open `Ludo/{gameId}`, enter a name and select a colour.
-    1. If the selected colour has been chosen by another player an error is returned and the player is prompted to try again.
-1. The player who created the game can at any time chose to start the game.
-1. When started the invite link will no longer work for anyone but the players in the game.
-1. The game has started and the first player is prompted to start their turn.
+    1. [ ] (in progress) If the selected colour has been chosen by another player an error is returned and the player is prompted to try again.
+1. [x] The player who created the game can at any time chose to start the game.
+1. [x] When started the invite link will no longer work for anyone but the players in the game.
+1. [x] The game has started and the first player is prompted to start their turn.
 
 
 ## New Turn
 
-1. Player is informed that it is their turn and is given options:
+1. [x] Player is informed that it is their turn and is given options:
    1. Exit to menu (this informs of the `auto-save` feature)
-   1. [Throw dice ↓](###-(1.2.)-Player-throws-dice:)
+   1. [x] [Throw dice ↓](###-(1.2.)-Player-throws-dice:)
 
-1. Player selects `throw dice`-option → `Request` is sent to WebApp (with `<form POST>`?).
-1. WebApp (server) forwards request to API → POST @ `api/Game/ThrowDice` with:
+1. [x] Player selects `throw dice`-option → `Request` is sent to WebApp (with `<form POST>`?).
+1. [x] WebApp (server) forwards request to API → POST @ `api/Game/ThrowDice` with:
    > fixme: name `ThrowDice`?
    ```csharp
     HEADER { Authentication }
@@ -50,13 +50,13 @@
         int playerId
     }
    ```
-1. API receives POST request and checks DB for `gameId` and `playerId`.:
+1. [x] API receives POST request and checks DB for `gameId` and `playerId`.:
     1. API doesn't find a valid `Game|Player`:
         - `Error` handling
         - `Logging`?
-1. API throws the `Dice` and generates a `List<MoveAction/TurnAction>`.
-1. API saves `List<MoveAction/TurnAction>` to DB.
-1. API responds with:
+1. [x] API throws the `Dice` and generates a `List<MoveAction/TurnAction>`.
+1. [x] API saves `List<MoveAction/TurnAction>` to DB.
+1. [x] API responds with:
     1. > todo: error responses
     1. data: (`List<MoveAction/TurnAction>`) e.g.:
         ```csharp
@@ -69,8 +69,8 @@
             ...
         ]
         ```
-1. The WebApp processes the data, and responds (with a `view/page`?).
-1. Client receives the new `view/page` which presents the player with the `MoveAction`s`/TurnAction`s.
+1. [x] The WebApp processes the data, and responds (with a `view/page`?).
+1. [x] Client receives the new `view/page` which presents the player with the `MoveAction`s`/TurnAction`s.
 1. Player selects a `MoveAction/TurnAction` → `Request` is sent to WebApp (with `<form POST>`?).
     > If the selected `MoveAction/TurnAction` is invalid and there are additional `MoveAction`s`/TurnAction`s the player can try them all CLIENT-side.
 1. WebApp (server) forwards request to API → POST @ `api/Game/ChooseAction` with:
