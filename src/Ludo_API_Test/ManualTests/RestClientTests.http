@@ -12,18 +12,17 @@ Content-Type: application/json
 {
     "GameId": 4,
     "PlayerName": "Ludo Player 3",
-    "PlayerColor": "#FF0000"
+    "PlayerColor": "Red"
 }
 
 ### Create new game
 POST localhost:44376/api/Games/New
 Content-Type: application/json
-//apikey: apikey1234_visitor
  
 {
-    //"GameId":1,
-    "PlayerName":"Oskar",
-    "PlayerColor": "#FF0000"
+    "ID": 1,
+    "PlayerName":"Player1",
+    "PlayerColor":"Yellow"
 }
 
 ### Start game
@@ -31,3 +30,30 @@ POST localhost:44376/api/Games/StartGame
 Content-Type: application/json
 
 19
+
+### Get LudoData
+GET localhost:44376/api/Games/LudoData
+
+### RollDie
+POST localhost:44376/api/Gameplay/RollDie
+Content-Type: application/json
+ 
+{
+    "GameId": 1,
+    "PlayerId": 1
+}
+
+### ChooseAction
+POST localhost:44376/api/Gameplay/ChooseAction
+Content-Type: application/json
+ 
+1
+
+### GetMoveActions
+POST localhost:44376/api/Gameplay/GetMoveActions
+Content-Type: application/json
+ 
+{
+    "GameId": 1,
+    "PlayerId": 1
+}

@@ -118,7 +118,7 @@ namespace Ludo_API.Controllers
         /// Create a new game.
         /// </summary>
         /// <param name="newPlayerDTO">A NewPlayerDTO object containing the name and chosen id of the player creating the game.</param>
-        /// <returns>int: ID of the new gameboard whichs represents a game. </returns>
+        /// <returns>int: ID of the new gameboard whichs represents a game.</returns>
         // POST api/Games/New
         [HttpPost("[action]")]
         [ActionName("New")]
@@ -163,9 +163,9 @@ namespace Ludo_API.Controllers
 
         // DELETE api/Games/{id}
         /// <summary>
-        /// todo: enter summary for method
+        /// Deletes game from database specefied by ID
         /// </summary>
-        /// <param name="id">todo: enter summary for id parameter</param>
+        /// <param name="id">ID provided for game to be deleted</param>
         /// <returns>void</returns>
         [HttpDelete("{id}")]
         public async Task<bool> Delete(int id)
@@ -177,7 +177,7 @@ namespace Ludo_API.Controllers
         /// <summary>
         /// Add a new player to a game.
         /// </summary>
-        /// <param name="newPlayerDTO"></param>
+        /// <param name="newPlayerDTO">A NewPlayerDTO object containing the name and color the player.</param>
         /// <returns>Returns a Gameboard object.</returns>
         [HttpPost("[action]")]
         [ActionName("AddPlayer")]

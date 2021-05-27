@@ -74,7 +74,7 @@ namespace Ludo_API.Controllers
             return Ok(await _moveActionsRepository.AddMoveActions(_context, moveActions));
         }
 
-        // POST api/Gameplay/ChoseAction
+        // POST api/Gameplay/ChooseAction
         [HttpPost("[action]")]
         [ActionName("ChooseAction")]
         public async Task<ActionResult<string>> PostChooseAction([Required][FromBody] int moveActionId)
