@@ -12,16 +12,20 @@ namespace Ludo_WebApp.Pages.Ludo
 {
     public class IndexModel : PageModel
     {
+        //[BindProperty(SupportsGet = true)]
         public LudoData LudoData { get; set; }
 
         //[BindProperty(SupportsGet = true)]
         public NewPlayerDTO NewPlayer { get; set; }
 
-        [BindProperty(SupportsGet = true)]
+        //[BindProperty(SupportsGet = true)]
         public GameboardDTO Gameboard { get; set; }
 
         //[BindProperty]
         public List<MoveAction> MoveActions { get; set; }
+
+        //[BindProperty]
+        public int? ChosenMoveActionId { get; set; }
 
         public string ColorError { get; set; }
 
@@ -36,12 +40,13 @@ namespace Ludo_WebApp.Pages.Ludo
         /// <param name="ludoData"></param>
         /// <returns></returns>
         //public async Task OnGet(int? id, GameboardDTO gameboard, LudoData ludoData)
-        public async Task OnGet(int? id)
+        public async Task<IActionResult> OnGet(int? id)
         {
             if (id == null)
             {
                 // todo: redirect to error-page / "Index" / "Pages/New"?
-                return;
+                ModelState.AddModelError("NoId", "You have to specify a gameId");
+                return Page();
             }
 
             // Check if this is already stored in a cookie/local storage
@@ -68,6 +73,23 @@ namespace Ludo_WebApp.Pages.Ludo
             Gameboard = restResponse.Data;
             //return EmptyResult();
             // todo: update the html
+
+
+            // Get Gameboard if one exists with this id.
+
+            var restResponseMoveActions = await Fetch.GetAsync<List<MoveAction>>(Fetch.RequestURLs.GameplayGetMoveActions, new PostRollDieDTO(Gameboard));
+
+            if (restResponseMoveActions.StatusCode != HttpStatusCode.OK)
+            {
+                ModelState.AddModelError("ErrorGetMoveActions", restResponseMoveActions.Content);
+                // todo: redirect to error-page?
+                // todo: logging?
+                MoveActions = null;
+                return Page();
+            }
+
+            MoveActions = restResponseMoveActions.Data.Count > 0 ? restResponseMoveActions.Data : null;
+            return Page();
         }
 
         /// <summary>
@@ -154,14 +176,14 @@ namespace Ludo_WebApp.Pages.Ludo
                 return Page();
             }
 
-            if (Gameboard.CurrentPlayer == null)
+            if (gameboard.CurrentPlayer == null)
             {
                 //todo: error handling
                 ModelState.AddModelError("PostRollDie_GameboardCurrentPlayer", "Gameboard.CurrentPlayer is null");
                 return Page();
             }
 
-            var restResponse = await Fetch.PostAsync<List<MoveAction>>(Fetch.RequestURLs.GameplayRollDie, new PostRollDieDTO(Gameboard));
+            var restResponse = await Fetch.PostAsync<List<MoveAction>>(Fetch.RequestURLs.GameplayRollDie, new PostRollDieDTO(gameboard));
 
             if (restResponse.StatusCode != HttpStatusCode.OK)
             {
@@ -169,8 +191,16 @@ namespace Ludo_WebApp.Pages.Ludo
                 return new BadRequestResult();
             }
 
-            MoveActions = restResponse.Data;
+            //MoveActions = restResponse.Data;
             //return RedirectToRoute(Request.Path.Value, new { id = gameboard.ID });
+            return RedirectToPage("./Index/", new { id = gameboard.ID, rollDie = true });
+            //return Page();
+        }
+
+        public async Task<IActionResult> OnPostChooseMoveActionAsync()
+        {
+            int? chosenId = ChosenMoveActionId;
+
             return RedirectToPage("./Index/", new { id = Gameboard.ID });
         }
     }

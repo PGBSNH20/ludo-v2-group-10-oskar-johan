@@ -24,6 +24,11 @@ namespace Ludo_API.Repositories
             return await context.MoveActions.SingleOrDefaultAsync(m => m.Id == moveActionId);
         }
 
+        public async Task<List<MoveAction>> GetMoveActions(LudoContext context, int gameId, int playerId)
+        {
+            return await context.MoveActions.Where(ma => ma.GameId == gameId && ma.PlayerId == playerId).ToListAsync();
+        }
+
         public async Task DeleteMoveActions(LudoContext context, int gameId)
         {
             try
