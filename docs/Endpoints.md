@@ -68,7 +68,7 @@ Body parameter: A NewPlayerDTO object containing the name and color the player.
 POST localhost:44376/api/Games/AddPlayer
 Content-Type: application/json
 //apikey: apikey1234_visitor
- 
+
 {
     "GameId": 1,
     "PlayerName": "Player2",
@@ -101,7 +101,7 @@ Body parameter: A PostRollDieDTO object containing Game ID and Player ID.
 ```
 POST localhost:44376/api/Gameplay/RollDie
 Content-Type: application/json
- 
+
 {
     "GameId": 1,
     "PlayerId": "1"
@@ -116,19 +116,19 @@ Body parameter: ID (int) of the action the player has chosen.
 ```
 POST localhost:44376/api/Gameplay/ChoseAction
 Content-Type: application/json
- 
+
 1
 ```
 <br/>
 
 **POST** /api/Gameplay/GetMoveActions  
-Used by OnGetAsync-method to get a list of all availible actions for a die roll.  
+Get a list of all availible actions for a die roll.  
 Body parameter: A PostRollDieDTO object containing Game ID and Player ID.
 #### Rest Client example:  
 ```
 POST localhost:44376/api/Gameplay/GetMoveActions
 Content-Type: application/json
- 
+
 {
     "GameId": 1,
     "PlayerId": "1"

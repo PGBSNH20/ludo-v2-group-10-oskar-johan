@@ -8,7 +8,7 @@ GET localhost:44376/api/Games/19
 POST localhost:44376/api/Games/AddPlayer
 Content-Type: application/json
 //apikey: apikey1234_visitor
- 
+
 {
     "GameId": 4,
     "PlayerName": "Ludo Player 3",
@@ -18,7 +18,7 @@ Content-Type: application/json
 ### Create new game
 POST localhost:44376/api/Games/New
 Content-Type: application/json
- 
+
 {
     "ID": 1,
     "PlayerName":"Player1",
@@ -37,7 +37,7 @@ GET localhost:44376/api/Games/LudoData
 ### RollDie
 POST localhost:44376/api/Gameplay/RollDie
 Content-Type: application/json
- 
+
 {
     "GameId": 1,
     "PlayerId": 1
@@ -46,13 +46,13 @@ Content-Type: application/json
 ### ChooseAction
 POST localhost:44376/api/Gameplay/ChooseAction
 Content-Type: application/json
- 
-1
+
+2
 
 ### GetMoveActions
 POST localhost:44376/api/Gameplay/GetMoveActions
 Content-Type: application/json
- 
+
 {
     "GameId": 1,
     "PlayerId": 1
