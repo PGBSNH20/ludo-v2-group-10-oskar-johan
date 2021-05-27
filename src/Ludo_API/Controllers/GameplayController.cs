@@ -94,6 +94,7 @@ namespace Ludo_API.Controllers
 
             if (success)
             {
+                _turnManager.NextTurn(moveAction.DiceRoll);
                 return Ok("Move action was succesfully executed");
             }
 
