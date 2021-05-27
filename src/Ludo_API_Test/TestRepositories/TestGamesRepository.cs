@@ -165,9 +165,10 @@ namespace Ludo_API_Test.TestRepositories
             return Task.FromResult(gameboard);
         }
 
-        public Task<int> StartGameAsync(LudoContext context, Gameboard gameboard)
+        public Task StartGameAsync(LudoContext context, Gameboard gameboard)
         {
-            throw new NotImplementedException();
+            gameboard.GameStartDate = DateTime.Now;
+            return Task.CompletedTask;
         }
 
         public Task SaveTurnAsync(LudoContext context, Gameboard gameboard, Player player)
