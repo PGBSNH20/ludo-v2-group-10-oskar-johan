@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace Ludo_API.GameEngine.Game
 {
-
     public class TurnManager : ITurnManager
     //internal class TurnManager
     {
@@ -42,23 +41,24 @@ namespace Ludo_API.GameEngine.Game
             return gameboard.Players.ElementAt(start);
         }
 
-        //public Player GetNextPlayer(Player player)
+
+        //public Player GetNextPlayer2(Player player)
         //{
-            // update to use repo
-            // pseudo:
-            //GameboardData.Colors.TryGetValue(Gameboard.CurrentPlayer.Color);
+        // update to use repo
+        // pseudo:
+        //GameboardData.Colors.TryGetValue(Gameboard.CurrentPlayer.Color);
 
-            //int currentPlayerColorIndex = Gameboard.ColorOrder.FindIndex(c => c == Gameboard.CurrentPlayer.Color);
+        //int currentPlayerColorIndex = Gameboard.ColorOrder.FindIndex(c => c == Gameboard.CurrentPlayer.Color);
 
-            //int nextPlayerColorIndex = currentPlayerColorIndex + 1 < OrderPlayers.Count ? currentPlayerColorIndex + 1 : 0;
+        //int nextPlayerColorIndex = currentPlayerColorIndex + 1 < OrderPlayers.Count ? currentPlayerColorIndex + 1 : 0;
 
-            //Color nextPlayerColor = Gameboard.ColorOrder.ElementAtOrDefault(currentPlayerColorIndex)
+        //Color nextPlayerColor = Gameboard.ColorOrder.ElementAtOrDefault(currentPlayerColorIndex)
 
 
-            //var NextPlayer  = Gameboard.Players.SingleOrDefault(p => p.Color == nextPlayerColor);
+        //var NextPlayer  = Gameboard.Players.SingleOrDefault(p => p.Color == nextPlayerColor);
 
-            //Gameboard.CurrentPlayer = NextPlayer();
-            //return NextPlayer;
+        //Gameboard.CurrentPlayer = NextPlayer();
+        //return NextPlayer;
         //}
 
         //public void StartGame()
@@ -69,19 +69,26 @@ namespace Ludo_API.GameEngine.Game
         //    NextTurn();
         //}
 
-        public void NextTurn(int previousTurnDiceRoll)
+        public Player GetNextPlayer(Gameboard gameboard)
+        {
+            var validColors = Player.GetValidColors();
+            int currentColorIndex = validColors.FindIndex(color => color == gameboard.CurrentPlayer.Color);
+            string nextColor = validColors[currentColorIndex + 1 < validColors.Count ? currentColorIndex + 1 : 0];
+            return gameboard?.Players.Single(p => p.Color == nextColor);
+        }
+
+        //public void StartNextTurn(List<Player> players, Player currentPlayer, int previousTurnDiceRoll)
+        public async Task StartNextTurnAsync(Gameboard gameboard, int previousTurnDiceRoll)
         {
             if (previousTurnDiceRoll == 6)
             {
-                //return "Player {name} rolled 6, it is their turn again".
+                // todo: do something?
             }
             else
             {
-                // find next player
-                // set next player as active
+                var nextPlayer = GetNextPlayer(gameboard);
+                await _gameRepository.SetCurrentPlayer(_context, gameboard, nextPlayer);
             }
-            // Get data from database
-            throw new NotImplementedException();
         }
 
         public List<MoveAction> HandleTurn(Gameboard gameboard, Player player)
