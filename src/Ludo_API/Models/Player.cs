@@ -1,13 +1,9 @@
-﻿using Ludo_API.Data;
-using Ludo_API.GameEngine.Game;
-using Ludo_API.Models.DTO;
+﻿using Ludo_API.Models.DTO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Drawing;
 using System.Linq;
-using System.Linq.Expressions;
 
 namespace Ludo_API.Models
 {
@@ -34,15 +30,6 @@ namespace Ludo_API.Models
         public const string ValidColorsPattern = "Yellow|Red|Blue|Green";
         #endregion
 
-        //[Required]
-        //[NotMapped]
-        //public Color Color { get; set; }
-
-        [Required]
-        [NotMapped]
-        //public TrackData TrackData { get; set; }
-        public ITrackData TrackData { get; set; }
-
         [NotMapped]
         public int StartPosition { get; set; }
 
@@ -51,9 +38,6 @@ namespace Ludo_API.Models
 
         [NotMapped]
         public List<int> Track { get; set; }
-
-        [NotMapped]
-        public ColorTrackData TrackNew { get; private set; }
         #endregion
 
         #region Constructors
@@ -87,15 +71,6 @@ namespace Ludo_API.Models
 
         public bool SetTrack()
         {
-            try
-            {
-                TrackNew = LudoData.Instance.ColorTracks[Color];
-            }
-            catch (Exception)
-            {
-
-            }
-
             if (Color == "Yellow")
             {
                 Track = Gameboard.YellowTrack;
