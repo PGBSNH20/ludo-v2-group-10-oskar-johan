@@ -16,19 +16,19 @@
 @Html.ValidationMessageFor(m => m.ModelState["Error.Lobby.OnPost.NewGame.Debug.Debug"])
 
 
-@* --- Error Messages ------------------------------- *@
-
-@if (Model.Gameboard == null)
-{
-    <h1>Create a new game:</h1>
-}
-else
-{
-    <h1>Join the game (id: @Model.Gameboard.ID)</h1>
-}
+@* --- Create and Join Game form ------------------------ *@
 
 <div class="row">
     <div class="col-md-4">
+        @if (Model.Gameboard == null)
+        {
+            <h2>Create a new game:</h2>
+        }
+        else
+        {
+            <h2>Join the game (id: @Model.Gameboard.ID)</h2>
+        }
+
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -57,10 +57,44 @@ else
             </div>
         </form>
     </div>
+    <div class="col-md-4">
+        @if (Model.Gameboard != null)
+        {
+            @* --- Draw "Start Game" button for the GameCreator ----- *@
+
+            bool couldParsePlayerId = Int32.TryParse(Request.Cookies["PlayerID"], out int playerId);
+
+            if (couldParsePlayerId && playerId == Model.Gameboard.GameCreator.ID)
+            {
+                <form method="post" asp-page-handler="StartGame">
+                    <input type="submit" value="Start Game" class="btn btn-primary" />
+                </form>
+            }
+
+            @* --- Draw table of Players currently in the game ------ *@
+
+            <h2>Players in this game:</h2>
+            <table>
+                <tr>
+                    <th>@Html.DisplayNameFor(m => m.Gameboard.Players[0].ID)</th>
+                    <th>@Html.DisplayNameFor(m => m.Gameboard.Players[0].Name)</th>
+                    <th>@Html.DisplayNameFor(m => m.Gameboard.Players[0].Color)</th>
+                </tr>
+                @foreach (var player in Model.Gameboard.Players)
+                {
+                    <tr>
+                        <th>@player.ID</th>
+                        <th>@player.Name</th>
+                        <th>@player.Color</th>
+                    </tr>
+                }
+            </table>
+        }
+    </div>
 </div>
 
 
-@* --- Scripts -------------------------------------- *@
+@* --- Scripts ------------------------------------------ *@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
