@@ -2,7 +2,7 @@
 GET localhost:44376/api/Games/
 
 ### Get game by ID
-GET localhost:44376/api/Games/4
+GET localhost:44376/api/Games/19
 
 ### Add player to Game with specific ID
 POST localhost:44376/api/Games/AddPlayer
@@ -26,4 +26,8 @@ Content-Type: application/json
     "PlayerColor": "#FF0000"
 }
 
+### Start game
+POST localhost:44376/api/Games/StartGame
+Content-Type: application/json
 
+19

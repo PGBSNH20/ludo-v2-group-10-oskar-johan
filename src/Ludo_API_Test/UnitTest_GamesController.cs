@@ -12,6 +12,8 @@ using Xunit;
 using System.Drawing;
 using Microsoft.AspNetCore.Mvc;
 using Ludo_API.GameEngine.Game;
+using Moq;
+using System.Net;
 
 namespace Ludo_API_Test
 {
@@ -252,7 +254,7 @@ namespace Ludo_API_Test
         }
 
         [Fact]
-        public async Task On_POST_StartGame__When_Game_Exists__Expect_Success()
+        public void On_POST_StartGame__When_Game_Exists__Expect_Success()
         {
             // Arrange
             List<Player> players = new()
@@ -281,18 +283,16 @@ namespace Ludo_API_Test
                 Gameboards = gameboards,
             };
 
-            ITurnManager turnManager = new TurnManager(null, gameRepo, )
+            ITurnManager turnManager = new TurnManager(null, gameRepo, new Game(), null);
 
-            GamesController gamesController = new(null, gameRepo, null);
+            GamesController gamesController = new(null, gameRepo, turnManager);
 
             // Act
-            var gameBoardDto = gamesController.PostStartGame(1);
+            var gameBoardDto = gamesController.PostStartGame(1).Result;
 
             //Assert
-            Assert.Equal("Player1", gameboards[0].Players.ElementAt(0).Name);
+            Assert.IsType<OkObjectResult>(gameBoardDto);
         }
-
-
 
         // Disabled 2021-05-18 12:14
         //[Fact]

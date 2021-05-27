@@ -229,7 +229,8 @@ namespace Ludo_API.Controllers
         /// <returns>A GameboardDTO object.</returns>
         [HttpPost("[action]")]
         [ActionName("StartGame")]
-        public async Task<ActionResult<GameboardDTO>> PostStartGame([FromBody] int gameId)
+        //public async Task<ActionResult<GameboardDTO>> PostStartGame([FromBody] int gameId)
+        public async Task<IActionResult> PostStartGame([FromBody] int gameId)
         {
             try
             {
