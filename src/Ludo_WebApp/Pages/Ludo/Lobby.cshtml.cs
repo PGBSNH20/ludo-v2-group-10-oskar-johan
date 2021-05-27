@@ -101,5 +101,31 @@ namespace Ludo_WebApp.Pages.Ludo
                 return RedirectToPage("./Lobby", new { id = restResponse.Data.ID });
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="gameboard"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> OnPostStartGameAsync(GameboardDTO gameboard)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "ModelState invalid");
+                return Page();
+            }
+
+            var restResponse = await Fetch.StartGameAsync(gameboard.ID);
+
+            if (restResponse.StatusCode != HttpStatusCode.OK)
+            {
+                // todo: do something
+                return new BadRequestResult();
+            }
+
+            Gameboard = restResponse.Data;
+            //return RedirectToRoute(Request.Path.Value, new { id = gameboard.ID });
+            return RedirectToPage("./Index/", new { id = restResponse.Data.ID, gameSuccessfullyStarted = 1 });
+        }
     }
 }
