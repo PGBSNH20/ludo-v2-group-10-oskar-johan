@@ -27,6 +27,7 @@ namespace Ludo_WebApp.Ludo_API
             // Gameplay endpoint/controller:
             internal static string GameplayRollDie = "/Gameplay/RollDie/";
             internal static string GameplayGetMoveActions = "/Gameplay/GetMoveActions/";
+            internal static string GameplayChoseAction = "/Gameplay/ChoseAction/";
         }
 
         //public static async Task<IRestResponse<int>> PostNewGameAsync(NewPlayerDTO newPlayerDTO)
@@ -155,7 +156,7 @@ namespace Ludo_WebApp.Ludo_API
         /* New generic methods                                                          */
         /* -----------------------------------------------------------------------------*/
 
-        internal static async Task<IRestResponse<T>> GetAsync<T>(string requestURL, object queryParameters = null)
+        internal static async Task<IRestResponse<T>> GetAsync<T>(string requestURL, object queryParameters)
         {
             // The source code for RouteValueDictionary as used by the RedirectToPage class like so: 'RedirectToPage("./Index/", new { id = 5 }),
             // was used to figured out how to convert an object of keys and values to a dictionary<string, string> of keys and values.
@@ -174,6 +175,23 @@ namespace Ludo_WebApp.Ludo_API
 
             var client = new RestClient(_baseURL);
             var request = new RestRequest(requestURL + queryString, Method.GET);
+
+            try
+            {
+                return await client.ExecuteAsync<T>(request);
+            }
+            catch (Exception)
+            {
+                // log the error?
+                return null;
+            }
+        }
+
+        internal static async Task<IRestResponse<T>> GetAsync<T>(string requestURL, int? id = null)
+        {
+
+            var client = new RestClient(_baseURL);
+            var request = new RestRequest(requestURL + id ?? "", Method.GET);
 
             try
             {
