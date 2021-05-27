@@ -3,6 +3,9 @@
 @*For development only*@
 @page "{id:int?}"
 @model Ludo_WebApp.Pages.Ludo.IndexModel
+@section scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
 
 @{
     ViewData["Title"] = "Ludo Game";
@@ -219,51 +222,52 @@
 
                 @if (playerId == Model.Gameboard.CurrentPlayer.ID)
                 {
-                    <div class="options-container">
+            <div class="options-container">
 
-                        @if (Model.MoveActions == null)
-                        {
-                            @*// 4x. If dice has not been thrown: Draw button to throw the die.*@
+                @if (Model.MoveActions == null)
+                {
+                    @*// 4x. If dice has not been thrown: Draw button to throw the die.*@
 
-                            <form method="post" asp-page-handler="RollDie">
-                                @Html.HiddenFor(m => m.Gameboard.ID)
-                                @Html.HiddenFor(m => m.Gameboard.CurrentPlayer.ID)
-                                <input type="submit" value="Roll die" class="btn btn-primary" />
-                            </form>
-                        }
-                        else // Model.MoveActions != null
-                        {
-                            @*
-                                todo:
-                                4x. If dice been throw: Draw draw menu of MoveActions (and form with submit button).
-                                    4a. (Javascript) check if MoveAction is valid and alert if it isn't and stop form POST submit.
-                                        use something like the following to stop the data from being submitted:
-                                        ```javascript
-                                        form.onSubmit = e => {
-                                            if (invalid MoveAction) {
-                                                e.preventDefault();
-                                                return false;
-                                            }
-                                        }
-                                        ```
-                                    4b. (Javascript) allow form POST to execute.
-                            *@
-                            <div>
-                                <form method="post" asp-for="OnPostChooseMoveActionAsync">
-                                    <div class="form-group">
-                                        <label @* asp-for="" *@ class="control-label" for="TEMPATTRIBUTE_select_piece" style="display: block; color: #fff">Move piece on square:</label>
-                                        <span @* asp-validation-for="" *@ class="text-danger" name="TEMPATTRIBUTE_select_piece"></span>
-                                        <select size="4" asp-for="ChosenMoveActionId">
-                                            @foreach (var moveAction in Model.MoveActions)
-                                            {
-                                                <option value="@moveAction.Id">@moveAction.OptionText</option>
-                                            }
-                                        </select>
-                                    </div>
-                                </form>
+                    <form method="post" asp-page-handler="RollDie">
+                        @Html.HiddenFor(m => m.Gameboard.ID)
+                        @Html.HiddenFor(m => m.Gameboard.CurrentPlayer.ID)
+                        <input type="submit" value="Roll die" class="btn btn-primary" />
+                    </form>
+                }
+                else // Model.MoveActions != null
+                {
+                    @*
+            todo:
+            4x. If dice been throw: Draw draw menu of MoveActions (and form with submit button).
+                4a. (Javascript) check if MoveAction is valid and alert if it isn't and stop form POST submit.
+                    use something like the following to stop the data from being submitted:
+                    ```javascript
+                    form.onSubmit = e => {
+                        if (invalid MoveAction) {
+                            e.preventDefault();
+                            return false;
+                        }ChooseMoveAction
+                    }
+                    ```
+                4b. (Javascript) allow form POST to execute.
+                    *@
+                    <div>
+                        <form method="post" asp-for="OnPostChooseMoveActionAsync">
+                            <div class="form-group">
+                                <label @* asp-for="" *@ class="control-label" for="TEMPATTRIBUTE_select_piece" style="display: block; color: #fff">Move piece on square:</label>
+                                <span @* asp-validation-for="" *@ class="text-danger" name="TEMPATTRIBUTE_select_piece"></span>
+                                <select size="4" asp-for="ChosenMoveActionId">
+                                    @foreach (var moveAction in Model.MoveActions)
+                                    {
+                                        <option value="@moveAction.Id">@moveAction.OptionText</option>
+                                    }
+                                </select>
+                                <input type="submit" value="Start Game" class="btn btn-primary" />
                             </div>
-                        }
+                        </form>
                     </div>
+                }
+            </div>
 
                     @*
                         todo: 4x.If MoveActions has been chosen:
