@@ -61,16 +61,25 @@ namespace Ludo_API.GameEngine.Game
             //return NextPlayer;
         //}
 
-        public void StartGame()
-        {
-            // move inline?
-            //Player player = DecideWhoStarts();
-            // update database with startdate
-            NextTurn();
-        }
+        //public void StartGame()
+        //{
+        //    // move inline?
+        //    //Player player = DecideWhoStarts();
+        //    // update database with startdate
+        //    NextTurn();
+        //}
 
-        public void NextTurn()
+        public void NextTurn(int previousTurnDiceRoll)
         {
+            if (previousTurnDiceRoll == 6)
+            {
+                //return "Player {name} rolled 6, it is their turn again".
+            }
+            else
+            {
+                // find next player
+                // set next player as active
+            }
             // Get data from database
             throw new NotImplementedException();
         }

@@ -13,6 +13,7 @@ namespace Ludo_API.GameEngine.Game
         List<MoveAction> HandleTurn(Gameboard gameboard, Player player);
         //void EndTurn();
         int RollDice();
+        void NextTurn(int diceRoll);
         //void HandleTurn();
     }
 }
