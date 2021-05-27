@@ -1,0 +1,67 @@
+﻿@page "{id:int?}"
+@model Ludo_WebApp.Pages.Ludo.LobbyModel
+@{
+}
+
+@* --- Error Messages ------------------------------- *@
+
+@Html.ValidationMessageFor(m => m.ModelState["Error.Lobby.OnGetAsync.GetGameboardDTO"])
+@Html.ValidationMessageFor(m => m.ModelState["Error.Lobby.OnGetAsync.GetLudoData"])
+@Html.ValidationMessageFor(m => m.ModelState["Error.Lobby.OnGetAsync.GetLudoData"])
+@Html.ValidationMessageFor(m => m.ModelState["Error.Lobby.OnPost.NewGame.Debug"])
+
+@Html.ValidationMessageFor(m => m.ModelState["Error.Lobby.OnGetAsync.GetGameboardDTO.Debug"])
+@Html.ValidationMessageFor(m => m.ModelState["Error.Lobby.OnGetAsync.GetLudoData.Debug"])
+@Html.ValidationMessageFor(m => m.ModelState["Error.Lobby.OnGetAsync.GetLudoData.Debug"])
+@Html.ValidationMessageFor(m => m.ModelState["Error.Lobby.OnPost.NewGame.Debug.Debug"])
+
+
+@* --- Error Messages ------------------------------- *@
+
+@if (Model.Gameboard == null)
+{
+    <h1>Create a new game:</h1>
+}
+else
+{
+    <h1>Join the game (id: @Model.Gameboard.ID)</h1>
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="NewPlayer.PlayerName" class="control-label"></label>
+                <input asp-for="NewPlayer.PlayerName" class="form-control" />
+                <span asp-validation-for="NewPlayer.PlayerName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @foreach (var colorTrack in Model.LudoData.ColorTracks)
+                {
+                    @if (colorTrack.Key == "Yellow")
+                    {
+                        <input type="radio" asp-for="NewPlayer.PlayerColor" value="@colorTrack.Key" id="color-radio-@colorTrack.Key" checked />
+                    }
+                    else
+                    {
+                        <input type="radio" asp-for="NewPlayer.PlayerColor" value="@colorTrack.Key" id="color-radio-@colorTrack.Key" />
+                    }
+
+                    <label asp-for="NewPlayer.PlayerColor" class="control-label" style="color:@colorTrack.Value.ColorHex" for="color-radio-@colorTrack.Key">@colorTrack.Key</label>
+                }
+                <span asp-validation-for="NewPlayer.PlayerColor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@* --- Scripts -------------------------------------- *@
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
