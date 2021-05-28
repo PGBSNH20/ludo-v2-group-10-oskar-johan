@@ -5,6 +5,7 @@ using Ludo_WebApp.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -110,6 +111,12 @@ namespace Ludo_WebApp.Pages.Ludo
             }
 
             MoveActions = restResponseMoveActions.Data.Count > 0 ? restResponseMoveActions.Data : null;
+
+            if (DieRoll == null)
+            {
+                DieRoll = MoveActions?.FirstOrDefault()?.DiceRoll;
+            }
+
             return Page();
         }
 
@@ -219,12 +226,19 @@ namespace Ludo_WebApp.Pages.Ludo
             //return Page();
         }
 
-        public async Task<IActionResult> OnPostChooseMoveActionAsync(int? chosenMoveActionId)
+        public async Task<IActionResult> OnPostChooseMoveActionAsync(int? chosenMoveActionId, int? DieRoll)
         {
             if (chosenMoveActionId == null)
             {
                 ModelState.AddModelError("PostRollDie_GameboardCurrentPlayer", "Gameboard.CurrentPlayer is null");
-                return Page();
+                //return Page();
+
+                return RedirectToPage("./Index/", new
+                {
+                    id = Gameboard.ID,
+                    dieRoll = DieRoll,
+                    moveActionMessage = "You have to select a move action!",
+                });
             }
 
             var restResponse = await Fetch.PostAsync<TurnDataDTO>(Fetch.RequestURLs.GameplayChooseAction, chosenMoveActionId);
@@ -240,6 +254,7 @@ namespace Ludo_WebApp.Pages.Ludo
             return RedirectToPage("./Index/", new
             {
                 id = Gameboard.ID,
+                dieRoll = restResponse.Data.DieRoll,
                 moveActionMessage = restResponse.Data.Message
             });
         }

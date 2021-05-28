@@ -40,6 +40,12 @@
 }
 
 
+@if (Model.Request.Query.TryGetValue("moveActionMessage", out var moveActionMessageString) && int.TryParse(moveActionMessageString, out int moveActionMessage))
+{
+    <div class="alert alert-danger" role="alert">@moveActionMessage</div>
+    <div class="alert alert-warning" role="alert">@moveActionMessage</div>
+}
+
 @{
     if (Model.Gameboard == null)
     {
@@ -267,6 +273,7 @@
                                         <label @* asp-for="" *@ class="control-label" for="TEMPATTRIBUTE_select_piece" style="display: block; color: #fff">Move piece on square:</label>
                                         <span @* asp-validation-for="" *@ class="text-danger" name="TEMPATTRIBUTE_select_piece"></span>
                                         @Html.HiddenFor(m => m.Gameboard.ID)
+                                        @Html.HiddenFor(m => m.DieRoll)
                                         <select size="4" asp-for="ChosenMoveActionId">
                                             @foreach (var moveAction in Model.MoveActions)
                                             {

@@ -42,5 +42,20 @@ namespace Ludo_API.Repositories
                 throw;
             }
         }
+
+        public async Task DeleteMoveAction(LudoContext context, MoveAction moveAction)
+        {
+            try
+            {
+                //await context.MoveActions.SingleOrDefaultAsync(ma => ma.Id == moveAction.Id)
+                context.MoveActions.Remove(moveAction);
+                await context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                // logging?
+                throw;
+            }
+        }
     }
 }

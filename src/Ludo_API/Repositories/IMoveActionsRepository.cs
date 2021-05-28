@@ -12,5 +12,6 @@ namespace Ludo_API.Repositories
         Task<MoveAction> GetMoveAction(LudoContext context, int moveActionId);
         Task DeleteMoveActions(LudoContext context, int gameId);
         Task<List<MoveAction>> GetMoveActions(LudoContext context, int gameId, int playerId);
+        Task DeleteMoveAction(LudoContext context, MoveAction moveAction);
     }
 }

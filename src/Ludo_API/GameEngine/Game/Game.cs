@@ -62,8 +62,9 @@ namespace Ludo_API.GameEngine.Game
 
         public (bool valid, string message) CanMoveToSquare(Player player, Square startSquare, int diceRoll, out Square endSquare)
         {
+            var playerTrack = LudoData.Instance.ColorTracks[player.Color];
             Square initialSquare = Squares.ElementAt(startSquare.ID);
-            int startIndex = LudoData.Instance.ColorTracks[player.Color].TrackIndices.ToList().FindIndex(x => x == startSquare.ID);
+            int startIndex = playerTrack.TrackIndices.ToList().FindIndex(x => x == startSquare.ID);
             //int startIndex = _ludoData2.Tracks[player.Color].ToList().FindIndex(x => x == startSquare.ID);
             //int startIndex = player.TrackNew.TrackIndices.FindIndex(x => x == startSquare.ID);
             int currentPlayerTrackIndex = startIndex;
@@ -73,22 +74,34 @@ namespace Ludo_API.GameEngine.Game
             {
                 // todo: fix (square vs playerTrack index) naming
                 currentPlayerTrackIndex += moveBackwards ? -1 : 1;
-                int currentSquareIndex = LudoData.Instance.ColorTracks[player.Color].TrackIndices[currentPlayerTrackIndex];
-                //int currentSquareIndex = _ludoData2.Tracks[player.Color][currentPlayerTrackIndex];
-                //int currentSquareIndex = player.TrackNew[currentPlayerTrackIndex];
-                endSquare = Squares.ElementAt(currentSquareIndex);
+                int? currentSquareIndex;
+                try
+                {
+                    currentSquareIndex = playerTrack.TrackIndices[currentPlayerTrackIndex];
+                    //int currentSquareIndex = _ludoData2.Tracks[player.Color][currentPlayerTrackIndex];
+                    //int currentSquareIndex = player.TrackNew[currentPlayerTrackIndex];
+                    endSquare = Squares.ElementAt(currentSquareIndex.Value);
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("currentPlayerTrackIndex is likely out of bounds");
+                }
 
                 // If the Piece is on the "goal"-Square this iteration.
-                if (currentSquareIndex == player.GoalIndex)
+                if (currentSquareIndex == playerTrack.GoalIndex)
                 {
                     // If the Piece is in the "goal"-Square and has finished.
-                    if (i == diceRoll) { return (true, MoveMessagesClass.PieceEnteredGoal); }
+                    if (i == diceRoll)
+                    {
+                        return (true, MoveMessagesClass.PieceEnteredGoal);
+                    }
 
                     // The Piece has to continue moving, it should move backwards the following iterations.
                     moveBackwards = true;
                 }
 
-                bool canInsertToken = CanInsertTokenAt(Squares.ElementAt(currentSquareIndex), player);
+                // This checks whether the player has a token on this square, false is expected if they do since they can't move to or past this square.
+                bool canInsertToken = CanInsertTokenAt(Squares.ElementAt(currentSquareIndex.Value), player);
 
                 if (!canInsertToken)
                 {
@@ -107,7 +120,7 @@ namespace Ludo_API.GameEngine.Game
 
             // Unexpected?
             //return true; // note: is true correct?
-            throw new Exception(""); // is it correct to throw? the loop should handle all cases where we want to return a bool.
+            throw new Exception("Unexpected exception in Game.CanMoveToSquare()"); // is it correct to throw? the loop should handle all cases where we want to return a bool.
         }
 
         /// <summary>
@@ -120,6 +133,7 @@ namespace Ludo_API.GameEngine.Game
         {
             Gameboard = gameboard;
             Squares = gameboard.Squares;
+            var playerTrack = LudoData.Instance.ColorTracks[player.Color];
 
             if (player == null || diceNumber is < 1 or > 6)
             {
@@ -137,7 +151,8 @@ namespace Ludo_API.GameEngine.Game
                 if (s.Tenant?.Player == player)
                 {
                     piecesOnBoardCount += s.Tenant?.PieceCount ?? 0;
-                    return s.ID != LudoData.Instance.ColorTracks[player.Color].TrackIndices[^1];
+                    //return s.ID != LudoData.Instance.ColorTracks[player.Color].TrackIndices[^1];
+                    return s.ID != playerTrack.GoalIndex;
                 }
 
                 return false;
@@ -149,6 +164,22 @@ namespace Ludo_API.GameEngine.Game
             {
                 var (validMove, message) = CanMoveToSquare(player, square, diceNumber, out Square destinationSquare);
 
+                //if (message == MoveMessagesClass.)
+                //{
+                    //moveActions.Add(new()
+                    //{
+                    //    GameId = Gameboard.ID,
+                    //    //PlayerId = player.ID,
+                    //    Player = player,
+                    //    ValidMove = validMove,
+                    //    DiceRoll = diceNumber,
+                    //    OptionText = $"Move your piece from {square.ID} to {destinationSquare.ID}",
+                    //    Message = message,
+                    //    StartSquare = new SquareTenant(square.ID, null, 0),
+                    //    DestinationSquare = new SquareTenant(destinationSquare.ID, player, 1),
+                    //});
+                //}
+                
                 if (square.Tenant.PieceCount == 1)
                 {
                     moveActions.Add(new()
@@ -187,9 +218,11 @@ namespace Ludo_API.GameEngine.Game
             #endregion
 
             #region "Insert New Piece(s)" actions:
-            if (piecesOnBoardCount <= 2 && CanInsertTokenAt(Gameboard.GetSquare(player.StartPosition), player) && diceNumber == 6)
+            //if (piecesOnBoardCount <= 2 && CanInsertTokenAt(Gameboard.GetSquare(player.StartPosition), player) && diceNumber == 6)
+            if (piecesOnBoardCount <= 2 && CanInsertTokenAt(Gameboard.GetSquare(playerTrack.StartIndex), player) && diceNumber == 6)
             {
-                var destinationSquare = new SquareTenant(player.StartPosition, player, 2);
+                //var destinationSquare = new SquareTenant(player.StartPosition, player, 2);
+                var destinationSquare = new SquareTenant(playerTrack.StartIndex, player, 2);
 
                 moveActions.Add(new()
                 {
@@ -198,7 +231,8 @@ namespace Ludo_API.GameEngine.Game
                     Player = player,
                     ValidMove = true,
                     DiceRoll = diceNumber,
-                    OptionText = $"Insert two new pieces to square {player.StartPosition}.",
+                    //OptionText = $"Insert two new pieces to square {player.StartPosition}.",
+                    OptionText = $"Insert two new pieces to square {playerTrack.StartIndex}.",
                     Message = Gameboard.GetSquare(destinationSquare.SquareIndex).Tenant != null ? MoveMessagesClass.KnockOutOpponent : MoveMessagesClass.MoveSuccessful,
                     DestinationSquare = destinationSquare,
                 });
@@ -206,9 +240,11 @@ namespace Ludo_API.GameEngine.Game
 
             if (piecesOnBoardCount < 4)
             {
-                if (CanInsertTokenAt(Gameboard.GetSquare(player.StartPosition), player) && diceNumber == 1)
+                //if (CanInsertTokenAt(Gameboard.GetSquare(player.StartPosition), player) && diceNumber == 1)
+                if (CanInsertTokenAt(Gameboard.GetSquare(playerTrack.StartIndex), player) && diceNumber == 1)
                 {
-                    var destinationSquare = new SquareTenant(player.StartPosition, player, 1);
+                    //var destinationSquare = new SquareTenant(player.StartPosition, player, 1);
+                    var destinationSquare = new SquareTenant(playerTrack.StartIndex, player, 1);
 
                     moveActions.Add(new()
                     {
@@ -217,14 +253,17 @@ namespace Ludo_API.GameEngine.Game
                         Player = player,
                         ValidMove = true,
                         DiceRoll = diceNumber,
-                        OptionText = $"Insert a new piece to square {player.StartPosition}.",
+                        //OptionText = $"Insert a new piece to square {player.StartPosition}.",
+                        OptionText = $"Insert a new piece to square {playerTrack.StartIndex}.",
                         Message = Gameboard.GetSquare(destinationSquare.SquareIndex).Tenant != null ? MoveMessagesClass.KnockOutOpponent : MoveMessagesClass.MoveSuccessful,
                         DestinationSquare = destinationSquare,
                     });
                 }
-                else if (CanInsertTokenAt(Gameboard.GetSquare(player.StartPosition + 5), player) && diceNumber == 6)
+                //else if (CanInsertTokenAt(Gameboard.GetSquare(player.StartPosition + 5), player) && diceNumber == 6)
+                else if (CanInsertTokenAt(Gameboard.GetSquare(playerTrack.StartIndex + 5), player) && diceNumber == 6)
                 {
-                    var destinationSquare = new SquareTenant(player.StartPosition + 5, player, 1);
+                    //var destinationSquare = new SquareTenant(player.StartPosition + 5, player, 1);
+                    var destinationSquare = new SquareTenant(playerTrack.StartIndex + 5, player, 1);
 
                     moveActions.Add(new()
                     {
@@ -233,7 +272,8 @@ namespace Ludo_API.GameEngine.Game
                         Player = player,
                         ValidMove = true,
                         DiceRoll = diceNumber,
-                        OptionText = $"Insert a new piece to square {player.StartPosition + 5}.",
+                        //OptionText = $"Insert a new piece to square {player.StartPosition + 5}.",
+                        OptionText = $"Insert a new piece to square {playerTrack.StartIndex + 5}.",
                         Message = Gameboard.GetSquare(destinationSquare.SquareIndex).Tenant != null ? MoveMessagesClass.KnockOutOpponent : MoveMessagesClass.MoveSuccessful,
                         DestinationSquare = destinationSquare,
                     });

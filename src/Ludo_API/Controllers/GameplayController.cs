@@ -99,7 +99,8 @@ namespace Ludo_API.Controllers
             // If the MoveAction is not valid, delete it and return it's message.
             if (!moveAction.ValidMove)
             {
-                await _moveActionsRepository.DeleteMoveActions(_context, moveAction.GameId);
+                //await _moveActionsRepository.DeleteMoveActions(_context, moveAction.GameId);
+                await _moveActionsRepository.DeleteMoveAction(_context, moveAction);
                 TurnDataDTO turnActionDTO =  new()
                 {
                     DieRoll = null,
