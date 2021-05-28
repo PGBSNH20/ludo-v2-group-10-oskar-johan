@@ -47,7 +47,6 @@ namespace Ludo_API.Repositories
         {
             try
             {
-                //await context.MoveActions.SingleOrDefaultAsync(ma => ma.Id == moveAction.Id)
                 context.MoveActions.Remove(moveAction);
                 await context.SaveChangesAsync();
             }

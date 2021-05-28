@@ -21,9 +21,6 @@ namespace Ludo_API.Models
         [RegularExpression("^(" + ValidColorsPattern + ")$")]
         public string Color { get; set; }
 
-        //[Required]
-        //public Gameboard Gameboard { get; set; }
-
         #region Non-Mapped Properties
         #region static, readonly and const Properties
         [NotMapped]
@@ -45,7 +42,6 @@ namespace Ludo_API.Models
         {
         }
 
-        //public Player(string name, Color color)
         public Player(string name, string color)
         {
             Name = name;
@@ -54,7 +50,6 @@ namespace Ludo_API.Models
             SetTrack();
         }
 
-        //public Player(string name, Color color)
         public Player(NewPlayerDTO newPlayerDTO)
         {
             Name = newPlayerDTO.PlayerName;

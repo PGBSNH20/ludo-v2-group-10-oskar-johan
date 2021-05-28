@@ -12,19 +12,15 @@ namespace Ludo_API.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
-        //[Key]
-        // https://stackoverflow.com/a/40917033
-        //public int GameId { get; set; }
 
         //[Required]
         // https://stackoverflow.com/a/40917033
         public string GameId { get; set; }
 
-        //[ForeignKey("LastPlayerId")]
         public Player LastPlayer { get; set; }
-        //[ForeignKey("CurrentPlayerId")]
+
         public Player CurrentPlayer { get; set; }
-        //[ForeignKey("GameCreatorId")]
+
         public Player GameCreator { get; set; }
 
         [Required]
@@ -33,7 +29,7 @@ namespace Ludo_API.Models
         [Required]
         public List<Player> Players { get; set; }
 
-        public DateTime? GameDate { get; set; } // todo: rename to something like "lastturndate"
+        public DateTime? GameDate { get; set; } // todo: rename to something like "LastTurnDate"?
         public DateTime? GameStartDate { get; set; }
 
         #region NotMappedVariables

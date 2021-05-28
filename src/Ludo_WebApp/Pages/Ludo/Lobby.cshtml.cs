@@ -31,7 +31,6 @@ namespace Ludo_WebApp.Pages.Ludo
             {
                 /* --- Get the Gameboard with the {id} ------------- */
 
-                //var restResponseGame = await Fetch.GetAsync<GameboardDTO>(Fetch.RequestURLs.Games, new { id = id.Value });
                 var restResponseGame = await Fetch.GetAsync<GameboardDTO>(Fetch.RequestURLs.Games,  id.Value);
 
                 if (restResponseGame.StatusCode != HttpStatusCode.OK)
@@ -122,7 +121,6 @@ namespace Ludo_WebApp.Pages.Ludo
             }
 
             Gameboard = restResponse.Data;
-            //return RedirectToRoute(Request.Path.Value, new { id = gameboard.ID });
             return RedirectToPage("./Index/", new { id = restResponse.Data.ID, gameSuccessfullyStarted = 1 });
         }
     }

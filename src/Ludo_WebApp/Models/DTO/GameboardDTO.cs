@@ -19,7 +19,6 @@ namespace Ludo_WebApp.Models.DTO
         public DateTime? GameStartDate { get; set; }
         [DisplayName("Game Creator")]
         public PlayerDTO GameCreator { get; set; }
-        //GameboardData GameboardData { get; set; } // Add ColorOrder?
 
         public GameboardDTO()
         {

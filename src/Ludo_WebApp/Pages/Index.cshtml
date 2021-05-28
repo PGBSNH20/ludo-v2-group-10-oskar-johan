@@ -19,6 +19,7 @@
 @{
     if (Model.Gameboards != null)
     {
+        <h2>All Games:</h2>
         <table>
             <tr>
                 <th>@Html.DisplayNameFor(m => m.Gameboards[0].ID)</th>
@@ -52,6 +53,8 @@
     }
 }
 
+@*
+<!-- SignalR tests -->
 <div class="container">
     <div class="row">&nbsp;</div>
     <div class="row">
@@ -79,6 +82,7 @@
         <ul id="messagesList"></ul>
     </div>
 </div>
+*@
 
 
 

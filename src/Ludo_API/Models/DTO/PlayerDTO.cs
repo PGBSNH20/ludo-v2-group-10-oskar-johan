@@ -17,11 +17,8 @@ namespace Ludo_API.Models.DTO
         public string Name { get; set; }
 
         [Required]
-        //[IsColor("Invalid color format, value should be a hex color (e.g. #123cef)")]
         [RegularExpression("^(" + Player.ValidColorsPattern + ")$")]
-        public string Color { get; set; } // e.g. "#ff00ff00" for green.
-
-        //public int Color { get; set; } // e.g. 0xff00ff00 for green.
+        public string Color { get; set; }
 
         public PlayerDTO(Player player)
         {

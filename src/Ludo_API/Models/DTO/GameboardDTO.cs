@@ -11,10 +11,9 @@ namespace Ludo_API.Models.DTO
         public Player CurrentPlayer { get; set; }
         public ICollection<Square> Squares { get; set; }
         public ICollection<PlayerDTO> Players { get; set; }
-        public DateTime? GameDate  { get; set; } // todo: rename to something like "lastturndate"
+        public DateTime? GameDate { get; set; } // todo: rename to something like "LastTurnDate"?
         public DateTime? GameStartDate { get; set; }
         public PlayerDTO GameCreator { get; set; }
-        //GameboardData GameboardData { get; set; } // Add ColorOrder?
 
         public GameboardDTO(Gameboard gameboard)
         {

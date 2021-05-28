@@ -30,18 +30,14 @@ namespace Ludo_WebApp.Ludo_API
             internal static string GameplayChooseAction = "/Gameplay/ChooseAction/";
         }
 
-        //public static async Task<IRestResponse<int>> PostNewGameAsync(NewPlayerDTO newPlayerDTO)
         public static async Task<IRestResponse<GameboardDTO>> PostNewGameAsync(NewPlayerDTO newPlayerDTO)
         {
             var client = new RestClient(_baseURL);
             var request = new RestRequest(RequestURLs.GamesNew, Method.POST);
             request.AddJsonBody(newPlayerDTO);
-            //request.OnBeforeDeserialization = r => { r.ContentType = "application/json"; };
 
             try // todo: fix getting and returning the error msg from throw in SetTrack
             {
-                //await client.PostAsync<GameDTO>(request);
-                //var response = await client.ExecuteAsync<int>(request);
                 var response = await client.ExecuteAsync<GameboardDTO>(request);
 
                 return response;
@@ -59,7 +55,6 @@ namespace Ludo_WebApp.Ludo_API
             var client = new RestClient(_baseURL);
             var request = new RestRequest(RequestURLs.GamesAddPlayer, Method.POST);
             request.AddJsonBody(newPlayerDTO);
-            //request.OnBeforeDeserialization = r => { r.ContentType = "application/json"; };
 
             try // todo: fix getting and returning the error msg from throw in SetTrack
             {
@@ -90,7 +85,6 @@ namespace Ludo_WebApp.Ludo_API
         }
 
         // api/Games/{id}
-        //internal static async Task<ActionResult<GameboardDTO>> GetGame(int gameId)
         internal static async Task<IRestResponse<GameboardDTO>> GetGame(int gameId)
         {
             var client = new RestClient(_baseURL);
@@ -98,7 +92,6 @@ namespace Ludo_WebApp.Ludo_API
 
             try // todo: fix getting and returning the error msg from throw in SetTrack
             {
-                //return await client.GetAsync<GameboardDTO>(request);
                 return await client.ExecuteAsync<GameboardDTO>(request);
             }
             catch (Exception)
@@ -106,7 +99,6 @@ namespace Ludo_WebApp.Ludo_API
                 // log the error?
                 // do error handling stuff?
                 return null;
-                //throw; // remove?
             }
         }
 
@@ -126,7 +118,6 @@ namespace Ludo_WebApp.Ludo_API
             }
         }
 
-        //internal static Task PostStartGameAsync(NewPlayerDTO newPlayer)
         internal static async Task<IRestResponse<GameboardDTO>> StartGameAsync(int gameId)
         {
             var client = new RestClient(_baseURL);
@@ -135,7 +126,6 @@ namespace Ludo_WebApp.Ludo_API
 
             try // todo: fix getting and returning the error msg from throw in SetTrack
             {
-                //return await client.GetAsync<GameboardDTO>(request);
                 return await client.ExecuteAsync<GameboardDTO>(request);
             }
             catch (Exception)
@@ -143,15 +133,8 @@ namespace Ludo_WebApp.Ludo_API
                 // log the error?
                 // do error handling stuff?
                 return null;
-                //throw; // remove?
             }
         }
-
-        //internal static async Task<IRestResponse<T> PostAsync<T1, T2>(T1 object) {
-        //    }
-
-
-
         /* -----------------------------------------------------------------------------*/
         /* New generic methods                                                          */
         /* -----------------------------------------------------------------------------*/
@@ -204,7 +187,6 @@ namespace Ludo_WebApp.Ludo_API
             }
         }
 
-        //internal static async Task<IRestResponse<T1>> PostAsync<T1, T2>(string requestURL, T2 body)
         internal static async Task<IRestResponse<T1>> PostAsync<T1>(string requestURL, object body)
         {
             var client = new RestClient(_baseURL);
