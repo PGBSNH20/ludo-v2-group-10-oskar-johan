@@ -10,11 +10,9 @@ using System.Threading.Tasks;
 namespace Ludo_API.GameEngine.Game
 {
     public class TurnManager : ITurnManager
-    //internal class TurnManager
     {
         private readonly LudoContext _context;
         private readonly IGamesRepository _gameRepository;
-        //private readonly Random _die;
         private readonly IDie _die;
         private readonly Game _game;
 
@@ -23,52 +21,15 @@ namespace Ludo_API.GameEngine.Game
             _context = context;
             _gameRepository = gamesRepository;
             _game = game;
-
-            //_die = new Random();
             _die = die;
         }
 
-        //public TurnManager(Game game)
-        //{
-        //    _die = new Random();
-        //}
-
-        #region ITurnManager
-        //public Player DecideWhoStarts(List<Player> players)
         public Player DecideWhoStarts(Gameboard gameboard)
         {
             var startnumber = new Random();
             var start = startnumber.Next(0, gameboard.Players.Count);
             return gameboard.Players.ElementAt(start);
         }
-
-
-        //public Player GetNextPlayer2(Player player)
-        //{
-        // update to use repo
-        // pseudo:
-        //GameboardData.Colors.TryGetValue(Gameboard.CurrentPlayer.Color);
-
-        //int currentPlayerColorIndex = Gameboard.ColorOrder.FindIndex(c => c == Gameboard.CurrentPlayer.Color);
-
-        //int nextPlayerColorIndex = currentPlayerColorIndex + 1 < OrderPlayers.Count ? currentPlayerColorIndex + 1 : 0;
-
-        //Color nextPlayerColor = Gameboard.ColorOrder.ElementAtOrDefault(currentPlayerColorIndex)
-
-
-        //var NextPlayer  = Gameboard.Players.SingleOrDefault(p => p.Color == nextPlayerColor);
-
-        //Gameboard.CurrentPlayer = NextPlayer();
-        //return NextPlayer;
-        //}
-
-        //public void StartGame()
-        //{
-        //    // move inline?
-        //    //Player player = DecideWhoStarts();
-        //    // update database with startdate
-        //    NextTurn();
-        //}
 
         public Player GetNextPlayer(Gameboard gameboard)
         {
@@ -81,7 +42,6 @@ namespace Ludo_API.GameEngine.Game
             return gameboard.Players.Single(p => p.Color == nextColor);
         }
 
-        //public void StartNextTurn(List<Player> players, Player currentPlayer, int previousTurnDiceRoll)
         public async Task StartNextTurnAsync(Gameboard gameboard, int previousTurnDiceRoll)
         {
             if (previousTurnDiceRoll == 6)
@@ -95,7 +55,6 @@ namespace Ludo_API.GameEngine.Game
             }
         }
 
-        //public (int dieRoll, List<MoveAction> moveActions) HandleTurn(Gameboard gameboard, Player player)
         public TurnDataDTO HandleTurn(Gameboard gameboard, Player player)
         {
             int diceNumber = RollDice();
@@ -108,7 +67,6 @@ namespace Ludo_API.GameEngine.Game
 
         public int RollDice()
         {
-            //return _die.Next(1, 7);
             return _die.RollDie();
         }
 
@@ -118,16 +76,5 @@ namespace Ludo_API.GameEngine.Game
             await _gameRepository.StartGameAsync(_context, gameboard);
             await _gameRepository.SetCurrentPlayer(_context, gameboard, player);
         }
-
-        //public void EndTurn()
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public void HandleTurn()
-        //{
-        //    throw new NotImplementedException();
-        //}
-        #endregion
     }
 }

@@ -13,43 +13,19 @@ namespace Ludo_API.GameEngine.Game
     {
         private readonly ILudoData2 _ludoData2;
 
-        //private readonly IGamesRepository _gameRepository;
         public Gameboard Gameboard { get; set; }
         public ICollection<Square> Squares { get; set; }
 
-        //public Game(IGamesRepository gamesRepository, Gameboard gameboard)
-        //public Game(ILudoData2 ludoData2)
         public Game()
         {
             //_ludoData2 = ludoData2;
-            //_gameRepository = gamesRepository;
-            //Gameboard = gameboard;
-            //Squares = gameboard.Squares;
         }
 
         public bool CanInsertTokenAt(Square squareToCheck, Player player)
         {
-            // note: this assumes that the OccupiedBy != null when PieceCount > 0 bug is fixed.
             return !(squareToCheck is null || squareToCheck.Tenant?.Player == player);
         }
 
-        // todo: remove or pick one of these?
-        #region todo: remove or pick one of these?
-        //public enum MoveMessagesEnum
-        //{
-        //    [Description("You can't pass or stop on a square you occupy")]
-        //    CantPassYourOwn,
-        //    [Description("You've knocked your opponent's piece(s) out.")]
-        //    KnockOutOpponent,
-        //    [Description("You've moved a piece to the goal square.")]
-        //    PieceEnteredGoal,
-        //};
-        //public struct MoveMessagesStruct
-        //{
-        //    public const string CantPassYourOwn = "You can't pass or stop on a square you occupy";
-        //    public const string KnockOutOpponent = "You've knocked your opponent's piece(s) out.";
-        //    public const string PieceEnteredGoal = "You've moved a piece to the goal square.";
-        //}
         static public class MoveMessagesClass
         {
             public const string NoPossibleMoves = "No possible moves";
@@ -58,15 +34,12 @@ namespace Ludo_API.GameEngine.Game
             public const string KnockOutOpponent = "You've knocked your opponent's piece(s) out.";
             public const string PieceEnteredGoal = "You've moved a piece to the goal square.";
         }
-        #endregion
 
         public (bool valid, string message) CanMoveToSquare(Player player, Square startSquare, int diceRoll, out Square endSquare)
         {
             var playerTrack = LudoData.Instance.ColorTracks[player.Color];
             Square initialSquare = Squares.ElementAt(startSquare.ID);
             int startIndex = playerTrack.TrackIndices.ToList().FindIndex(x => x == startSquare.ID);
-            //int startIndex = _ludoData2.Tracks[player.Color].ToList().FindIndex(x => x == startSquare.ID);
-            //int startIndex = player.TrackNew.TrackIndices.FindIndex(x => x == startSquare.ID);
             int currentPlayerTrackIndex = startIndex;
             bool moveBackwards = false;
 
@@ -78,8 +51,6 @@ namespace Ludo_API.GameEngine.Game
                 try
                 {
                     currentSquareIndex = playerTrack.TrackIndices[currentPlayerTrackIndex];
-                    //int currentSquareIndex = _ludoData2.Tracks[player.Color][currentPlayerTrackIndex];
-                    //int currentSquareIndex = player.TrackNew[currentPlayerTrackIndex];
                     endSquare = Squares.ElementAt(currentSquareIndex.Value);
                 }
                 catch (Exception e)
@@ -123,12 +94,6 @@ namespace Ludo_API.GameEngine.Game
             throw new Exception("Unexpected exception in Game.CanMoveToSquare()"); // is it correct to throw? the loop should handle all cases where we want to return a bool.
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="diceNumber"></param>
-        /// <returns></returns>
         public List<MoveAction> GetPossibleMoves(Gameboard gameboard, Player player, int diceNumber)
         {
             Gameboard = gameboard;
@@ -145,13 +110,9 @@ namespace Ludo_API.GameEngine.Game
 
             var playerOwnedSquares = Squares.Where(s =>
             {
-                // todo: fix the "OccupiedBy != null when s.Tenant?.PieceCount == 0" bug and remove " && s.Tenant?.PieceCount > 0"
-                //bool hasTokenOnSquare = s..Tenant?.Player == player && s.Tenant?.PieceCount > 0 && s.ID != player.Track[^1];
-                //bool hasTokenOnSquare = s.Tenant.Player == player && s.Tenant?.PieceCount > 0 && s.ID != player.Track[^1];
                 if (s.Tenant?.Player == player)
                 {
                     piecesOnBoardCount += s.Tenant?.PieceCount ?? 0;
-                    //return s.ID != LudoData.Instance.ColorTracks[player.Color].TrackIndices[^1];
                     return s.ID != playerTrack.GoalIndex;
                 }
 
@@ -164,22 +125,6 @@ namespace Ludo_API.GameEngine.Game
             {
                 var (validMove, message) = CanMoveToSquare(player, square, diceNumber, out Square destinationSquare);
 
-                //if (message == MoveMessagesClass.)
-                //{
-                    //moveActions.Add(new()
-                    //{
-                    //    GameId = Gameboard.ID,
-                    //    //PlayerId = player.ID,
-                    //    Player = player,
-                    //    ValidMove = validMove,
-                    //    DiceRoll = diceNumber,
-                    //    OptionText = $"Move your piece from {square.ID} to {destinationSquare.ID}",
-                    //    Message = message,
-                    //    StartSquare = new SquareTenant(square.ID, null, 0),
-                    //    DestinationSquare = new SquareTenant(destinationSquare.ID, player, 1),
-                    //});
-                //}
-                
                 if (square.Tenant.PieceCount == 1)
                 {
                     moveActions.Add(new()
@@ -218,20 +163,16 @@ namespace Ludo_API.GameEngine.Game
             #endregion
 
             #region "Insert New Piece(s)" actions:
-            //if (piecesOnBoardCount <= 2 && CanInsertTokenAt(Gameboard.GetSquare(player.StartPosition), player) && diceNumber == 6)
             if (piecesOnBoardCount <= 2 && CanInsertTokenAt(Gameboard.GetSquare(playerTrack.StartIndex), player) && diceNumber == 6)
             {
-                //var destinationSquare = new SquareTenant(player.StartPosition, player, 2);
                 var destinationSquare = new SquareTenant(playerTrack.StartIndex, player, 2);
 
                 moveActions.Add(new()
                 {
                     GameId = Gameboard.ID,
-                    //PlayerId = player.ID,
                     Player = player,
                     ValidMove = true,
                     DiceRoll = diceNumber,
-                    //OptionText = $"Insert two new pieces to square {player.StartPosition}.",
                     OptionText = $"Insert two new pieces to square {playerTrack.StartIndex}.",
                     Message = Gameboard.GetSquare(destinationSquare.SquareIndex).Tenant != null ? MoveMessagesClass.KnockOutOpponent : MoveMessagesClass.MoveSuccessful,
                     DestinationSquare = destinationSquare,
@@ -240,39 +181,31 @@ namespace Ludo_API.GameEngine.Game
 
             if (piecesOnBoardCount < 4)
             {
-                //if (CanInsertTokenAt(Gameboard.GetSquare(player.StartPosition), player) && diceNumber == 1)
                 if (CanInsertTokenAt(Gameboard.GetSquare(playerTrack.StartIndex), player) && diceNumber == 1)
                 {
-                    //var destinationSquare = new SquareTenant(player.StartPosition, player, 1);
                     var destinationSquare = new SquareTenant(playerTrack.StartIndex, player, 1);
 
                     moveActions.Add(new()
                     {
                         GameId = Gameboard.ID,
-                        //PlayerId = player.ID,
                         Player = player,
                         ValidMove = true,
                         DiceRoll = diceNumber,
-                        //OptionText = $"Insert a new piece to square {player.StartPosition}.",
                         OptionText = $"Insert a new piece to square {playerTrack.StartIndex}.",
                         Message = Gameboard.GetSquare(destinationSquare.SquareIndex).Tenant != null ? MoveMessagesClass.KnockOutOpponent : MoveMessagesClass.MoveSuccessful,
                         DestinationSquare = destinationSquare,
                     });
                 }
-                //else if (CanInsertTokenAt(Gameboard.GetSquare(player.StartPosition + 5), player) && diceNumber == 6)
                 else if (CanInsertTokenAt(Gameboard.GetSquare(playerTrack.StartIndex + 5), player) && diceNumber == 6)
                 {
-                    //var destinationSquare = new SquareTenant(player.StartPosition + 5, player, 1);
                     var destinationSquare = new SquareTenant(playerTrack.StartIndex + 5, player, 1);
 
                     moveActions.Add(new()
                     {
                         GameId = Gameboard.ID,
-                        //PlayerId = player.ID,
                         Player = player,
                         ValidMove = true,
                         DiceRoll = diceNumber,
-                        //OptionText = $"Insert a new piece to square {player.StartPosition + 5}.",
                         OptionText = $"Insert a new piece to square {playerTrack.StartIndex + 5}.",
                         Message = Gameboard.GetSquare(destinationSquare.SquareIndex).Tenant != null ? MoveMessagesClass.KnockOutOpponent : MoveMessagesClass.MoveSuccessful,
                         DestinationSquare = destinationSquare,

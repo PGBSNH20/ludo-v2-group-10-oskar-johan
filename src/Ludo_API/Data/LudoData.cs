@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace Ludo_API.Data
 {
-
     public sealed class LudoData
     {
         #region Singleton

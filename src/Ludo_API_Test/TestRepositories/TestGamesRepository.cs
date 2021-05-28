@@ -22,17 +22,6 @@ namespace Ludo_API_Test.TestRepositories
         {
         }
 
-        //public TestGamesRepository(List<Gameboard> gameboards)
-        //{
-        //    Gameboards = gameboards;
-        //}
-
-        //public TestGamesRepository(List<Gameboard> gameboards, List<Square> squares)
-        //{
-        //    Gameboards = gameboards;
-        //    Squares = squares;
-        //}
-
         public Task AddNewGameAsync(Gameboard gameboard, Player players)
         {
             throw new NotImplementedException();
@@ -55,7 +44,6 @@ namespace Ludo_API_Test.TestRepositories
                     squares.Add(new Square
                     {
                         ID = j,
-                        //PieceCount = 0
                         Tenant = new SquareTenant(i, null, 0),
                     });
                 }
@@ -66,8 +54,7 @@ namespace Ludo_API_Test.TestRepositories
                     new Player( $"Randa {i + 10}", "Red")
                 };
 
-                //squares[players[i].StartPosition].Tenant?.Player = players[i];
-                //squares[players[i].StartPosition].Tenant?.PieceCount = 1;
+
                 squares[players[i].StartPosition].Tenant = new SquareTenant(players[i].StartPosition, players[i], 1);
 
                 Gameboard gb = new()
@@ -120,18 +107,6 @@ namespace Ludo_API_Test.TestRepositories
             return Task.FromResult(Gameboards.SingleOrDefault(g => g.ID == id));
         }
 
-        //public void MoveToken(Player player, Square startSquare, Square endSquare)
-        //{
-        //    startSquare.Tenant = new SquareTenant(startSquare.ID, null, 0);
-        //    //startSquare.Tenant?.Player = null;
-        //    //startSquare.Tenant?.PieceCount = 0;
-
-        //    startSquare.Tenant = new SquareTenant(startSquare.ID, player, (endSquare.Tenant?.PieceCount).GetValueOrDefault() + 1);
-        //    //endSquare.Tenant?.Player = player;
-        //    //endSquare.Tenant?.PieceCount++;
-        //}
-
-        //public Task<bool> ExecuteMoveAction(LudoContext context, MoveAction moveAction)
         public Task<bool> ExecuteMoveAction(LudoContext context, MoveAction moveAction)
         {
             if (moveAction.StartSquare != null)

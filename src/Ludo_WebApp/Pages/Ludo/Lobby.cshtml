@@ -73,12 +73,7 @@
                 else
                 {
                     <h4>The game has started!</h4>
-                    <a asp-page="~/Ludo/Index" asp-route-id="@Model.Gameboard.ID" class="btn btn-primary" role="button">Go to Game</a>
-                    <a asp-page="~/Ludo/" asp-route-id="@Model.Gameboard.ID" class="btn btn-primary" role="button">Go to Game</a>
-                    <a asp-page="~/Ludo" asp-route-id="@Model.Gameboard.ID" class="btn btn-primary" role="button">Go to Game</a>
                     <a asp-page="/Ludo/Index" asp-route-id="@Model.Gameboard.ID" class="btn btn-primary" role="button">Go to Game</a>
-                    <a asp-page="/Ludo/" asp-route-id="@Model.Gameboard.ID" class="btn btn-primary" role="button">Go to Game</a>
-                    <a asp-page="/Ludo" asp-route-id="@Model.Gameboard.ID" class="btn btn-primary" role="button">Go to Game</a>
                 }
             }
             else if (Model.Gameboard.GameStartDate != null || Model.Gameboard.Players.Count == 4)

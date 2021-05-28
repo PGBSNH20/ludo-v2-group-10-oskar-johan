@@ -55,92 +55,10 @@
     {
         bool couldParsePlayerId = Int32.TryParse(Request.Cookies["PlayerID"], out int playerId);
 
-        #region Code moved to Ludo/Lobby
-        @*
-                    // If the game hasn't started:
-                    if (Model.Gameboard.GameStartDate == null)
-                    {
-                        //string cookieValue = Request.Cookies["PlayerID"];-->
-
-                //if (Int32.Parse() == Model.Gameboard.GameCreator.ID)
-
-
-                // If the player is the one who started the game, show a "Star Game" button.
-                if (couldParsePlayerId && playerId == Model.Gameboard.GameCreator.ID)
-                {
-                    /*-------------------------------------------------------------------------------------------------------------------*/
-                    /*--- [START] Show "Start Game" button ------------------------------------------------------------------------------*/
-
-                    @(// todo: only show this to the player who created the game.)
-                    <form method="post" asp-page-handler="StartGame">
-                        <input type="submit" value="Start Game" class="btn btn-primary" />
-                    </form>
-
-                    /*--- [END] Show "Start Game" button --------------------------------------------------------------------------------*/
-                    /*-------------------------------------------------------------------------------------------------------------------*/
-
-                }
-                // If the player isn't the one who started the game and hasn't already joined the game, show a "join game form".
-                else if (!(couldParsePlayerId && Model.Gameboard.Players.Any(p => p.ID == playerId)))
-                {
-                    /*-------------------------------------------------------------------------------------------------------------------*/
-                    /*--- [START] Join Game form ----------------------------------------------------------------------------------------*/
-
-                    @(// todo: don't show the "join game" section for the player who created the game.)
-                    <h1>Join Game</h1>
-
-                    <div class="row">
-                        <div class="col-md-4">
-                            <form asp-page-handler="AddPlayer" method="post">
-                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                <!--<div class="form-group">
-                                <label asp-for="NewGame.PlayerCount" class="control-label"></label>
-                                <input asp-for="NewGame.PlayerCount" class="form-control" />-->
-                                <!-- todo: switch to type="range"? -->
-                                <!--<span asp-validation-for="NewGame.PlayerCount" class="text-danger"></span>
-                                </div>-->
-                                <div class="form-group">
-                                    <label asp-for="NewPlayer.PlayerName" class="control-label"></label>
-                                    <input asp-for="NewPlayer.PlayerName" class="form-control" />
-                                    <span asp-validation-for="NewPlayer.PlayerName" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    @foreach (var color in Model.LudoData.ColorTracks)
-                                    {
-                                        <input type="radio" asp-for="NewPlayer.PlayerColor" value="@color.Key" id="color-radio-@color.Key" />
-                                        <label asp-for="NewPlayer.PlayerColor" class="control-label" style="color:@color.Value.ColorHex" for="color-radio-@color.Key">@color.Key</label> <!-- todo: fix clicking labels always selects first radio-input -->
-                                        <span asp-validation-for="NewPlayer.PlayerColor" class="text-danger"></span>
-                                    }
-                                    @if (Model.ColorError != null)
-                                    {
-                                        <span class="text-danger">@Model.ColorError</span>
-                                    }
-                                </div>
-                                <div class="form-group">
-                                    <input type="submit" value="Join" class="btn btn-primary" />
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-
-                    /*--- [END] Join Game form ------------------------------------------------------------------------------------------*/
-                    /*-------------------------------------------------------------------------------------------------------------------*/
-                }
-            }
-        *@
-        #endregion
-
-        // If the game has started:
-        // else if (couldParsePlayerId && Model.Gameboard.Players.Any(p => p.ID == playerId))
-
         if (couldParsePlayerId && Model.Gameboard.Players.Any(p => p.ID == playerId))
         {
             <h2>It is @(Model.Gameboard.CurrentPlayer?.Name)'s (id: @Model.Gameboard.CurrentPlayer?.ID turn.</h2>
 
-
-            // 2. Draw gameboard.
-            //    todo: 3. Draw pieces on gameboard.
-            //<div class="ludo-container col-md-9">
             <div class="ludo-container">
 
                 @*-------------------------------------------------------------------------------------------------------------------*@
@@ -249,21 +167,6 @@
                         }
                         else // Model.MoveActions != null
                         {
-                            @*
-                                todo:
-                                4x. If dice been throw: Draw draw menu of MoveActions (and form with submit button).
-                                    4a. (Javascript) check if MoveAction is valid and alert if it isn't and stop form POST submit.
-                                        use something like the following to stop the data from being submitted:
-                                        ```javascript
-                                        form.onSubmit = e => {
-                                            if (invalid MoveAction) {
-                                                e.preventDefault();
-                                                return false;
-                                            }ChooseMoveAction
-                                        }
-                                        ```
-                                    4b. (Javascript) allow form POST to execute.
-                            *@
                             <div>
                                 You rolled a @(Model.DieRoll).
                             </div>
@@ -286,10 +189,6 @@
                             </div>
                         }
                     </div>
-
-                    @*
-                        todo: 4x.If MoveActions has been chosen:
-                    *@
                 }
                 else
                 {
@@ -301,13 +200,9 @@
                             1. Listen for signalR message when it's the next player's turn / same player but new turn (when player rolls a 6).
                     *@
                 }
-
-                @*--- [END] Draw gameplay options ("Roll Die"-button, menu with MoveActions) --------------------------------------*@
-                @*-------------------------------------------------------------------------------------------------------------------*@
-
             </div>
         }
-        else // The person is not one of the players attached to the game.
+        else // The person is not one of the players ín to the game.
         {
             // todo: redirect to start?
         }
@@ -323,16 +218,3 @@
 
 <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/ludo.js"></script>
-@*
-        @if Model.Gameboard.
-        <script type="text/javascript">
-            $(function () {
-                setInterval
-            })
-        </script>
-    <script type="text/javascript">
-        $(function () {
-            setInterval
-        })
-    </script>
-*@

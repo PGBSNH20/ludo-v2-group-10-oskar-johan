@@ -8,10 +8,6 @@ namespace Ludo_API.Models.DTO
 {
     public class NewPlayerDTO
     {
-        //public string GameName { get; set; } // todo: if time permits
-        //[Range(1, 4)]
-        //public int PlayerCount { get; set; }
-
         public int? ID { get; set; }
 
         public int? GameId { get; set; }
@@ -21,7 +17,6 @@ namespace Ludo_API.Models.DTO
         public string PlayerName { get; set; }
 
         [Required]
-        //[RegularExpression("#[0-9a-fA-F]{6}")]
         [RegularExpression("^(" + Player.ValidColorsPattern + ")$")]
         public string PlayerColor { get; set; }
     }

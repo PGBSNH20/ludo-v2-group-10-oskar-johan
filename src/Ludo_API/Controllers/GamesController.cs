@@ -45,38 +45,6 @@ namespace Ludo_API.Controllers
             //return gameboards;
         }
 
-        // /// <summary>
-        // /// todo: fill me
-        // /// </summary>
-        // /// <param name="playerId">todo: fill me</param>
-        // /// <param name="includeNew">todo: fill me</param>
-        // /// <param name="includeActive">todo: fill me</param>
-        // /// <param name="includeCompleted">todo: fill me</param>
-        // /// <returns></returns>
-        //// POST api/Games/GetGamesForPlayer/{playerId}?includeNew=bool&includeActive=boolincludeCompleted=bool
-        //// alt:
-        //// POST api/Games/GetGamesForPlayer/{playerId}
-        //[HttpPost("[action]/{id}")]
-        //[ActionName("GetGamesForPlayer")]
-        //public async Task<ActionResult<IEnumerable<GameboardDTO>>> GetGameboardForPlayer(
-        //    [Required][FromBody] int playerId
-        //    //[FromBody] bool includeNew = true,
-        //    //[FromBody] bool includeActive = true,
-        //    //[FromBody] bool includeCompleted = false
-        //)
-        //{
-        //    var gameboards = await _gameRepository.GetAllGames(_context); // todo: update this
-
-        //    if (gameboards.Count == 0)
-        //    {
-        //        return NotFound("Could not find any games.");
-        //    }
-
-        //    var gameboardsDTO = gameboards.Select(g => new GameboardDTO(g));
-
-        //    return Ok(gameboardsDTO);
-        //}
-
         /// <summary>
         /// Get a gameboard by its ID.
         /// </summary>
@@ -95,12 +63,6 @@ namespace Ludo_API.Controllers
 
             return Ok(new GameboardDTO(gameboard));
         }
-        //// GET api/Games/
-        //[HttpGet()]
-        //public async Task<ActionResult<GameboardDTO>> GetGameIdFromQuery([FromQuery] int id)
-        //{
-        //    return await Get(id);
-        //}
 
         /// <summary>
         /// Get Ludo data such as gameboard layout, player colors and their gameboard track indices.
@@ -128,7 +90,6 @@ namespace Ludo_API.Controllers
         // POST api/Games/New
         [HttpPost("[action]")]
         [ActionName("New")]
-        //public async Task<ActionResult<int>> Post([FromBody] NewPlayerDTO newPlayerDTO)
         public async Task<ActionResult<GameboardDTO>> Post([FromBody] NewPlayerDTO newPlayerDTO)
         {
             try
@@ -145,7 +106,6 @@ namespace Ludo_API.Controllers
                 gameboard = await _gameRepository.CreateNewGame(_context, gameboard);
                 await _gameRepository.SetCreator(_context, gameboard, newPlayer);
 
-                //return Ok(gameboard.ID);
                 return Ok(new GameboardDTO(gameboard));
             }
             catch (Exception e)
@@ -154,37 +114,24 @@ namespace Ludo_API.Controllers
             }
         }
 
-        ///// <summary>
-        ///// todo: enter summary for method
-        ///// </summary>
-        ///// <param name="id">todo: enter summary for id parameter</param>
-        ///// <param name="value">todo: enter summary for value parameter</param>
-        ///// <returns>void</returns>
-        //// PUT api/Games/{id}
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        // DELETE api/Games/{id}
         /// <summary>
         /// Deletes game from database specefied by ID
         /// </summary>
         /// <param name="id">ID provided for game to be deleted</param>
         /// <returns>void</returns>
+        // DELETE api/Games/{id}
         [HttpDelete("{id}")]
         public async Task<bool> Delete(int id)
         {
             return await _gameRepository.DeleteGame(_context, id);
         }
 
-        // POST api/Games/AddPlayer
         /// <summary>
         /// Add a new player to a game.
         /// </summary>
         /// <param name="newPlayerDTO">A NewPlayerDTO object containing the name and color the player.</param>
         /// <returns>Returns a Gameboard object.</returns>
+        // POST api/Games/AddPlayer
         [HttpPost("[action]")]
         [ActionName("AddPlayer")]
         public async Task<ActionResult<NewPlayerDTO>> PostAddPlayer([FromBody] NewPlayerDTO newPlayerDTO)
@@ -207,18 +154,14 @@ namespace Ludo_API.Controllers
 
                 if (await _gameRepository.IsColorTaken(_context, gameboard.ID, newPlayerDTO.PlayerColor))
                 {
-                    //throw new Exception("Color is used by another player");
                     return BadRequest($"The color {newPlayerDTO.PlayerColor} is used by another player, please try again.");
                 }
 
-                //var color = ColorTranslator.FromHtml(newPlayerDTO.PlayerColor);
-                //Player player = new(newPlayerDTO.PlayerName, color);
                 Player player = new(newPlayerDTO);
                 gameboard = await _gameRepository.AddPlayerAsync(_context, gameboard, player);
 
                 newPlayerDTO.ID = player.ID;
 
-                //return Ok(new GameboardDTO(gameboard));
                 return Ok(newPlayerDTO);
             }
             catch (Exception e)
@@ -227,15 +170,14 @@ namespace Ludo_API.Controllers
             }
         }
 
-        // POST api/Games/StartGame
         /// <summary>
         /// Start a game.
         /// </summary>
         /// <param name="gameId">The ID of the game.</param>
         /// <returns>A GameboardDTO object.</returns>
+        // POST api/Games/StartGame
         [HttpPost("[action]")]
         [ActionName("StartGame")]
-        //public async Task<ActionResult<GameboardDTO>> PostStartGame([FromBody] int gameId)
         public async Task<IActionResult> PostStartGame([FromBody] int gameId)
         {
             try
@@ -253,7 +195,6 @@ namespace Ludo_API.Controllers
             catch (Exception)
             {
                 // log exception?
-                //return BadRequest(e.Message);
                 return BadRequest("Something went wrong.");
                 throw;
             }

@@ -8,9 +8,7 @@
     <h1>Ludo game</h1>
 
     <p>
-        <a asp-page="Ludo/Index">Gameboard</a> <!-- temp, todo: remove -->
         <a asp-page="Ludo/Lobby">New Game</a>
-        <a asp-page="Ludo/Load">Load Game</a>
     </p>
 </div>
 <form>
@@ -21,6 +19,7 @@
 @{
     if (Model.Gameboards != null)
     {
+        <h2>All Games:</h2>
         <table>
             <tr>
                 <th>@Html.DisplayNameFor(m => m.Gameboards[0].ID)</th>
@@ -54,6 +53,8 @@
     }
 }
 
+@*
+<!-- SignalR tests -->
 <div class="container">
     <div class="row">&nbsp;</div>
     <div class="row">
@@ -81,6 +82,7 @@
         <ul id="messagesList"></ul>
     </div>
 </div>
+*@
 
 
 

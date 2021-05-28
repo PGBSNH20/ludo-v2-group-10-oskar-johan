@@ -36,16 +36,7 @@ namespace Ludo_API.Repositories
             await context.SaveChangesAsync();
             return await context.Gameboards.SingleOrDefaultAsync(g => g == gameboard);
         }
-        //public void MoveToken(Player player, Square startSquare, Square endSquare)
-        //{
-        //    throw new NotImplementedException();
-        //}
 
-        //public async Task<int> StartGameAsync(LudoContext context, Gameboard gameboard)
-        //{
-        //    gameboard.GameStartDate = DateTime.Now;
-        //    return await context.SaveChangesAsync();
-        //}
         public async Task StartGameAsync(LudoContext context, Gameboard gameboard)
         {
             gameboard.GameStartDate = DateTime.Now;
@@ -78,7 +69,6 @@ namespace Ludo_API.Repositories
                 Square startSquare;
                 try
                 {
-                    //var startSquare = await context.Squares.SingleOrDefaultAsync(s => s.ID == moveAction.StartSquare.SquareIndex);
                     startSquare = await context.Squares.SingleOrDefaultAsync(s => s.GameboardId == moveAction.GameId && s.ID == moveAction.StartSquare.SquareIndex);
                 }
                 catch (Exception)
@@ -130,8 +120,6 @@ namespace Ludo_API.Repositories
         public async Task<Gameboard> AddPlayerAsync(LudoContext context, Gameboard gameboard, Player player)
         {
             gameboard.Players.Add(player);
-            //context.Players.Add(player);
-            //context.Gameboards.Add(gameboard);
             await context.SaveChangesAsync();
 
             return gameboard;

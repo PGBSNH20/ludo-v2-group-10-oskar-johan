@@ -21,7 +21,6 @@
         public int this[int index]
         {
             get => TrackIndices[index];
-            //set => TrackIndices[index] = value;
         }
     }
 }

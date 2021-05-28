@@ -36,21 +36,10 @@ namespace Ludo_API.Controllers
             _turnManager = turnManager;
         }
 
-        // POST api/Gameplay/New
-        //[HttpGet("[action]")]
-        //public async Task<ActionResult<int>> Get...(
-        //    [Required][FromBody] int gameId,
-        //    [Required][FromBody] int playerId
-        //)
-        //{
-        //}
-
         // POST api/Gameplay/RollDie
         [HttpPost("[action]")]
         [ActionName("RollDie")]
         public async Task<ActionResult<List<MoveAction>>> PostRollDie(
-        //[Required][FromBody] int gameId, // fixme: only one [FromBody]
-        //[Required][FromBody] int playerId // fixme: only one [FromBody]
             [Required][FromBody] PostRollDieDTO postRollDieDTO
         )
         {
@@ -91,15 +80,12 @@ namespace Ludo_API.Controllers
 
             if (moveAction == null)
             {
-                // todo: maybe replace NotFound with another error
-                // e.g. StatusCode(HttpStatusCode.InternalServerError, "error message");
                 return NotFound($"Can't find a move action with id {moveActionId}");
             }
 
             // If the MoveAction is not valid, delete it and return it's message.
             if (!moveAction.ValidMove)
             {
-                //await _moveActionsRepository.DeleteMoveActions(_context, moveAction.GameId);
                 await _moveActionsRepository.DeleteMoveAction(_context, moveAction);
                 TurnDataDTO turnActionDTO =  new()
                 {
@@ -140,32 +126,20 @@ namespace Ludo_API.Controllers
                     MoveActions = null,
                 };
                 return Ok(turnActionDTO);
-                //return Ok("Move action was succesfully executed");
             }
 
-            // todo: maybe replace NotFound with another error
-            // e.g. StatusCode(HttpStatusCode.InternalServerError, "error message");
             return BadRequest("Move was unsuccessful.");
         }
 
         // POST api/Gameplay/GetMoveActions
         [HttpGet("[action]")]
         [ActionName("GetMoveActions")]
-        //public async Task<ActionResult<List<MoveAction>>> GetMoveActions([Required][FromQuery] PostRollDieDTO postRollDieDTO)
         public async Task<ActionResult<List<MoveAction>>> GetMoveActions(
             [Required][FromQuery] int GameId,
             [Required][FromQuery] int PlayerId
         )
         {
-            //var moveActions = await _moveActionsRepository.GetMoveActions(_context, postRollDieDTO.GameId, postRollDieDTO.PlayerId);
             var moveActions = await _moveActionsRepository.GetMoveActions(_context, GameId, PlayerId);
-
-            if (moveActions == null)
-            {
-                //return NotFound($"Can't find a move action for game with id: {postRollDieDTO.GameId} and playerId {postRollDieDTO.PlayerId}");
-                //return NotFound($"Can't find a move action for game with id: {GameId} and playerId {PlayerId}");
-            }
-
             return Ok(moveActions);
         }
     }
