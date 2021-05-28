@@ -15,56 +15,88 @@
 @Html.ValidationMessageFor(m => m.ModelState["Error.Lobby.OnGetAsync.GetLudoData.Debug"])
 @Html.ValidationMessageFor(m => m.ModelState["Error.Lobby.OnPost.NewGame.Debug.Debug"])
 
+@{
+    bool couldParsePlayerId = Int32.TryParse(Request?.Cookies["PlayerID"], out int playerId);
+}
 
 @* --- Create and Join Game form ------------------------ *@
 
 <div class="row">
     <div class="col-md-4">
-        @if (Model.Gameboard == null)
+        @if (Model.Gameboard == null || !(couldParsePlayerId && Model.Gameboard.Players.Any(p => p.ID == playerId)))
         {
-            <h2>Create a new game:</h2>
+            @if (Model.Gameboard == null)
+            {
+                <h2>Create a new game</h2>
+            }
+            else
+            {
+                <h2>Join the game (id: @Model.Gameboard.ID))</h2>
+            }
+
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="NewPlayer.PlayerName" class="control-label"></label>
+                    <input asp-for="NewPlayer.PlayerName" class="form-control" />
+                    <span asp-validation-for="NewPlayer.PlayerName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    @foreach (var colorTrack in Model.LudoData.ColorTracks)
+                    {
+                        @if (colorTrack.Key == "Yellow")
+                        {
+                            <input type="radio" asp-for="NewPlayer.PlayerColor" value="@colorTrack.Key" id="color-radio-@colorTrack.Key" checked />
+                        }
+                        else
+                        {
+                            <input type="radio" asp-for="NewPlayer.PlayerColor" value="@colorTrack.Key" id="color-radio-@colorTrack.Key" />
+                        }
+
+                        <label asp-for="NewPlayer.PlayerColor" class="control-label" style="color:@colorTrack.Value.ColorHex" for="color-radio-@colorTrack.Key">@colorTrack.Key</label>
+                    }
+                    <span asp-validation-for="NewPlayer.PlayerColor" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="@(Model.Gameboard == null ? "Create" : "Join")" class="btn btn-primary" />
+                </div>
+            </form>
         }
         else
         {
-            <h2>Join the game (id: @Model.Gameboard.ID)</h2>
-        }
-
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="NewPlayer.PlayerName" class="control-label"></label>
-                <input asp-for="NewPlayer.PlayerName" class="form-control" />
-                <span asp-validation-for="NewPlayer.PlayerName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                @foreach (var colorTrack in Model.LudoData.ColorTracks)
+            if (couldParsePlayerId && Model.Gameboard.Players.Any(p => p.ID == playerId))
+            {
+                if (Model.Gameboard.GameStartDate == null)
                 {
-                    @if (colorTrack.Key == "Yellow")
-                    {
-                        <input type="radio" asp-for="NewPlayer.PlayerColor" value="@colorTrack.Key" id="color-radio-@colorTrack.Key" checked />
-                    }
-                    else
-                    {
-                        <input type="radio" asp-for="NewPlayer.PlayerColor" value="@colorTrack.Key" id="color-radio-@colorTrack.Key" />
-                    }
-
-                    <label asp-for="NewPlayer.PlayerColor" class="control-label" style="color:@colorTrack.Value.ColorHex" for="color-radio-@colorTrack.Key">@colorTrack.Key</label>
+                    <div>Waiting for other players to join or for the game to start.</div>
                 }
-                <span asp-validation-for="NewPlayer.PlayerColor" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+                else
+                {
+                    <h4>The game has started!</h4>
+                    <a asp-page="~/Ludo/Index" asp-route-id="@Model.Gameboard.ID" class="btn btn-primary" role="button">Go to Game</a>
+                    <a asp-page="~/Ludo/" asp-route-id="@Model.Gameboard.ID" class="btn btn-primary" role="button">Go to Game</a>
+                    <a asp-page="~/Ludo" asp-route-id="@Model.Gameboard.ID" class="btn btn-primary" role="button">Go to Game</a>
+                    <a asp-page="/Ludo/Index" asp-route-id="@Model.Gameboard.ID" class="btn btn-primary" role="button">Go to Game</a>
+                    <a asp-page="/Ludo/" asp-route-id="@Model.Gameboard.ID" class="btn btn-primary" role="button">Go to Game</a>
+                    <a asp-page="/Ludo" asp-route-id="@Model.Gameboard.ID" class="btn btn-primary" role="button">Go to Game</a>
+                }
+            }
+            else if (Model.Gameboard.GameStartDate != null || Model.Gameboard.Players.Count == 4)
+            {
+                <div>
+                    <p>Sorry, this game is either full or it has already started.</p>
+
+                    <a asp-page="~/">Return to the startpage</a>
+                </div>
+            }
+        }
     </div>
     <div class="col-md-4">
         @if (Model.Gameboard != null)
         {
             @* --- Draw "Start Game" button for the GameCreator ----- *@
 
-            bool couldParsePlayerId = Int32.TryParse(Request.Cookies["PlayerID"], out int playerId);
-
-            if (couldParsePlayerId && playerId == Model.Gameboard.GameCreator.ID)
+            if (Model.Gameboard.GameStartDate == null && couldParsePlayerId && playerId == Model.Gameboard.GameCreator.ID)
             {
                 <form method="post" asp-page-handler="StartGame">
                     <input type="submit" value="Start Game" class="btn btn-primary" />
@@ -73,7 +105,7 @@
 
             @* --- Draw table of Players currently in the game ------ *@
 
-            <h2>Players in this game:</h2>
+            <h2>Players</h2>
             <table>
                 <tr>
                     <th>@Html.DisplayNameFor(m => m.Gameboard.Players[0].ID)</th>

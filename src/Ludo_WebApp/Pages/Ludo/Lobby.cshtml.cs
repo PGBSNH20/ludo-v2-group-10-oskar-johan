@@ -64,13 +64,15 @@ namespace Ludo_WebApp.Pages.Ludo
         }
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int? id)
         {
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("", "ModelState invalid");
                 return Page();
             }
+
+            NewPlayer.GameId = id;
 
             if (NewPlayer.GameId == null)
             {
@@ -84,6 +86,7 @@ namespace Ludo_WebApp.Pages.Ludo
                     return Page();
                 }
 
+                CookieMonster.SetCookie(Response.Cookies, "PlayerID", restResponse.Data.GameCreator.ID.ToString());
                 return RedirectToPage("./Lobby", new { id = restResponse.Data.ID });
             }
             else
@@ -98,7 +101,8 @@ namespace Ludo_WebApp.Pages.Ludo
                     return Page();
                 }
 
-                return RedirectToPage("./Lobby", new { id = restResponse.Data.ID });
+                CookieMonster.SetCookie(Response.Cookies, "PlayerID", restResponse.Data.ID.ToString());
+                return RedirectToPage("./Lobby", new { id = id });
             }
         }
 
@@ -109,9 +113,9 @@ namespace Ludo_WebApp.Pages.Ludo
         /// <returns></returns>
         public async Task<IActionResult> OnPostStartGameAsync(GameboardDTO gameboard)
         {
-            if (!ModelState.IsValid)
+            if (gameboard == null || gameboard.ID == null)
             {
-                ModelState.AddModelError("", "ModelState invalid");
+                ModelState.AddModelError("Gameboard.ID", "Gameboard or Gameboard.ID is null.");
                 return Page();
             }
 

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Ludo_WebApp.Models
 {
-    public class Ludo
-    {
-    }
+    //public class Ludo
+    //{
+    //}
 }
