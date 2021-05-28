@@ -75,7 +75,16 @@ namespace Ludo_API.Repositories
         {
             if (moveAction.StartSquare != null)
             {
-                var startSquare = await context.Squares.SingleOrDefaultAsync(s => s.ID == moveAction.StartSquare.SquareIndex);
+                Square startSquare;
+                try
+                {
+                    //var startSquare = await context.Squares.SingleOrDefaultAsync(s => s.ID == moveAction.StartSquare.SquareIndex);
+                    startSquare = await context.Squares.SingleOrDefaultAsync(s => s.GameboardId == moveAction.GameId && s.ID == moveAction.StartSquare.SquareIndex);
+                }
+                catch (Exception)
+                {
+                    throw new Exception("Error retreiving square matching moveAction.StartSquare!");
+                }
 
                 if (startSquare != null)
                 {
@@ -85,7 +94,15 @@ namespace Ludo_API.Repositories
 
             if (moveAction.DestinationSquare != null)
             {
-                var destinationSquare = await context.Squares.SingleOrDefaultAsync(s => s.ID == moveAction.DestinationSquare.SquareIndex);
+                Square destinationSquare;
+                try
+                {
+                    destinationSquare = await context.Squares.SingleOrDefaultAsync(s => s.GameboardId == moveAction.GameId && s.ID == moveAction.DestinationSquare.SquareIndex);
+                }
+                catch (Exception)
+                {
+                    throw new Exception("Error retreiving square matching moveAction.DestinationSquare!");
+                }
 
                 if (destinationSquare == null)
                 {
