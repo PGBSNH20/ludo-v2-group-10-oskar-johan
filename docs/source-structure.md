@@ -105,49 +105,78 @@
                 > This repository handles all database queries against the `Players` table.
         - Utils/
             - ShortGuid.cs
+                > ShortGuid can be used to construct an URL friendly guid id string and to convert the ShortGuid back to a guid
         - Validators/
             - IsColor.cs
+                > note: Not used, delete?
+                
+                > The class `IsColorAttribute` defines an attribute used to validate hex color strings.
     - Ludo_API_Test/
-        - Ludo_API_Test.csproj
-        - UnitTest1.cs
-        - UnitTest_GamesController.cs
         - Helpers/
             - TestData.cs
+                > note: Not used, delete?
         - ManualTests/
+            > Contains Rest Client snippets for manual testing of the API.
             - RestClientTests.http
         - TestRepositories/
+            > Test repositories. Implementations of the repository interfaces defined in WebApi.
             - TestGamesRepository.cs
             - TestMoveActionsRepository.cs
             - TestPlayerRepository.cs
         - UnitTests/
+            > Contains our tests.
             - UnitTest_GameplayController.cs
+                > Unit tests for the `api/Gameplay` endpoint controller.
+            - UnitTest1.cs
+                > Refactoring of these tests so that they work with the new code is incomplete.
+
+                > Tests from the first Ludo project (Ludo v1).
+            - UnitTest_GamesController.cs
+                > Unit tests for the `api/Games` endpoint controller.
     - Ludo_WebApp/
         - Program.cs
+            > The entry point in the WebApp. Creates the host builder, configures the default WebHost by registering our Startup class.
         - Startup.cs
+            > Register and configure our dependencies and services. Configures Swagger. Sets up the pipeline.
         - Data/
             - GameboardConfigORM.cs
+                > note: Not used, delete?
         - Hubs/
+            > Hubs for SignalR
             - LudoHub.cs
         - Ludo_API/
             - Fetch.cs
+                > The `Fetch` class contains methods to make API calls against the various endpoints.
             - Models/
                 - LudoData.cs
+                    > This holds all data for Ludo, such as gameboard layout (square color and square type) and a `ColorTrackData` for each color. This data is set by RestSharp when it deserializes the json data received when request the LudoData from the API.
         - Models/
             - Ludo.cs
+                > note: Not used, delete?
             - MoveAction.cs
+                > RestSharp creates MoveAction object when it deserializes json data from the API.
             - DTO/
                 - GameboardDTO.cs
+                    > RestSharp creates Gameboard object when it deserializes json data from the API.
                 - NewPlayerDTO.cs
+                    > RestSharp creates NewPlayer object when it deserializes json data from the API.
                 - PlayerDTO.cs
+                    > RestSharp creates Player object when it deserializes json data from the API.
                 - PostRollDieDTO.cs
+                    > RestSharp creates PostRollDie object when it deserializes json data from the API.
                 - SquareDTO.cs
+                    > RestSharp creates Square object when it deserializes json data from the API.
                 - SquareTenantDTO.cs
+                    > RestSharp creates SquareTenant object when it deserializes json data from the API.
                 - TurnDataDTO.cs
+                    > RestSharp creates TurnData object when it deserializes json data from the API.
         - Pages/
             - Error.cshtml
             - Error.cshtml.cs
             - Index.cshtml
+                > Startpage of the WebApp
             - Index.cshtml.cs
+                > Startpage of the WebApp
             - Privacy.cshtml
             - Privacy.cshtml.cs
             - _ViewImports.cshtml
@@ -156,13 +185,28 @@
                 - Game.cshtml
                 - Game.cshtml.cs
                 - Index.cshtml
+                    - Here the gameboard is drawn if a route id is specified and if there's a gameboard with said id.
+                    - Display a "Cast Die" button for the player whose turn it is.
+                    - Display a list of `MoveAction`s if the player has cast their die.
                 - Index.cshtml.cs
+                    - Loads LudoData and the Gameboard if the {id} is not null.
+                    - Handles the POST when the "Cast Die" is clicked.
+                    - Handles the POST when the MoveActions form is submitted.
                 - Load.cshtml
+                    > note: Not used, delete?
                 - Load.cshtml.cs
+                    > note: Not used, delete?
                 - Lobby.cshtml
+                    > Shows a form to create or join a game depending on whether {id} is null or not.
+                    > Displays a list of player in a game (if {id} is not null)
+                    > Presents a button which takes they player to the gameboard when the creator has started the game.
                 - Lobby.cshtml.cs
+                    - Handles the POST when the create/join game form is submitted.
+                    - Handles the POST when "Start Game" button is clicked.
                 - New.cshtml
+                    > note: Not used, delete?
                 - New.cshtml.cs
+                    > note: Not used, delete?
             - Shared/
                 - _Layout.cshtml
                 - _ValidationScriptsPartial.cshtml
@@ -170,14 +214,20 @@
             - launchSettings.json
             - serviceDependencies.local.json.user
         - Repositories/
+            > note: Not used, delete?
             - ILudoApiRepository.cs
+                > note: Not used, delete?
             - LudoApiRepository.cs
+                > note: Not used, delete?
         - Utils/
             - CookieMonster.cs
+                > Sets cookies, and surprisingly it doesn't eat any.
         - wwwroot/
             - css/
                 - ludo.css
+                    > Styles for the gameboard.
                 - site.css
             - js/
                 - ludo.js
+                    > Scripts for the gameboard.
                 - site.js

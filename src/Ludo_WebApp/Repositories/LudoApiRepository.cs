@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Ludo_WebApp.Repositories
 {
-    public class LudoApiRepository : ILudoApiRepository
-    {
-    }
+    //public class LudoApiRepository : ILudoApiRepository
+    //{
+    //}
 }
