@@ -26,5 +26,10 @@ namespace Ludo_API_Test
         {
             throw new System.NotImplementedException();
         }
+
+        public Task<List<MoveAction>> GetMoveActions(LudoContext context, int gameId, int playerId)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

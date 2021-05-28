@@ -21,12 +21,12 @@ namespace Ludo_API.Repositories
 
         public async Task<MoveAction> GetMoveAction(LudoContext context, int moveActionId)
         {
-            return await context.MoveActions.SingleOrDefaultAsync(m => m.Id == moveActionId);
+            return await context.MoveActions.Include(ma => ma.Player).Include(ma => ma.StartSquare).Include(ma => ma.DestinationSquare).SingleOrDefaultAsync(m => m.Id == moveActionId);
         }
 
         public async Task<List<MoveAction>> GetMoveActions(LudoContext context, int gameId, int playerId)
         {
-            return await context.MoveActions.Where(ma => ma.GameId == gameId && ma.PlayerId == playerId).ToListAsync();
+            return await context.MoveActions.Include(ma => ma.Player).Include(ma => ma.StartSquare).Include(ma => ma.DestinationSquare).Where(ma => ma.GameId == gameId && ma.PlayerId == playerId).ToListAsync();
         }
 
         public async Task DeleteMoveActions(LudoContext context, int gameId)
