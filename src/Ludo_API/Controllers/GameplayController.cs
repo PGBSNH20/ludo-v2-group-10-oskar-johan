@@ -54,30 +54,38 @@ namespace Ludo_API.Controllers
             [Required][FromBody] PostRollDieDTO postRollDieDTO
         )
         {
-            var game = await _gamesRepository.GetGame(_context, postRollDieDTO.GameId);
+            var gameboard = await _gamesRepository.GetGame(_context, postRollDieDTO.GameId);
 
-            if (game == null || game.Squares.Any(square => square.Tenant?.PieceCount >= 4))
+            if (gameboard == null || gameboard.Squares.Any(square => square.Tenant?.PieceCount >= 4))
             {
                 return NotFound($"Can't find an active game with the id {postRollDieDTO.GameId}");
             }
 
-            var player = game.Players.SingleOrDefault(player => player.ID == postRollDieDTO.PlayerId);
+            var player = gameboard.Players.SingleOrDefault(player => player.ID == postRollDieDTO.PlayerId);
 
             if (player == null)
             {
                 return NotFound($"Can't find player with the id {postRollDieDTO.PlayerId}");
             }
 
-            // Call ITurnManager.HandleTurn which rolls the die and builds a list of MoveActions
-            var moveActions = _turnManager.HandleTurn(game, player);
+            var moveActions = await _moveActionsRepository.GetMoveActions(_context, gameboard.ID, player.ID);
+            TurnDataDTO turnDataDTO = new();
 
-            return Ok(await _moveActionsRepository.AddMoveActions(_context, moveActions));
+            if (moveActions.Count == 0)
+            {
+                // Call ITurnManager.HandleTurn which rolls the die and builds a list of MoveActions
+                turnDataDTO = _turnManager.HandleTurn(gameboard, player);
+                moveActions = await _moveActionsRepository.AddMoveActions(_context, turnDataDTO.MoveActions);
+            }
+
+            turnDataDTO.MoveActions = moveActions;
+            return Ok(turnDataDTO);
         }
 
         // POST api/Gameplay/ChoseAction
         [HttpPost("[action]")]
         [ActionName("ChooseAction")]
-        public async Task<ActionResult<string>> PostChooseAction([Required][FromBody] int moveActionId)
+        public async Task<ActionResult<TurnDataDTO>> PostChooseAction([Required][FromBody] int moveActionId)
         {
             var moveAction = await _moveActionsRepository.GetMoveAction(_context, moveActionId);
 
@@ -88,14 +96,50 @@ namespace Ludo_API.Controllers
                 return NotFound($"Can't find a move action with id {moveActionId}");
             }
 
-            bool success = await _gamesRepository.ExecuteMoveAction(_context, moveAction);
+            // If the MoveAction is not valid, delete it and return it's message.
+            if (!moveAction.ValidMove)
+            {
+                await _moveActionsRepository.DeleteMoveActions(_context, moveAction.GameId);
+                TurnDataDTO turnActionDTO =  new()
+                {
+                    DieRoll = null,
+                    Message = moveAction.Message,
+                    MoveActions = null,
+                };
+                return Ok(turnActionDTO);
+            }
 
-            await _moveActionsRepository.DeleteMoveActions(_context, moveAction.GameId);
+            bool success;
+
+            if (moveAction.StartSquare == null && moveAction.DestinationSquare == null)
+            {
+                // The MoveAction represents "no possible moves". We can let the `if (success)`-action do the work of deleting the MoveAction and starting the next turn.
+                success = true;
+            }
+            else
+            {
+                success = await _gamesRepository.ExecuteMoveAction(_context, moveAction);
+            }
 
             if (success)
             {
-                _turnManager.NextTurn(moveAction.DiceRoll);
-                return Ok("Move action was succesfully executed");
+                var gameboard = await _gamesRepository.GetGame(_context, moveAction.GameId);
+
+                if (gameboard == null)
+                {
+                    return NotFound($"Could not find a game with the id: {moveAction.GameId}");
+                }
+
+                await _moveActionsRepository.DeleteMoveActions(_context, moveAction.GameId);
+                await _turnManager.StartNextTurnAsync(gameboard, moveAction.DiceRoll);
+                TurnDataDTO turnActionDTO = new()
+                {
+                    DieRoll = null,
+                    Message = moveAction.Message,
+                    MoveActions = null,
+                };
+                return Ok(turnActionDTO);
+                //return Ok("Move action was succesfully executed");
             }
 
             // todo: maybe replace NotFound with another error
@@ -106,13 +150,19 @@ namespace Ludo_API.Controllers
         // POST api/Gameplay/GetMoveActions
         [HttpGet("[action]")]
         [ActionName("GetMoveActions")]
-        public async Task<ActionResult<List<MoveAction>>> GetMoveActions([Required][FromQuery] PostRollDieDTO postRollDieDTO)
+        //public async Task<ActionResult<List<MoveAction>>> GetMoveActions([Required][FromQuery] PostRollDieDTO postRollDieDTO)
+        public async Task<ActionResult<List<MoveAction>>> GetMoveActions(
+            [Required][FromQuery] int GameId,
+            [Required][FromQuery] int PlayerId
+        )
         {
-            var moveActions = await _moveActionsRepository.GetMoveActions(_context, postRollDieDTO.GameId, postRollDieDTO.PlayerId);
+            //var moveActions = await _moveActionsRepository.GetMoveActions(_context, postRollDieDTO.GameId, postRollDieDTO.PlayerId);
+            var moveActions = await _moveActionsRepository.GetMoveActions(_context, GameId, PlayerId);
 
             if (moveActions == null)
             {
-                return NotFound($"Can't find a move action for game with id: {postRollDieDTO.GameId} and playerId {postRollDieDTO.PlayerId}");
+                //return NotFound($"Can't find a move action for game with id: {postRollDieDTO.GameId} and playerId {postRollDieDTO.PlayerId}");
+                //return NotFound($"Can't find a move action for game with id: {GameId} and playerId {PlayerId}");
             }
 
             return Ok(moveActions);
