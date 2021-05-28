@@ -18,6 +18,11 @@ namespace Ludo_API_Test
             return Task.FromResult(moveActions);
         }
 
+        public Task DeleteMoveAction(LudoContext context, MoveAction moveAction)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public Task DeleteMoveActions(LudoContext context, int gameId)
         {
             throw new System.NotImplementedException();
