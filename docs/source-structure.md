@@ -90,12 +90,19 @@
         - Properties/
             - launchSettings.json
         - Repositories/
+            > Contains our repository interfaces and their main implementations.
             - GamesRepository.cs
+                > This repository handles all database queries for the `api/Games/` endpoint (`GamesController`) such as adding a new game (gameboard), adding a new player to an existing game or retrieving games (`Gameboard`s).
             - IGamesRepository.cs
+                > Defines the repository for the `api/Games/` endpoint (`GamesController`).
             - IMoveActionsRepository.cs
+                > Defines the repository for the `MoveActions` table.
             - IPlayerRepository.cs
+                > Defines the repository for the `Players` table.
             - MoveActionsRepository.cs
+                > This repository handles all database queries against the `MoveActions` table.
             - PlayerRepository.cs
+                > This repository handles all database queries against the `Players` table.
         - Utils/
             - ShortGuid.cs
         - Validators/
