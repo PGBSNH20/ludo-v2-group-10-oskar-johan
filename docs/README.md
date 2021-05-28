@@ -444,7 +444,7 @@ See [Source Structure](#Source&#32;Structure) section for detailed explenation o
 ## How we worked
 We have mostly been working together on the project as we think that is the best way to solve problems, share knowledge and make each one involved in every part of the project.
 
-Johan has however taken a larger responsibility twords the end of the project as we needed to get things done before deadline and he is is the most experience one of us.
+Johan has however taken a larger responsibility twords the end of the project as we needed to get things done before deadline and he is the most experience one of us.
 
 <br>
 
