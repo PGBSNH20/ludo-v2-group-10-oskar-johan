@@ -1,3 +1,4 @@
+using Ludo_API.Data;
 using Ludo_API.Database;
 using Ludo_API.GameEngine;
 using Ludo_API.GameEngine.Game;
@@ -39,11 +40,12 @@ namespace Ludo_API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Ludo_API", Version = "v1" });
             });
+            services.AddSingleton<ILudoData2, LudoData2>();
             services.AddScoped<IGamesRepository, GamesRepository>();
             services.AddTransient<ITurnManager, TurnManager>();
             services.AddTransient<IMoveActionsRepository, MoveActionsRepository>();
             services.AddTransient<Game, Game>(); // todo: create an interface for Game
-            services.AddTransient<IDie, DieD6>(); // todo: create an interface for Game
+            services.AddTransient<IDie, DieD6>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
