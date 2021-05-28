@@ -95,6 +95,12 @@ namespace Ludo_API.Controllers
 
             return Ok(new GameboardDTO(gameboard));
         }
+        //// GET api/Games/
+        //[HttpGet()]
+        //public async Task<ActionResult<GameboardDTO>> GetGameIdFromQuery([FromQuery] int id)
+        //{
+        //    return await Get(id);
+        //}
 
         /// <summary>
         /// Get Ludo data such as gameboard layout, player colors and their gameboard track indices.

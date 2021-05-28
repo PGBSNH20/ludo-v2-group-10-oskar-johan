@@ -233,7 +233,7 @@ namespace Ludo_WebApp.Pages.Ludo
             {
                 // todo: do something
                 ModelState.AddModelError("PostChooseMoveAction.ResponseError.Debug", restResponse.ErrorMessage);
-                ModelState.AddModelError("PostChooseMoveAction.ResponseError", ((string)restResponse).Data);
+                ModelState.AddModelError("PostChooseMoveAction.ResponseError", restResponse.Data.Message);
                 return Page();
             }
 
@@ -241,7 +241,7 @@ namespace Ludo_WebApp.Pages.Ludo
             {
                 id = Gameboard.ID,
                 moveActionMessage = restResponse.Data.Message
-                });
+            });
         }
     }
 }
