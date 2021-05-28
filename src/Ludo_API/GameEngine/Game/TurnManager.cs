@@ -1,5 +1,6 @@
 ﻿using Ludo_API.Database;
 using Ludo_API.Models;
+using Ludo_API.Models.DTO;
 using Ludo_API.Repositories;
 using System;
 using System.Collections.Generic;
@@ -71,10 +72,13 @@ namespace Ludo_API.GameEngine.Game
 
         public Player GetNextPlayer(Gameboard gameboard)
         {
-            var validColors = Player.GetValidColors();
+            var playerColors = gameboard.Players.Select(p => p.Color);
+            var validColors = Player.GetValidColors().Where(c => playerColors.Contains(c)).ToList();
+
             int currentColorIndex = validColors.FindIndex(color => color == gameboard.CurrentPlayer.Color);
+
             string nextColor = validColors[currentColorIndex + 1 < validColors.Count ? currentColorIndex + 1 : 0];
-            return gameboard?.Players.Single(p => p.Color == nextColor);
+            return gameboard.Players.Single(p => p.Color == nextColor);
         }
 
         //public void StartNextTurn(List<Player> players, Player currentPlayer, int previousTurnDiceRoll)
@@ -91,10 +95,15 @@ namespace Ludo_API.GameEngine.Game
             }
         }
 
-        public List<MoveAction> HandleTurn(Gameboard gameboard, Player player)
+        //public (int dieRoll, List<MoveAction> moveActions) HandleTurn(Gameboard gameboard, Player player)
+        public TurnDataDTO HandleTurn(Gameboard gameboard, Player player)
         {
             int diceNumber = RollDice();
-            return _game.GetPossibleMoves(gameboard, player, diceNumber);
+            return new TurnDataDTO
+            {
+                DieRoll = diceNumber,
+                MoveActions = _game.GetPossibleMoves(gameboard, player, diceNumber),
+            };
         }
 
         public int RollDice()
