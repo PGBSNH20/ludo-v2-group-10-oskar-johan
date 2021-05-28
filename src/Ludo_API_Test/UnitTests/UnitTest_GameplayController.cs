@@ -76,10 +76,10 @@ namespace Ludo_API_Test.UnitTests
             // Act
             var moveActions_ActionResult = await gameplayController.PostRollDie(postRollDieDTO);
             var moveActions_OkObjectResult = (OkObjectResult)(moveActions_ActionResult).Result;
-            var moveActions = (List<MoveAction>)moveActions_OkObjectResult.Value;
+            var turnDataDTO = (TurnDataDTO)moveActions_OkObjectResult.Value;
 
             // Assert
-            Assert.Empty(moveActions);
+            Assert.Empty(turnDataDTO.MoveActions);
         }
 
         /// <summary>
@@ -164,10 +164,10 @@ namespace Ludo_API_Test.UnitTests
             // Act
             var moveActions_ActionResult = await gameplayController.PostRollDie(postRollDieDTO);
             var moveActions_OkObjectResult = (OkObjectResult)(moveActions_ActionResult).Result;
-            var moveActions = (List<MoveAction>)moveActions_OkObjectResult.Value;
+            var turnDataDTO = (TurnDataDTO)moveActions_OkObjectResult.Value;
 
             // Assert
-            Assert.Collection(moveActions, item => Assert.Equal(expectedDestSquareIndex, item.DestinationSquare.SquareIndex) );
+            Assert.Collection(turnDataDTO.MoveActions, item => Assert.Equal(expectedDestSquareIndex, item.DestinationSquare.SquareIndex) );
         }
 
         //[Fact]
@@ -234,10 +234,10 @@ namespace Ludo_API_Test.UnitTests
             // Act
             var moveActions_ActionResult = await gameplayController.PostRollDie(postRollDieDTO);
             var moveActions_OkObjectResult = (OkObjectResult)(moveActions_ActionResult).Result;
-            var moveActions = (List<MoveAction>)moveActions_OkObjectResult.Value;
+            var turnDataDTO = (TurnDataDTO)moveActions_OkObjectResult.Value;
 
             // Assert
-            Assert.Collection(moveActions,
+            Assert.Collection(turnDataDTO.MoveActions,
                 item => Assert.Equal(expectedDestSquareIndexForPieceInPlay, item.DestinationSquare.SquareIndex),
                 item => Assert.Equal(expectedDestSquareIndexForNewPiece, item.DestinationSquare.SquareIndex)
             );
