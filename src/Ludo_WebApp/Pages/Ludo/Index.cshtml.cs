@@ -13,37 +13,14 @@ namespace Ludo_WebApp.Pages.Ludo
 {
     public class IndexModel : PageModel
     {
-        public int? DieRoll { get; set; } = null;
-
-        //[BindProperty(SupportsGet = true)]
-        public LudoData LudoData { get; set; }
-
-        ////[BindProperty(SupportsGet = true)]
-        //public NewPlayerDTO NewPlayer { get; set; }
-
-        //[BindProperty(SupportsGet = true)]
         [BindProperty]
         public GameboardDTO Gameboard { get; set; }
 
-        //[BindProperty]
+        public int? DieRoll { get; set; } = null;
+        public LudoData LudoData { get; set; }
         public List<MoveAction> MoveActions { get; set; }
-
-        //[BindProperty]
         public int? ChosenMoveActionId { get; set; }
 
-        //public string ColorError { get; set; }
-
-        //[BindProperty]
-        //public GameboardDTO gameboard { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="gameboard"></param>
-        /// <param name="ludoData"></param>
-        /// <returns></returns>
-        //public async Task OnGet(int? id, GameboardDTO gameboard, LudoData ludoData)
         public async Task<IActionResult> OnGet(int? id)
         {
             if (id == null)
@@ -78,9 +55,6 @@ namespace Ludo_WebApp.Pages.Ludo
             {
                 return RedirectToPage("./Lobby/", new { id = Gameboard.ID });
             }
-
-            //return EmptyResult();
-            // todo: update the html
 
             /* -------------------------------------------------- */
 
@@ -120,82 +94,6 @@ namespace Ludo_WebApp.Pages.Ludo
             return Page();
         }
 
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        ///// <param name="id"></param>
-        ///// <param name="newPlayer"></param>
-        ///// <returns></returns>
-        ////[NonHandler]
-        //public async Task<IActionResult> OnPostAddPlayerAsync(int id, NewPlayerDTO newPlayer)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        ModelState.AddModelError("", "ModelState invalid");
-        //        return Page();
-        //    }
-
-        //    newPlayer.GameId = id;
-
-        //    // call API to the add player
-        //    var restResponse = await Fetch.PostAddPlayerAsync(newPlayer);
-
-        //    if (restResponse.StatusCode != HttpStatusCode.OK)
-        //    {
-        //        //ModelState.AddModelError("AddPlayer", restResponse.ErrorMessage);
-
-        //        if (restResponse.StatusCode == HttpStatusCode.BadRequest)
-        //        {
-        //            ModelState.AddModelError("AddPlayerBadRequest", restResponse.Content);
-        //        }
-
-        //        if (restResponse.StatusCode == HttpStatusCode.NotFound)
-        //        {
-        //            ModelState.AddModelError("AddPlayerNotFound", restResponse.Content);
-        //        }
-
-        //        //return Page();
-        //        return Redirect(Request.Path);
-        //        // todo: redirect to error-page?
-        //        // todo: logging?
-        //    }
-
-        //    CookieMonster.SetCookie(Response.Cookies, "PlayerID", restResponse.Data.ID.ToString());
-
-        //    return RedirectToPage("./Index/", new { id = restResponse.Data.GameId, successfullyJoined = 1 });
-        //}
-
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        ///// <param name="gameboard"></param>
-        ///// <returns></returns>
-        //public async Task<IActionResult> OnPostStartGameAsync(GameboardDTO gameboard)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        ModelState.AddModelError("", "ModelState invalid");
-        //        return Page();
-        //    }
-
-        //    var restResponse = await Fetch.StartGameAsync(gameboard.ID);
-
-        //    if (restResponse.StatusCode != HttpStatusCode.OK)
-        //    {
-        //        // todo: do something
-        //        return new BadRequestResult();
-        //    }
-
-        //    Gameboard = restResponse.Data;
-        //    //return RedirectToRoute(Request.Path.Value, new { id = gameboard.ID });
-        //    return RedirectToPage("./Index/", new { id = restResponse.Data.ID, gameSuccessfullyStarted = 1 });
-        //}
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="gameboard"></param>
-        /// <returns></returns>
         public async Task<IActionResult> OnPostRollDieAsync(GameboardDTO gameboard)
         {
             if (!ModelState.IsValid)
@@ -211,7 +109,6 @@ namespace Ludo_WebApp.Pages.Ludo
                 return Page();
             }
 
-            //var restResponse = await Fetch.PostAsync<List<MoveAction>>(Fetch.RequestURLs.GameplayRollDie, new PostRollDieDTO(gameboard));
             var restResponse = await Fetch.PostAsync<TurnDataDTO>(Fetch.RequestURLs.GameplayRollDie, new PostRollDieDTO(gameboard));
 
             if (restResponse.StatusCode != HttpStatusCode.OK)
@@ -220,10 +117,7 @@ namespace Ludo_WebApp.Pages.Ludo
                 return new BadRequestResult();
             }
 
-            //MoveActions = restResponse.Data;
-            //return RedirectToRoute(Request.Path.Value, new { id = gameboard.ID });
             return RedirectToPage("./Index/", new { id = gameboard.ID, dieRoll = restResponse.Data.DieRoll });
-            //return Page();
         }
 
         public async Task<IActionResult> OnPostChooseMoveActionAsync(int? chosenMoveActionId, int? DieRoll)
@@ -231,7 +125,6 @@ namespace Ludo_WebApp.Pages.Ludo
             if (chosenMoveActionId == null)
             {
                 ModelState.AddModelError("PostRollDie_GameboardCurrentPlayer", "Gameboard.CurrentPlayer is null");
-                //return Page();
 
                 return RedirectToPage("./Index/", new
                 {
@@ -245,7 +138,6 @@ namespace Ludo_WebApp.Pages.Ludo
 
             if (restResponse.StatusCode != HttpStatusCode.OK)
             {
-                // todo: do something
                 ModelState.AddModelError("PostChooseMoveAction.ResponseError.Debug", restResponse.ErrorMessage);
                 ModelState.AddModelError("PostChooseMoveAction.ResponseError", restResponse.Data.Message);
                 return Page();

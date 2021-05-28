@@ -4,7 +4,6 @@ using Ludo_WebApp.Models.DTO;
 using Ludo_WebApp.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -106,11 +105,6 @@ namespace Ludo_WebApp.Pages.Ludo
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="gameboard"></param>
-        /// <returns></returns>
         public async Task<IActionResult> OnPostStartGameAsync(GameboardDTO gameboard)
         {
             if (gameboard == null || gameboard.ID == null)

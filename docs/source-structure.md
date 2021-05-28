@@ -33,28 +33,18 @@
                 > Here we define our entities/tables, and setup a composite primary key constraint in the `Square` table for the `ID` and `GameboardId` columns.
         - GameEngine/
             > This folder contains all gameplay related functionality.
-            - GameEngine.cs
-                > not used, todo: delete file
-            - IGameEngine.cs
-                > not used, todo: delete file
             - Game/
                 > This folder contains all gameplay related functionality.
                 - DieD6.cs
                     > This defines a 6 side die, and has one method for rolling the die, and one property to which the result is saved.
                 - Game.cs
                     > The game's move logic is defined, such as generating possible moves.
-                - GameOptions.cs
-                    > not used, todo: delete file
                 - IDie.cs
                     > Defines a die
                     <br>
                     > By defining a die with an interface and injecting an implementation as needed we can test any functionality which uses a die since the main implementation `DieD6` uses `Random` meaning that the outcome of the roll cannot be predicated and reliably tested.
-                - ILudoGame.cs
-                    > not used, todo: delete file
                 - ITurnManager.cs
                     > Defines a TurnManager
-                - PlayerManager.cs
-                    > not used, todo: delete file
                 - TurnManager.cs
                     > Our implementation of ITurnManager
                     <br>
@@ -112,9 +102,6 @@
                 
                 > The class `IsColorAttribute` defines an attribute used to validate hex color strings.
     - Ludo_API_Test/
-        - Helpers/
-            - TestData.cs
-                > note: Not used, delete?
         - ManualTests/
             > Contains Rest Client snippets for manual testing of the API.
             - RestClientTests.http
@@ -138,9 +125,6 @@
             > The entry point in the WebApp. Creates the host builder, configures the default WebHost by registering our Startup class.
         - Startup.cs
             > Register and configure our dependencies and services. Configures Swagger. Sets up the pipeline.
-        - Data/
-            - GameboardConfigORM.cs
-                > note: Not used, delete?
         - Hubs/
             > Hubs for SignalR
             - LudoHub.cs
@@ -151,8 +135,6 @@
                 - LudoData.cs
                     > This holds all data for Ludo, such as gameboard layout (square color and square type) and a `ColorTrackData` for each color. This data is set by RestSharp when it deserializes the json data received when request the LudoData from the API.
         - Models/
-            - Ludo.cs
-                > note: Not used, delete?
             - MoveAction.cs
                 > RestSharp creates MoveAction object when it deserializes json data from the API.
             - DTO/
@@ -192,10 +174,6 @@
                     - Loads LudoData and the Gameboard if the {id} is not null.
                     - Handles the POST when the "Cast Die" is clicked.
                     - Handles the POST when the MoveActions form is submitted.
-                - Load.cshtml
-                    > note: Not used, delete?
-                - Load.cshtml.cs
-                    > note: Not used, delete?
                 - Lobby.cshtml
                     > Shows a form to create or join a game depending on whether {id} is null or not.
                     > Displays a list of player in a game (if {id} is not null)
@@ -203,22 +181,12 @@
                 - Lobby.cshtml.cs
                     - Handles the POST when the create/join game form is submitted.
                     - Handles the POST when "Start Game" button is clicked.
-                - New.cshtml
-                    > note: Not used, delete?
-                - New.cshtml.cs
-                    > note: Not used, delete?
             - Shared/
                 - _Layout.cshtml
                 - _ValidationScriptsPartial.cshtml
         - Properties/
             - launchSettings.json
             - serviceDependencies.local.json.user
-        - Repositories/
-            > note: Not used, delete?
-            - ILudoApiRepository.cs
-                > note: Not used, delete?
-            - LudoApiRepository.cs
-                > note: Not used, delete?
         - Utils/
             - CookieMonster.cs
                 > Sets cookies, and surprisingly it doesn't eat any.
