@@ -2,6 +2,7 @@
 using Ludo_API.Models;
 using Ludo_API.Repositories;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Ludo_API_Test
@@ -29,7 +30,7 @@ namespace Ludo_API_Test
 
         public Task<List<MoveAction>> GetMoveActions(LudoContext context, int gameId, int playerId)
         {
-            throw new System.NotImplementedException();
+            return Task.FromResult(MoveActions.Where(ma => ma.GameId == gameId && ma.PlayerId == playerId).ToList());
         }
     }
 }
