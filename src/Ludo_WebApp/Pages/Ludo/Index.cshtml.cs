@@ -12,6 +12,8 @@ namespace Ludo_WebApp.Pages.Ludo
 {
     public class IndexModel : PageModel
     {
+        public int? DieRoll { get; set; } = null;
+
         //[BindProperty(SupportsGet = true)]
         public LudoData LudoData { get; set; }
 
@@ -19,6 +21,7 @@ namespace Ludo_WebApp.Pages.Ludo
         //public NewPlayerDTO NewPlayer { get; set; }
 
         //[BindProperty(SupportsGet = true)]
+        [BindProperty]
         public GameboardDTO Gameboard { get; set; }
 
         //[BindProperty]
@@ -48,6 +51,12 @@ namespace Ludo_WebApp.Pages.Ludo
                 ModelState.AddModelError("NoId", "You have to specify a gameId");
                 return Page();
             }
+
+            if (Request.Query.TryGetValue("DieRoll", out var dieRollString) && int.TryParse(dieRollString, out int dieRoll))
+            {
+                DieRoll = dieRoll;
+            }
+
 
             /* -------------------------------------------------- */
 
@@ -89,6 +98,7 @@ namespace Ludo_WebApp.Pages.Ludo
 
             // Get possible MoveActions
             var restResponseMoveActions = await Fetch.GetAsync<List<MoveAction>>(Fetch.RequestURLs.GameplayGetMoveActions, new PostRollDieDTO(Gameboard));
+            //var restResponseMoveActions = await Fetch.GetAsync<TurnResultDTO>(Fetch.RequestURLs.GameplayGetMoveActions, new PostRollDieDTO(Gameboard));
 
             if (restResponseMoveActions.StatusCode != HttpStatusCode.OK)
             {
@@ -194,7 +204,8 @@ namespace Ludo_WebApp.Pages.Ludo
                 return Page();
             }
 
-            var restResponse = await Fetch.PostAsync<List<MoveAction>>(Fetch.RequestURLs.GameplayRollDie, new PostRollDieDTO(gameboard));
+            //var restResponse = await Fetch.PostAsync<List<MoveAction>>(Fetch.RequestURLs.GameplayRollDie, new PostRollDieDTO(gameboard));
+            var restResponse = await Fetch.PostAsync<TurnDataDTO>(Fetch.RequestURLs.GameplayRollDie, new PostRollDieDTO(gameboard));
 
             if (restResponse.StatusCode != HttpStatusCode.OK)
             {
@@ -204,17 +215,33 @@ namespace Ludo_WebApp.Pages.Ludo
 
             //MoveActions = restResponse.Data;
             //return RedirectToRoute(Request.Path.Value, new { id = gameboard.ID });
-            return RedirectToPage("./Index/", new { id = gameboard.ID, rollDie = true });
+            return RedirectToPage("./Index/", new { id = gameboard.ID, dieRoll = restResponse.Data.DieRoll });
             //return Page();
         }
 
-        public async Task<IActionResult> OnPostChooseMoveActionAsync()
+        public async Task<IActionResult> OnPostChooseMoveActionAsync(int? chosenMoveActionId)
         {
-            int? chosenId = ChosenMoveActionId;
+            if (chosenMoveActionId == null)
+            {
+                ModelState.AddModelError("PostRollDie_GameboardCurrentPlayer", "Gameboard.CurrentPlayer is null");
+                return Page();
+            }
 
-            var restResponse = await Fetch.PostAsync<List<MoveAction>>(Fetch.RequestURLs.GameplayChoseAction, chosenId);
+            var restResponse = await Fetch.PostAsync<TurnDataDTO>(Fetch.RequestURLs.GameplayChooseAction, chosenMoveActionId);
 
-            return RedirectToPage("./Index/", new { id = Gameboard.ID });
+            if (restResponse.StatusCode != HttpStatusCode.OK)
+            {
+                // todo: do something
+                ModelState.AddModelError("PostChooseMoveAction.ResponseError.Debug", restResponse.ErrorMessage);
+                ModelState.AddModelError("PostChooseMoveAction.ResponseError", ((string)restResponse).Data);
+                return Page();
+            }
+
+            return RedirectToPage("./Index/", new
+            {
+                id = Gameboard.ID,
+                moveActionMessage = restResponse.Data.Message
+                });
         }
     }
 }
