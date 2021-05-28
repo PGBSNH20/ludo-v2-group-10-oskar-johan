@@ -13,6 +13,10 @@ namespace Ludo_WebApp
         public int GameId { get; init; } // necessary?
         #region DataMembers
 
+        //[ForeignKey("Player")]
+        //[DataMember] // unnecessary?
+        public PlayerDTO Player { get; init; } // necessary?
+
         //[DataMember] // unnecessary?
         public int PlayerId { get; init; } // necessary?
 
@@ -33,7 +37,7 @@ namespace Ludo_WebApp
         public bool ValidMove { get; init; }
         #endregion
 
-        #region NonDataMembers
+        //#region NonDataMembers
         /// <summary>
         /// This holds the new value for the <see cref="Square"/> a piece is moved from.
         /// </summary>
@@ -43,7 +47,7 @@ namespace Ludo_WebApp
         /// </summary>
         //[Required] // note: will this work? will it serialize it even though it's not a [DataMember]? ((if used as input DTO) will it throw/error because it's not set?)
         public SquareTenantDTO DestinationSquare { get; init; }
-        #endregion
+        //#endregion
 
         //public int SquareIndex { get; set; }
         //public Player NewPlayerValue { get; set; }

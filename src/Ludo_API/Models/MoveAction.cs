@@ -21,7 +21,11 @@ namespace Ludo_API.Models
         //[ForeignKey("Gameboard")]
         //[DataMember] // unnecessary?
         public int GameId { get; init; } // necessary?
-        #region DataMembers
+        //#region DataMembers
+
+        //[ForeignKey("Player")]
+        //[DataMember] // unnecessary?
+        public Player Player { get; init; } // necessary?
 
         [ForeignKey("Player")]
         //[DataMember] // unnecessary?
@@ -42,9 +46,9 @@ namespace Ludo_API.Models
         [Required]
         //[DataMember] // unnecessary? // (if used as input DTO) make it impossible to set this property on input
         public bool ValidMove { get; init; }
-        #endregion
+        //#endregion
 
-        #region NonDataMembers
+        //#region NonDataMembers
         /// <summary>
         /// This holds the new value for the <see cref="Square"/> a piece is moved from.
         /// </summary>
@@ -52,9 +56,9 @@ namespace Ludo_API.Models
         /// <summary>
         /// This holds the new value for the <see cref="Square"/> a piece is moved from.
         /// </summary>
-        [Required] // note: will this work? will it serialize it even though it's not a [DataMember]? ((if used as input DTO) will it throw/error because it's not set?)
+        //[Required] // note: will this work? will it serialize it even though it's not a [DataMember]? ((if used as input DTO) will it throw/error because it's not set?)
         public SquareTenant DestinationSquare { get; init; }
-        #endregion
+        //#endregion
 
         //public int SquareIndex { get; set; }
         //public Player NewPlayerValue { get; set; }
