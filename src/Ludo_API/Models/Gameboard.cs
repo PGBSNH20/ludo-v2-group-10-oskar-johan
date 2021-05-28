@@ -77,8 +77,6 @@ namespace Ludo_API.Models
                     Tenant = new SquareTenant(i, null, 0),
                 });
             }
-
-            CreateOrderPlayers();
         }
         #endregion
 
@@ -112,28 +110,13 @@ namespace Ludo_API.Models
         }
 
         /// <summary>
-        /// Get a Square with its index.
+        /// Get the Square with the specified index.
         /// </summary>
         /// <param name="index">The index of the Square to retrieve.</param>
         /// <returns></returns>
         public Square GetSquare(int index)
         {
             return Squares.ElementAtOrDefault(index);
-        }
-
-        public void CreateOrderPlayers()
-        {
-            OrderPlayers = (from player in Players
-                            join color in ColorOrder on player.Color equals color
-                            orderby ColorOrder.FindIndex(x => x == color)
-                            select player).ToList();
-        }
-
-        public Player NextPlayer(Player player)
-        {
-            int playerIndex = OrderPlayers.FindIndex(p => p == player);
-
-            return playerIndex + 1 < OrderPlayers.Count ? OrderPlayers[playerIndex + 1] : OrderPlayers[0];
         }
     }
 }
