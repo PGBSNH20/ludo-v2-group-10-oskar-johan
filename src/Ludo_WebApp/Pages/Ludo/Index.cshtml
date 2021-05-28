@@ -1,5 +1,5 @@
 ﻿@*Use this in production*@
-@*@page "{id:int}"*@
+@*@page "{id:int"*@
 @*For development only*@
 @page "{id:int?}"
 @model Ludo_WebApp.Pages.Ludo.IndexModel
@@ -22,6 +22,14 @@
         if (gameSuccessfullyStarted.ToString() == "1")
         {
             <p>The game has started!</p>
+        }
+    }
+
+    if (Model.Request.Query.TryGetValue("DieRoll", out var dieRollString) && int.TryParse(dieRollString, out int dieRoll))
+    {
+        if (gameSuccessfullyStarted.ToString() == "1")
+        {
+            <p>Die roll: @dieRoll</p>
         }
     }
 
@@ -121,7 +129,7 @@
 
         if (couldParsePlayerId && Model.Gameboard.Players.Any(p => p.ID == playerId))
         {
-            <h2>It is @(Model.Gameboard.CurrentPlayer?.Name)'s turn.</h2>
+            <h2>It is @(Model.Gameboard.CurrentPlayer?.Name)'s (id: @Model.Gameboard.CurrentPlayer?.ID turn.</h2>
 
 
             // 2. Draw gameboard.
@@ -225,12 +233,13 @@
                         @if (Model.MoveActions == null)
                         {
                             @*// 4x. If dice has not been thrown: Draw button to throw the die.*@
-
-                            <form method="post" asp-page-handler="RollDie">
-                                @Html.HiddenFor(m => m.Gameboard.ID)
-                                @Html.HiddenFor(m => m.Gameboard.CurrentPlayer.ID)
-                                <input type="submit" value="Roll die" class="btn btn-primary" />
-                            </form>
+                            <div class="form-group">
+                                <form method="post" asp-page-handler="RollDie">
+                                    @Html.HiddenFor(m => m.Gameboard.ID)
+                                    @Html.HiddenFor(m => m.Gameboard.CurrentPlayer.ID)
+                                    <input type="submit" value="Roll die" class="btn btn-primary" />
+                                </form>
+                            </div>
                         }
                         else // Model.MoveActions != null
                         {
@@ -250,10 +259,14 @@
                                     4b. (Javascript) allow form POST to execute.
                             *@
                             <div>
-                                <form method="post" asp-for="OnPostChooseMoveActionAsync">
+                                You rolled a @(Model.DieRoll).
+                            </div>
+                            <div class="form-group">
+                                <form method="post" asp-page-handler="ChooseMoveAction" asp-for="OnPostChooseMoveActionAsync">
                                     <div class="form-group">
                                         <label @* asp-for="" *@ class="control-label" for="TEMPATTRIBUTE_select_piece" style="display: block; color: #fff">Move piece on square:</label>
                                         <span @* asp-validation-for="" *@ class="text-danger" name="TEMPATTRIBUTE_select_piece"></span>
+                                        @Html.HiddenFor(m => m.Gameboard.ID)
                                         <select size="4" asp-for="ChosenMoveActionId">
                                             @foreach (var moveAction in Model.MoveActions)
                                             {
