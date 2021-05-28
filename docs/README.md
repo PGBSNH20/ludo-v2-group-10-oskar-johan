@@ -3,7 +3,9 @@
 ## Table of contents
 
 - [Process](#Process)
+- [Application Structure Overview](#Application Structure Overview)
 - [Database](#Database)
+  - [Database Diagram](#Database Diagram)
   - [Models](#Models)
 - [Endpoints](#Endpoints)
 - [Credits & Sources](#Credits-&-Sources)
@@ -27,9 +29,22 @@ The fix for this was to lock the static properties "{Color}Track" (where {Color}
 
 ![set](Bug-fix-Lock-static-properties.png)
 
-## Database
+## Application Structure Overview
 
 ---
+
+![Application Structure Overview](Project-2-Ludo-v2-Diagram.svg)
+
+---
+
+## Database
+
+
+---
+
+### Database Diagram
+
+![Database Diagram](DatabaseDiagram.PNG)
 
 ---
 
