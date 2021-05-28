@@ -23,7 +23,7 @@ The solution consists of 3 projects:
 - Webb app  
 This is the client application which holds the user interface such as the design of gameboard, menus and forms for creating or joining a game. When setting up a game, and during gameplay, the client calls the API with requests to recieve data such as a die roll, possible moves and results from choices depending on what actions the users decides to do.
 
-  The API is called with generic GET and POST methods that is used with DTO models together with parameters to send the required data.
+  The API is called with generic GET and POST methods that is used with DTO models together with parameters to send the required data. Input is validated through model attributes.
 
   Cookies is used on the client side to keep track of who created the game and which players has joined a specific game.
 
