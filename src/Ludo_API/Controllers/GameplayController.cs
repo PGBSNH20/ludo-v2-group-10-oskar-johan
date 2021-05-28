@@ -82,7 +82,7 @@ namespace Ludo_API.Controllers
             return Ok(turnDataDTO);
         }
 
-        // POST api/Gameplay/ChoseAction
+        // POST api/Gameplay/ChooseAction
         [HttpPost("[action]")]
         [ActionName("ChooseAction")]
         public async Task<ActionResult<TurnDataDTO>> PostChooseAction([Required][FromBody] int moveActionId)
