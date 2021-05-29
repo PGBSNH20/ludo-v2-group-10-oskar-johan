@@ -79,7 +79,7 @@ namespace Ludo_API_Test.UnitTests
             var turnDataDTO = (TurnDataDTO)moveActions_OkObjectResult.Value;
 
             // Assert
-            Assert.Empty(turnDataDTO.MoveActions);
+            Assert.Collection(turnDataDTO.MoveActions, item => Assert.Equal(Game.MoveMessagesClass.NoPossibleMoves, item.Message));
         }
 
         /// <summary>
