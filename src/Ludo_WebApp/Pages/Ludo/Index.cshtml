@@ -2,6 +2,7 @@
 @*@page "{id:int"*@
 @*For development only*@
 @page "{id:int?}"
+@using Ludo_WebApp.Ludo_API.Models 
 @model Ludo_WebApp.Pages.Ludo.IndexModel
 @(ViewData["Title"] = "Ludo Game")
 
@@ -39,11 +40,28 @@
     /*-------------------------------------------------------------------------------------------------------------------*/
 }
 
-
-@if (Model.Request.Query.TryGetValue("moveActionMessage", out var moveActionMessageString) && int.TryParse(moveActionMessageString, out int moveActionMessage))
+@if (Model.Request.Query.TryGetValue("moveActionMessage", out var moveActionMessageString))
 {
-    <div class="alert alert-danger" role="alert">@moveActionMessage</div>
-    <div class="alert alert-warning" role="alert">@moveActionMessage</div>
+    string messageAlertClass;
+
+    switch (moveActionMessageString)
+    {
+        case MoveMessagesClass.CantPassYourOwn:
+        case MoveMessagesClass.NoPossibleMoves:
+        case "You have to select a move action!":
+            messageAlertClass = "alert-danger";
+            break;
+        case MoveMessagesClass.KnockOutOpponent:
+        case MoveMessagesClass.MoveSuccessful:
+        case MoveMessagesClass.PieceEnteredGoal:
+            messageAlertClass = "alert-success";
+            break;
+        default:
+            messageAlertClass = "alert-warning";
+            break;
+    }
+
+    <div class="alert @messageAlertClass" role="alert">@moveActionMessageString</div>
 }
 
 @{
