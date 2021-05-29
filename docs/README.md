@@ -461,26 +461,6 @@ The fix for this was to lock the static properties "{Color}Track" (where {Color}
 
 ---
 
-# TODO
-
-## document this
-- Validation attributes
-- Why use DI for `Turnmanager : ITurnBased`?
-  - Multiple rule sets?
-
-## include in video presentation
-- Validation attributes
-
-
-
-### **_Ideas_**:
-
-#### **Basic**
-
-<br>
-
----
-
 # Credits & Sources
 - Lazy loading **singleton** https://csharpindepth.com/Articles/Singleton#performance
 - https://github.com/microsoft/referencesource/blob/5697c29004a34d80acdaf5742d7e699022c64ecd/System.Web/Routing/RouteValueDictionary.cs#L61
