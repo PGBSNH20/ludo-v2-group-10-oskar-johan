@@ -8,8 +8,8 @@ namespace Ludo_API.Models.DTO
     public class GameboardDTO
     {
         public int ID { get; set; }
-        public Player CurrentPlayer { get; set; }
-        public ICollection<Square> Squares { get; set; }
+        public PlayerDTO CurrentPlayer { get; set; }
+        public ICollection<SquareDTO> Squares { get; set; }
         public ICollection<PlayerDTO> Players { get; set; }
         public DateTime? GameDate { get; set; } // todo: rename to something like "LastTurnDate"?
         public DateTime? GameStartDate { get; set; }
@@ -17,13 +17,18 @@ namespace Ludo_API.Models.DTO
 
         public GameboardDTO(Gameboard gameboard)
         {
+            if (gameboard == null)
+            {
+                throw new NullReferenceException("'gameboard' (Gameboard) is null.");
+            }
+
             ID = gameboard.ID;
-            CurrentPlayer = gameboard.CurrentPlayer;
-            Squares = gameboard.Squares;
+            CurrentPlayer = gameboard.CurrentPlayer == null ? null : new PlayerDTO(gameboard.CurrentPlayer);
+            Squares = gameboard.Squares?.Select(s => new SquareDTO(s)).ToList();
             Players = gameboard.Players?.Select(p => new PlayerDTO(p)).ToList();
             GameDate = gameboard.GameDate;
             GameStartDate = gameboard.GameStartDate;
-            GameCreator = gameboard.GameCreator != null?new PlayerDTO(gameboard.GameCreator):null;
+            GameCreator = gameboard.GameCreator != null ? new PlayerDTO(gameboard.GameCreator) : null;
         }
     }
 }

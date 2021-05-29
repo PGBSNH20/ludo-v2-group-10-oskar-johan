@@ -1,9 +1,5 @@
-﻿using Ludo_API.Validators;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Ludo_API.Models.DTO
 {
@@ -22,6 +18,11 @@ namespace Ludo_API.Models.DTO
 
         public PlayerDTO(Player player)
         {
+            if (player == null)
+            {
+                throw new NullReferenceException("'player' (Player) is null.");
+            }
+
             ID = player.ID;
             Name = player.Name;
             Color = player.Color;

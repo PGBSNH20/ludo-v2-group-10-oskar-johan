@@ -42,7 +42,6 @@ namespace Ludo_API.Controllers
             var gameboards = await _gameRepository.GetAllGames(_context);
 
             return gameboards.Select(g => new GameboardDTO(g));
-            //return gameboards;
         }
 
         /// <summary>
