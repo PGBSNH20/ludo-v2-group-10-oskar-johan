@@ -11,7 +11,7 @@
   - [Gameplay](#Gameplay)
 - [Source Structure](#Source-Structure)  
 - [Database Design](#Database-Design)
-- [Credits & Sources](#Credits-&-Sources)
+- [Credits and Sources](#Credits-and-Sources)
 
 <br>
 
@@ -218,6 +218,7 @@ Content-Type: application/json
 }
 ```
 <br/>
+
 
 ---
 
@@ -466,7 +467,7 @@ Documentation of the source structure
 
 # Database Design
 
-See [Source Structure](#Source&#32;Structure) section for detailed explenation on database models.
+See [Source Structure](#Source-Structure) section for detailed explenation on database models.
 
 ![Database Diagram](DatabaseDiagram.PNG)
 
@@ -475,7 +476,7 @@ See [Source Structure](#Source&#32;Structure) section for detailed explenation o
 ---
 
 
-# Credits & Sources
+# Credits and Sources
 - Lazy loading **singleton** https://csharpindepth.com/Articles/Singleton#performance
 - https://github.com/microsoft/referencesource/blob/5697c29004a34d80acdaf5742d7e699022c64ecd/System.Web/Routing/RouteValueDictionary.cs#L61
   - Used this to figure out how to convert an anonymous object (of query-parameters) to a dictionary. This is used in the method GetAsync<T> in [Fetch.cs](../src/Ludo_WebApp/Ludo_API/Fetch.cs) (in the WebApp-project).
