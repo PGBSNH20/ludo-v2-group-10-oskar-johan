@@ -2,14 +2,15 @@
 
 - [Understanding the application](#Understanding&#32;the&#32;application)
   - [Application Structure Overview](#Application&#32;Structure&#32;Overview)
+- [Process](#Process)
+  - [Workflow](#Workflow)
+  - [How we worked](#How&#32;we&#32;worked)
+  - [Problems we encountered and how we solved them](Problemsn&#32;wen&#32;encounteredn&#32;andn&#32;hown&#32;wen&#32;solvedn&#32;them)
 - [Endpoints](#Endpoints)
   - [Games](#Games)  
   - [Gameplay](#Gameplay)  
 - [Source Structure](#Source&#32;Structure)  
 - [Database Design](#Database&#32;Design)
-- [Process](#Process)
-  - [How we worked](#How&#32;we&#32;worked)
-  - [Problems we encountered and how we solved them](Problemsn&#32;wen&#32;encounteredn&#32;andn&#32;hown&#32;wen&#32;solvedn&#32;them)
 - [Credits & Sources](#Credits-&-Sources)
 
 <br>
@@ -42,6 +43,31 @@ This project holds manual tests with RestClient and automatic units tests for th
 <br>
 
 ---
+
+
+# Process
+
+## Workflow
+
+We started out by making user stories to stake out a path for the process and get a picture of what we needed the solutuion to contain, we also set up a github project with task issues and cards and a to-do-list to break the process into smaller smaller tasks so we could keep track of our progress allways see what we had left to do.
+
+We started the work on the solution by making 3 projects, one for the API and game engine logic, one for the webb client and one for tests.
+
+The first projects we started working with was the API, get the database, controllers and repositories up with validated input, so that we could fetch data from the system. We also added tests to see that it worked.
+
+When programming the gameplay logic we tried to recycle as much as we could from our previous project, but we hade to rewrite most of it as it was very attached to the console application of our old project.
+
+We then moved on the user interface, starting with the gameboard adding functionality with a lobby and the abillity for other players to join the game.
+
+## How we worked
+We have mostly been working together on the project as we think that is the best way to solve problems, share knowledge and make each one involved in every part of the project.
+
+Johan has however taken a larger responsibility twords the end of the project as we needed to get things done before deadline and he is the most experience one of us.
+
+<br>
+
+---
+
 
 # Endpoints
 
@@ -438,27 +464,6 @@ See [Source Structure](#Source&#32;Structure) section for detailed explenation o
 
 ---
 
-
-# Process
-
-## Workflow
-
-We started out by making user stories to stake out a path for the process and get a picture of what we needed the solutuion to contain, we also set up a github project with task issues and cards and a to-do-list to break the process into smaller smaller tasks so we could keep track of our progress allways see what we had left to do.
-
-We started the work on the solution by making 3 projects, one for the API and game engine logic, one for the webb client and one for tests.
-
-The first projects we started working with was the API, get the database, controllers and repositories up with validated input, so that we could fetch data from the system. We also added tests to see that it worked.
-
-When programming the gameplay logic we tried to recycle as much as we could from our previous project, but we hade to rewrite most of it as it was very attached to the console application of our old project.
-
-We then moved on the user interface, starting with the gameboard adding functionality with a lobby and the abillity for other players to join the game.
-
-## How we worked
-We have mostly been working together on the project as we think that is the best way to solve problems, share knowledge and make each one involved in every part of the project.
-
-Johan has however taken a larger responsibility twords the end of the project as we needed to get things done before deadline and he is the most experience one of us.
-
-<br>
 
 ## Problems we encountered and how we solved them
 We found that some tests would fail randomly when all tests in the test projects are run simultaneously with the "Run All Tests in View" button.
