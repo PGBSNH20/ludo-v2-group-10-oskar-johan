@@ -441,6 +441,18 @@ See [Source Structure](#Source&#32;Structure) section for detailed explenation o
 
 # Process
 
+## Workflow
+
+We started out by making user stories to stake out a path for the process and get a picture of what we needed the solutuion to contain, we also set up a github project with task issues and cards and a to-do-list to break the process into smaller smaller tasks so we could keep track of our progress allways see what we had left to do.
+
+We started the work on the solution by making 3 projects, one for the API and game engine logic, one for the webb client and one for tests.
+
+The first projects we started working with was the API, get the database, controllers and repositories up with validated input, so that we could fetch data from the system. We also added tests to see that it worked.
+
+When programming the gameplay logic we tried to recycle as much as we could from our previous project, but we hade to rewrite most of it as it was very attached to the console application of our old project.
+
+We then moved on the user interface, starting with the gameboard adding functionality with a lobby and the abillity for other players to join the game.
+
 ## How we worked
 We have mostly been working together on the project as we think that is the best way to solve problems, share knowledge and make each one involved in every part of the project.
 
