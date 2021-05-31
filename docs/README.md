@@ -38,7 +38,7 @@ This project holds manual tests with RestClient and automatic units tests for th
 
 ## Application Structure Overview
 
-![Application Structure Overview](Project-2-Ludo-v2-Diagram.svg)
+![Application Structure Overview](Project-2-Ludo-v2-Diagram.svg#1)
 
 <br>
 
