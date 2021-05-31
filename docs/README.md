@@ -4,7 +4,7 @@
   - [Application Structure Overview](#Application&#32;Structure&#32;Overview)
 - [Process](#Process)
   - [Workflow](#Workflow)
-  - [How we worked](#How&#32;we&#32;worked)
+  - [How we worked](#How-we-worked)
   - [Problems we encountered and how we solved them](Problemsn&#32;wen&#32;encounteredn&#32;andn&#32;hown&#32;wen&#32;solvedn&#32;them)
 - [Endpoints](#Endpoints)
   - [Games](#Games)  
@@ -63,6 +63,15 @@ We then moved on the user interface, starting with the gameboard adding function
 We have mostly been working together on the project as we think that is the best way to solve problems, share knowledge and make each one involved in every part of the project.
 
 Johan has however taken a larger responsibility twords the end of the project as we needed to get things done before deadline and he is the most experience one of us.
+
+## Problems we encountered and how we solved them
+We found that some tests would fail randomly when all tests in the test projects are run simultaneously with the "Run All Tests in View" button.
+
+!["Run All Tests in View" button](Visual-Studio-Test-Explorer-Run-All-button.png)
+
+The fix for this was to lock the static properties "{Color}Track" (where {Color} is Yellow, Red, Green or Blue) while they were being populated.
+
+![set](Bug-fix-Lock-static-properties.png)
 
 <br>
 
@@ -454,6 +463,7 @@ Documentation of the source structure
 
 ---
 
+
 # Database Design
 
 See [Source Structure](#Source&#32;Structure) section for detailed explenation on database models.
@@ -464,19 +474,6 @@ See [Source Structure](#Source&#32;Structure) section for detailed explenation o
 
 ---
 
-
-## Problems we encountered and how we solved them
-We found that some tests would fail randomly when all tests in the test projects are run simultaneously with the "Run All Tests in View" button.
-
-!["Run All Tests in View" button](Visual-Studio-Test-Explorer-Run-All-button.png)
-
-The fix for this was to lock the static properties "{Color}Track" (where {Color} is Yellow, Red, Green or Blue) while they were being populated.
-
-![set](Bug-fix-Lock-static-properties.png)
-
-<br>
-
----
 
 # Credits & Sources
 - Lazy loading **singleton** https://csharpindepth.com/Articles/Singleton#performance
