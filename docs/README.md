@@ -5,7 +5,7 @@
 - [Process](#Process)
   - [Workflow](#Workflow)
   - [How we worked](#How-we-worked)
-  - [Problems we encountered and how we solved them](Problems-we-encountered-and-how-we-solved-them)
+  - [Problems we encountered and how we solved them](#Problems-we-encountered-and-how-we-solved-them)
 - [Endpoints](#Endpoints)
   - [Games](#Games)
   - [Gameplay](#Gameplay)
