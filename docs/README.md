@@ -1,16 +1,16 @@
 # Table of contents
 
-- [Understanding the application](#Understanding&#32;the&#32;application)
-  - [Application Structure Overview](#Application&#32;Structure&#32;Overview)
+- [Understanding the application](#Understanding-the-application)
+  - [Application Structure Overview](#Application-Structure-Overview)
 - [Process](#Process)
   - [Workflow](#Workflow)
   - [How we worked](#How-we-worked)
-  - [Problems we encountered and how we solved them](Problemsn&#32;wen&#32;encounteredn&#32;andn&#32;hown&#32;wen&#32;solvedn&#32;them)
+  - [Problems we encountered and how we solved them](Problems-we-encountered-and-how-we-solved-them)
 - [Endpoints](#Endpoints)
-  - [Games](#Games)  
-  - [Gameplay](#Gameplay)  
-- [Source Structure](#Source&#32;Structure)  
-- [Database Design](#Database&#32;Design)
+  - [Games](#Games)
+  - [Gameplay](#Gameplay)
+- [Source Structure](#Source-Structure)  
+- [Database Design](#Database-Design)
 - [Credits & Sources](#Credits-&-Sources)
 
 <br>
